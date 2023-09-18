@@ -12,6 +12,14 @@
   .head-text {
     @apply text-heading2-bold text-light-1;
   }
+
+  /* Activity */
+  .activity-card {
+    @apply flex items-center gap-2 rounded-md bg-dark-2 px-7 py-4;
+  }
+  .navbar {
+    @apply fixed top-0 z-30 flex w-full items-center justify-between bg-dark-2 px-6 py-3;
+  }
 }
 
 @layer utilities {

@@ -42,9 +42,9 @@ model Session {
 
 model User {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  firstName     String?
-  lastName      String?
+  name          String?
   email         String?   @unique
+  password      String?
   emailVerified DateTime?
   image         String?
   accounts      Account[]
@@ -52,17 +52,19 @@ model User {
   bio           String?
   phone         String?
   picturePath   String?
-  groupId       String?   @db.ObjectId
-  group         Group?    @relation(fields: [groupId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  groupId       String?   @map("groupId") @db.ObjectId
+  createdGroup  Group?    @relation("created")
+  memberOfGroup Group?    @relation("members", fields: [groupId], references: [id])
 
   @@map("users")
 }
 
 model Group {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
-  name      String @unique
-  creator   User   @relation(fields: [creatorId], references: [id])
-  creatorId String
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  name    String
+  owner   User   @relation("created", references: [id], fields: [ownerId], onUpdate: NoAction)
+  ownerId String @unique @db.ObjectId
+  members User[] @relation("members")
 
   @@map("groups")
 }
