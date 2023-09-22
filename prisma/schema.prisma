@@ -60,11 +60,12 @@ model User {
 }
 
 model Group {
-  id      String @id @default(auto()) @map("_id") @db.ObjectId
-  name    String
-  owner   User   @relation("created", references: [id], fields: [ownerId], onUpdate: NoAction)
-  ownerId String @unique @db.ObjectId
-  members User[] @relation("members")
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  owner       User   @relation("created", references: [id], fields: [ownerId], onUpdate: NoAction)
+  ownerId     String @unique @db.ObjectId
+  members     User[] @relation("members")
 
   @@map("groups")
 }

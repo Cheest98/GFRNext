@@ -2,10 +2,14 @@
 
 import { Session } from "next-auth";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { usePathname, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import Image from "next/image";
 import { UserValidation } from "@/lib/validations/user";
 import * as z from "zod";
+import { Button } from "@/components/ui/button";
+import { ChangeEvent, useState } from "react";
 
 import {
   Form,
@@ -18,12 +22,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
+import { updateUser } from "@/lib/actions/user.actions";
 
 interface UserProps {
   session: Session | null;
 }
 
 const AccountProfile = ({ session }: UserProps) => {
+  const [files, setFiles] = useState<File[]>([]);
+  const router = useRouter();
+  const pathname = usePathname();
   const user = session?.user;
 
   const form = useForm<z.infer<typeof UserValidation>>({
@@ -36,11 +44,50 @@ const AccountProfile = ({ session }: UserProps) => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof UserValidation>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof UserValidation>) {
+    const userId = session?.user.id;
+    if (!userId) {
+      console.error("User ID is missing.");
+      return;
+    }
+
+    try {
+      await updateUser({ session, data: values });
+      console.log("updated");
+    } catch (error) {
+      console.error(error);
+      console.error({ session, values });
+    }
+
+    if (pathname === "/profile/edit") {
+      router.push("/");
+    } else {
+      router.push("/");
+    }
   }
 
-  const handleImage = () => {};
+  const handleImage = (
+    e: ChangeEvent<HTMLInputElement>,
+    fieldChange: (value: string) => void
+  ) => {
+    e.preventDefault();
+
+    const fileReader = new FileReader();
+
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      setFiles(Array.from(e.target.files));
+
+      if (!file.type.includes("image")) return;
+
+      fileReader.onload = async (event) => {
+        const imageDataUrl = event.target?.result?.toString() || "";
+        fieldChange(imageDataUrl);
+      };
+
+      fileReader.readAsDataURL(file);
+    }
+  };
 
   return (
     <Form {...form}>
@@ -79,7 +126,7 @@ const AccountProfile = ({ session }: UserProps) => {
                   accept="image/*"
                   placeholder="Add profile photo"
                   className="account-form_image-input"
-                  onChange={(e) => handleImage()}
+                  onChange={(e) => handleImage(e, field.onChange)}
                 />
               </FormControl>
             </FormItem>
@@ -145,6 +192,9 @@ const AccountProfile = ({ session }: UserProps) => {
             </FormItem>
           )}
         />
+        <Button type="submit" className="bg-primary-500">
+          Update
+        </Button>
       </form>
     </Form>
   );
