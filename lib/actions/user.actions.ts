@@ -29,6 +29,7 @@ export async function updateUser({
       data: updateData,
     });
   } catch (error: any) {
-    throw new Error(`Failed to update user: ${error.message}`);
+    console.error("Error details:", error);
+    throw new Error(`Failed to create group: ${error.message}`);
   }
 }

@@ -1,6 +1,6 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import AccountProfile from "@/components/forms/AccountProfile";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 async function Page() {
   const session = await getServerSession(authOptions);

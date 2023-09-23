@@ -1,28 +1,27 @@
 "use client";
 
-import { Session } from "next-auth";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Session } from "next-auth";
 
-import { usePathname, useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import Image from "next/image";
 import { UserValidation } from "@/lib/validations/user";
-import * as z from "zod";
-import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "../ui/textarea";
 import { updateUser } from "@/lib/actions/user.actions";
+import SharedButton from "../shared/SharedButton";
+import { Textarea } from "../ui/textarea";
 
 interface UserProps {
   session: Session | null;
@@ -43,28 +42,6 @@ const AccountProfile = ({ session }: UserProps) => {
       phone: user?.phone ? user.phone : "",
     },
   });
-
-  async function onSubmit(values: z.infer<typeof UserValidation>) {
-    const userId = session?.user.id;
-    if (!userId) {
-      console.error("User ID is missing.");
-      return;
-    }
-
-    try {
-      await updateUser({ session, data: values });
-      console.log("updated");
-    } catch (error) {
-      console.error(error);
-      console.error({ session, values });
-    }
-
-    if (pathname === "/profile/edit") {
-      router.push("/");
-    } else {
-      router.push("/");
-    }
-  }
 
   const handleImage = (
     e: ChangeEvent<HTMLInputElement>,
@@ -89,12 +66,11 @@ const AccountProfile = ({ session }: UserProps) => {
     }
   };
 
+  const data = form.watch();
+
   return (
     <Form {...form}>
-      <form
-        className="flex flex-col justify-start gap-10"
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
+      <form className="flex flex-col justify-start gap-10">
         <FormField
           control={form.control}
           name="image"
@@ -192,9 +168,13 @@ const AccountProfile = ({ session }: UserProps) => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="bg-primary-500">
-          Update
-        </Button>
+
+        <SharedButton
+          session={session}
+          data={data}
+          action={updateUser}
+          label="Save"
+        />
       </form>
     </Form>
   );

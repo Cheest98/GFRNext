@@ -1,7 +1,7 @@
 "use server";
 
-import { prisma } from "../db/prisma";
 import { Session } from "next-auth";
+import { prisma } from "../db/prisma";
 
 interface CreateGroupProps {
   session: Session | null;
@@ -25,10 +25,13 @@ export async function createGroup({
         name: data.name,
         description: data.description,
         ownerId: session.user.id,
+        members: {
+          connect: {
+            id: session.user.id,
+          },
+        },
       },
     });
-
-    // Update the user's groupId with the newly created group's ID
     await prisma.user.update({
       where: {
         id: session.user.id,
@@ -37,6 +40,7 @@ export async function createGroup({
         groupId: newGroup.id,
       },
     });
+    console.log(newGroup);
   } catch (error: any) {
     throw new Error(`Failed to create group: ${error.message}`);
   }

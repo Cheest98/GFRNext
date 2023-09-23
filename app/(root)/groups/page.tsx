@@ -1,6 +1,6 @@
-import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import CreateGroup from "@/components/forms/CreateGroup";
+import { getServerSession } from "next-auth";
 
 async function Page() {
   const session = await getServerSession(authOptions);
