@@ -26,9 +26,7 @@ export async function createGroup({
         description: data.description,
         ownerId: session.user.id,
         members: {
-          connect: {
-            id: session.user.id,
-          },
+          connect: { id: session.user.id },
         },
       },
     });

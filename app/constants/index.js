@@ -6,12 +6,6 @@ export const sidebarLinks = [
     route: "/",
     label: "Home",
   },
-
-  {
-    imgURL: "/assets/create.svg",
-    route: "/posts",
-    label: "Posts",
-  },
   {
     imgURL: "/assets/community.svg",
     route: "/tasks",
