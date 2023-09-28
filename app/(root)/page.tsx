@@ -4,6 +4,8 @@ import { Session, getServerSession } from "next-auth";
 import PostCard from "@/components/cards/PostCard";
 import { fetchGroupPosts } from "@/lib/actions/post.actions";
 import { useEffect, useState } from "react";
+import { GetServerSideProps } from "next";
+import { prisma } from "@/lib/db/prisma";
 
 const posts = [
   {
@@ -32,21 +34,33 @@ const posts = [
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
+  const groupIdPrisma = session?.user?.groupId || undefined;
+
+  //const test = await fetchGroupPosts({ groupIdPrisma }); - to nie działa ale  dlaczego?
+
+  const posts2 = await prisma.post.findMany({
+    where: {
+      groupId: groupIdPrisma,
+    },
+    include: {
+      author: true,
+    },
+  });
+
   return (
     <main className="mx-auto flex max-w-3xl flex-col justify-start">
       <section className="bg-dark-2 p-10">
         <Post session={session} />
       </section>
-
       <section className="mt-9 flex flex-col gap-10">
-        {posts.map((post) => (
+        {posts2.map((post) => (
           <PostCard
             key={post.id}
             id={post.id}
             content={post.content}
             author={{
-              name: post.author.name,
-              image: post.author.image,
+              name: post.author.name || "Unknown",
+              image: post.author.image || "DefaultImageURL",
               id: post.author.id,
             }}
           />

@@ -11,16 +11,9 @@ interface CreatePostProps {
   };
 }
 
-interface FetchPostsProps {
-  session: Session | null;
+interface groupProps {
+  groupIdPrisma: string | undefined;
 }
-type PostType = {
-  id: string;
-  content: string;
-  picturePath: string | null;
-  authorId: string;
-  groupId: string;
-};
 
 export async function createPost({
   session,
@@ -54,29 +47,22 @@ export async function createPost({
   }
 }
 
-export async function fetchGroupPosts({
-  session,
-}: FetchPostsProps): Promise<PostType[]> {
-  if (!session?.user?.id) {
-    throw new Error("User ID is missing.");
+export async function fetchGroupPosts({ groupIdPrisma }: groupProps) {
+  if (!groupIdPrisma) {
+    throw new Error("Group ID is missing.");
   }
 
-  // Fetch the user from the database to get the groupId
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { groupId: true }, // Only select the groupId for efficiency
-  });
-
-  if (!user || !user.groupId) {
-    throw new Error("User's group ID is missing.");
+  try {
+    const posts = await prisma.post.findMany({
+      where: {
+        groupId: groupIdPrisma,
+      },
+      include: {
+        author: true,
+      },
+    });
+    return posts;
+  } catch (error: any) {
+    throw new Error(`Failed to fetch post: ${error.message}`);
   }
-
-  // Fetch posts associated with the user's group
-  const groupPosts = await prisma.post.findMany({
-    where: {
-      groupId: user.groupId,
-    },
-  });
-
-  return groupPosts;
 }

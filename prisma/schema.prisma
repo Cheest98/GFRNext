@@ -53,7 +53,7 @@ model User {
   phone         String?
   picturePath   String?
   group         Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  groupId       String    @db.ObjectId
+  groupId       String    @default("65142379c592bef7f2b1e3c7") @db.ObjectId
   posts         Post[]
 
   @@map("users")
