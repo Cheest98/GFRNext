@@ -20,6 +20,7 @@ export const authOptions: NextAuthOptions = {
       session.user.id = user.id;
       session.user.bio = (user as User).bio;
       session.user.phone = (user as User).phone;
+      session.user.groupId = (user as User).groupId;
       return session;
     },
   },

@@ -36,16 +36,7 @@ export default async function Home() {
   const session = await getServerSession(authOptions);
   const groupIdPrisma = session?.user?.groupId || undefined;
 
-  //const test = await fetchGroupPosts({ groupIdPrisma }); - to nie działa ale  dlaczego?
-
-  const posts2 = await prisma.post.findMany({
-    where: {
-      groupId: groupIdPrisma,
-    },
-    include: {
-      author: true,
-    },
-  });
+  const test = await fetchGroupPosts({ groupIdPrisma });
 
   return (
     <main className="mx-auto flex max-w-3xl flex-col justify-start">
@@ -53,7 +44,7 @@ export default async function Home() {
         <Post session={session} />
       </section>
       <section className="mt-9 flex flex-col gap-10">
-        {posts2.map((post) => (
+        {test.map((post) => (
           <PostCard
             key={post.id}
             id={post.id}

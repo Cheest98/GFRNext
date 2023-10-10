@@ -51,7 +51,6 @@ export async function fetchGroupPosts({ groupIdPrisma }: groupProps) {
   if (!groupIdPrisma) {
     throw new Error("Group ID is missing.");
   }
-
   try {
     const posts = await prisma.post.findMany({
       where: {
