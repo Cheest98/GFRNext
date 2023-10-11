@@ -1,6 +1,20 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import CreateGroup from "@/components/forms/CreateGroup";
 import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import Image from "next/image";
+import { Input } from "../../../components/ui/input";
+import Searchbar from "@/components/shared/Searchbar";
+
+async function searchGroup(formData: FormData) {
+  "use server";
+
+  const searchQuery = formData.get("searchQuery")?.toString();
+
+  if (searchQuery) {
+    redirect("/search?query=" + searchQuery);
+  }
+}
 
 async function Page() {
   const session = await getServerSession(authOptions);
@@ -9,6 +23,9 @@ async function Page() {
       <h1 className="head-text"> Create group</h1>
       <section className="mt-9 bg-dark-2 p-10">
         <CreateGroup session={session} />
+      </section>
+      <section>
+        <Searchbar action={searchGroup} />
       </section>
     </main>
   );

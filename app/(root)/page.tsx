@@ -7,30 +7,6 @@ import { useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import { prisma } from "@/lib/db/prisma";
 
-const posts = [
-  {
-    id: "65142568c592bef7f2b1e3c8",
-    content: "Test",
-    authorId: "6508c7819ce58cceec142343",
-    author: {
-      name: "test1",
-      image: "test2",
-      id: "6508c7819ce58cceec142343",
-    },
-    groupId: "65142379c592bef7f2b1e3c7",
-  },
-  {
-    id: "65142568c592bef7f2b1e3c8",
-    content: "Test",
-    authorId: "6508c7819ce58cceec142343",
-    author: {
-      name: "test1",
-      image: "test2",
-      id: "6508c7819ce58cceec142343",
-    },
-    groupId: "65142379c592bef7f2b1e3c7",
-  },
-];
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
