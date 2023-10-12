@@ -15,18 +15,21 @@ export default async function searchParams({
     orderBy: { id: "desc" },
   });
 
-  if (group.length === 0) {
-    return (
-      <div className="mt-2 text-small-regular text-light-2">
-        No groups found
-      </div>
-    );
-  }
   return (
-    <div>
-      {group.map((group) => (
-        <div className="mt-2 text-small-regular text-light-2">{group.name}</div>
-      ))}
-    </div>
+    <section>
+      <div className="mt-14 flex flex-col gap-9">
+        {group.length === 0 ? (
+          <p className="no-result">No Result</p>
+        ) : (
+          <>
+            {group.map((group) => (
+              <div className="mt-2 text-small-regular text-light-2">
+                {group.name}
+              </div>
+            ))}
+          </>
+        )}
+      </div>
+    </section>
   );
 }

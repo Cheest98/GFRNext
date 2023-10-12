@@ -19,6 +19,47 @@ export async function createGroup({
     throw new Error("User ID is missing.");
   }
 
+  // Check if the user is already a member of another group
+  const existingGroup = await prisma.group.findFirst({
+    where: {
+      members: {
+        some: {
+          id: session.user.id,
+        },
+      },
+    },
+    include: {
+      members: true,
+    },
+  });
+
+  if (existingGroup) {
+    // If the user is the last member of the group
+    if (existingGroup.members.length === 1) {
+      await prisma.group.delete({
+        where: {
+          id: existingGroup.id,
+        },
+      });
+    } else {
+      // If there are other members, set the next user as the owner
+      const nextOwner = existingGroup.members.find(
+        (member) => member.id !== session.user.id
+      );
+      if (nextOwner) {
+        await prisma.group.update({
+          where: {
+            id: existingGroup.id,
+          },
+          data: {
+            ownerId: nextOwner.id,
+          },
+        });
+      }
+    }
+  }
+
+  // Proceed to create the new group
   try {
     const newGroup = await prisma.group.create({
       data: {
