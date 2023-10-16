@@ -1,7 +1,6 @@
 import { prisma } from "@/lib/db/prisma";
 import { env } from "@/lib/env";
 import { CustomPrismaAdapter } from "@/prisma/customPrismaAdapter";
-import { PrismaAdapter } from "@auth/prisma-adapter";
 import { PrismaClient, User } from "@prisma/client";
 import { NextAuthOptions } from "next-auth";
 import { Adapter } from "next-auth/adapters";

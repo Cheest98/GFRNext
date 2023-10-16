@@ -1,7 +1,3 @@
-import Image from "next/image";
-import Link from "next/link";
-import { Session } from "next-auth";
-
 interface PostCardProps {
   id: string;
   content: string;

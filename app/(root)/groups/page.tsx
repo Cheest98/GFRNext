@@ -1,10 +1,8 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import CreateGroup from "@/components/forms/CreateGroup";
+import Searchbar from "@/components/shared/Searchbar";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import Image from "next/image";
-import { Input } from "../../../components/ui/input";
-import Searchbar from "@/components/shared/Searchbar";
 
 async function searchGroup(formData: FormData) {
   "use server";

@@ -1,8 +1,8 @@
 "use client";
 
-import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Session } from "next-auth";
+import * as z from "zod";
 
 import {
   Form,
@@ -11,15 +11,13 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 
-import React from "react";
-import { PostValidation } from "@/lib/validations/post";
 import { Input } from "@/components/ui/input";
 import { createPost } from "@/lib/actions/post.actions";
+import { PostValidation } from "@/lib/validations/post";
 import SharedButton from "../shared/SharedButton";
 import { Textarea } from "../ui/textarea";
 

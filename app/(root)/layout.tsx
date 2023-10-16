@@ -1,11 +1,11 @@
-import React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import React from "react";
 
-import "../globals.css";
-import SessionProvider from "../SessionProvider";
-import Navbar from "@/components/shared/Navbar";
 import LeftSidebar from "@/components/shared/LeftSidebar";
+import Navbar from "@/components/shared/Navbar";
+import SessionProvider from "../SessionProvider";
+import "../globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 

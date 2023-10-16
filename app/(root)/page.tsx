@@ -1,12 +1,8 @@
-import Post from "@/components/forms/Post";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { Session, getServerSession } from "next-auth";
 import PostCard from "@/components/cards/PostCard";
+import Post from "@/components/forms/Post";
 import { fetchGroupPosts } from "@/lib/actions/post.actions";
-import { useEffect, useState } from "react";
-import { GetServerSideProps } from "next";
-import { prisma } from "@/lib/db/prisma";
-
+import { getServerSession } from "next-auth";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
