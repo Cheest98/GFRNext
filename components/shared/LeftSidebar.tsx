@@ -6,7 +6,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { sidebarLinks } from "../../app/constants/index.js";
 
 export default async function LeftSidebar() {
-  const router = useRouter();
   const pathname = usePathname();
   return (
     <section className="custom-scrollbar leftsidebar">

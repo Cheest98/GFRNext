@@ -53,8 +53,9 @@ model User {
   phone         String?
   picturePath   String?
   group         Group?    @relation(fields: [groupId], references: [id])
-  groupId       String?   @default("65142379c592bef7f2b1e3c7") @db.ObjectId
+  groupId       String?   @db.ObjectId
   posts         Post[]
+  tasks         Task[]
 
   @@map("users")
 }
@@ -66,18 +67,34 @@ model Group {
   ownerId     String @unique @db.ObjectId
   members     User[]
   posts       Post[]
+  tasks       Task[]
 
   @@map("groups")
 }
 
 model Post {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   content     String
   picturePath String?
-  author      User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId    String  @db.ObjectId
-  group       Group   @relation(references: [id], fields: [groupId], onUpdate: NoAction)
-  groupId     String  @db.ObjectId
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId    String   @db.ObjectId
+  group       Group    @relation(references: [id], fields: [groupId], onUpdate: NoAction, onDelete: Cascade)
+  groupId     String   @db.ObjectId
+  createdAt   DateTime @default(now())
 
   @@map("posts")
+}
+
+model Task {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  task      String
+  status    String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String   @db.ObjectId
+  group     Group    @relation(references: [id], fields: [groupId], onUpdate: NoAction, onDelete: Cascade)
+  groupId   String   @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map("tasks")
 }

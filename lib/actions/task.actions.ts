@@ -3,11 +3,10 @@
 import { Session } from "next-auth";
 import { prisma } from "../db/prisma";
 
-interface CreatePostProps {
+interface CreateTaskProps {
   session: Session | null;
   data: {
-    picturePath: string;
-    content: string;
+    task: string;
   };
 }
 
@@ -15,10 +14,17 @@ interface groupProps {
   groupIdPrisma: string | undefined;
 }
 
-export async function createPost({
+interface UpdateTaskProps {
+  data: {
+    id: string;
+    status: string;
+  };
+}
+
+export async function createTask({
   session,
   data,
-}: CreatePostProps): Promise<void> {
+}: CreateTaskProps): Promise<void> {
   if (!session?.user?.id) {
     throw new Error("User ID is missing.");
   }
@@ -32,23 +38,23 @@ export async function createPost({
   }
 
   try {
-    const newPost = await prisma.post.create({
+    const newTask = await prisma.task.create({
       data: {
-        picturePath: data.picturePath,
-        content: data.content,
+        task: data.task,
+        status: "To do",
         authorId: session.user.id,
         groupId: user.groupId,
       },
     });
-    console.log(newPost);
+    console.log(newTask);
   } catch (error: any) {
     throw new Error(`Failed to create post: ${error.message}`);
   }
 }
 
-export async function fetchGroupPosts({ groupIdPrisma }: groupProps) {
+export async function fetchGroupTasks({ groupIdPrisma }: groupProps) {
   try {
-    const posts = await prisma.post.findMany({
+    const tasks = await prisma.task.findMany({
       where: {
         groupId: groupIdPrisma,
       },
@@ -59,8 +65,26 @@ export async function fetchGroupPosts({ groupIdPrisma }: groupProps) {
         author: true,
       },
     });
-    return posts;
+    return tasks;
   } catch (error: any) {
     throw new Error(`Failed to fetch post: ${error.message}`);
+  }
+}
+
+export async function updateTask({ data }: UpdateTaskProps): Promise<void> {
+  // Filter out undefined fields
+
+  try {
+    await prisma.task.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        status: data.status,
+      },
+    });
+  } catch (error: any) {
+    console.error("Error details:", error);
+    throw new Error(`Failed to create task: ${error.message}`);
   }
 }
