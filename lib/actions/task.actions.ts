@@ -2,6 +2,7 @@
 
 import { Session } from "next-auth";
 import { prisma } from "../db/prisma";
+import { revalidatePath } from "next/cache";
 
 interface CreateTaskProps {
   session: Session | null;
@@ -47,6 +48,7 @@ export async function createTask({
       },
     });
     console.log(newTask);
+    revalidatePath("/tasks");
   } catch (error: any) {
     throw new Error(`Failed to create post: ${error.message}`);
   }
@@ -65,6 +67,7 @@ export async function fetchGroupTasks({ groupIdPrisma }: groupProps) {
         author: true,
       },
     });
+
     return tasks;
   } catch (error: any) {
     throw new Error(`Failed to fetch post: ${error.message}`);
@@ -83,6 +86,7 @@ export async function updateTask({ data }: UpdateTaskProps): Promise<void> {
         status: data.status,
       },
     });
+    revalidatePath("/tasks");
   } catch (error: any) {
     console.error("Error details:", error);
     throw new Error(`Failed to create task: ${error.message}`);

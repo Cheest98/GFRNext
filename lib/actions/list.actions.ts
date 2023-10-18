@@ -4,11 +4,10 @@ import { Session } from "next-auth";
 import { prisma } from "../db/prisma";
 import { revalidatePath } from "next/cache";
 
-interface CreatePostProps {
+interface ListTaskProps {
   session: Session | null;
   data: {
-    picturePath: string;
-    content: string;
+    list: string;
   };
 }
 
@@ -16,10 +15,10 @@ interface groupProps {
   groupIdPrisma: string | undefined;
 }
 
-export async function createPost({
+export async function createList({
   session,
   data,
-}: CreatePostProps): Promise<void> {
+}: ListTaskProps): Promise<void> {
   if (!session?.user?.id) {
     throw new Error("User ID is missing.");
   }
@@ -33,24 +32,24 @@ export async function createPost({
   }
 
   try {
-    const newPost = await prisma.post.create({
+    const newList = await prisma.list.create({
       data: {
-        picturePath: data.picturePath,
-        content: data.content,
+        list: data.list,
+        status: "Not Completed",
         authorId: session.user.id,
         groupId: user.groupId,
       },
     });
-    console.log(newPost);
-    revalidatePath("/");
+    console.log(newList);
+    revalidatePath("/lists");
   } catch (error: any) {
     throw new Error(`Failed to create post: ${error.message}`);
   }
 }
 
-export async function fetchGroupPosts({ groupIdPrisma }: groupProps) {
+export async function fetchGroupLists({ groupIdPrisma }: groupProps) {
   try {
-    const posts = await prisma.post.findMany({
+    const lists = await prisma.list.findMany({
       where: {
         groupId: groupIdPrisma,
       },
@@ -61,7 +60,8 @@ export async function fetchGroupPosts({ groupIdPrisma }: groupProps) {
         author: true,
       },
     });
-    return posts;
+
+    return lists;
   } catch (error: any) {
     throw new Error(`Failed to fetch post: ${error.message}`);
   }

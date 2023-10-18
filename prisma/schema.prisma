@@ -56,6 +56,7 @@ model User {
   groupId       String?   @db.ObjectId
   posts         Post[]
   tasks         Task[]
+  lists         List[]
 
   @@map("users")
 }
@@ -68,6 +69,7 @@ model Group {
   members     User[]
   posts       Post[]
   tasks       Task[]
+  lists       List[]
 
   @@map("groups")
 }
@@ -97,4 +99,30 @@ model Task {
   updatedAt DateTime @default(now())
 
   @@map("tasks")
+}
+
+model List {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  list      String
+  price     Float?
+  status    String
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String    @db.ObjectId
+  group     Group     @relation(references: [id], fields: [groupId], onUpdate: NoAction, onDelete: Cascade)
+  groupId   String    @db.ObjectId
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
+
+  @@map("lists")
+}
+
+model Product {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  name   String
+  status String
+  list   List   @relation(fields: [listid], references: [id], onDelete: Cascade)
+  listid String @db.ObjectId
+
+  @@map("products")
 }
