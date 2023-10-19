@@ -14,12 +14,9 @@ import {
 import { useForm } from "react-hook-form";
 
 import { Input } from "@/components/ui/input";
-import { TaskValidation } from "@/lib/validations/task";
-import SharedButton from "../shared/SharedButton";
-import { Button } from "../ui/button";
-import { createTask } from "@/lib/actions/task.actions";
-import { ListValidation } from "@/lib/validations/list";
 import { createList } from "@/lib/actions/list.actions";
+import { ListValidation } from "@/lib/validations/list";
+import SharedButton from "../shared/SharedButton";
 
 interface UserProps {
   session: Session | null;
@@ -39,7 +36,7 @@ const List = ({ session }: UserProps) => {
 
   return (
     <>
-      <h1 className="head-text text-left">Create Task</h1>
+      <h1 className="head-text text-left">Create List</h1>
       <Form {...form}>
         <form className="mt-10 flex justify-start gap-10">
           <FormField
