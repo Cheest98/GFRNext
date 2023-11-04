@@ -4,7 +4,7 @@ import { Session } from "next-auth";
 import { prisma } from "../db/prisma";
 import { revalidatePath } from "next/cache";
 
-interface ListTaskProps {
+interface ListProps {
   session: Session | null;
   data: {
     list: string;
@@ -15,10 +15,14 @@ interface groupProps {
   groupIdPrisma: string | undefined;
 }
 
-export async function createList({
-  session,
-  data,
-}: ListTaskProps): Promise<void> {
+interface ProductProps {
+  listId: string;
+  data: {
+    name: string;
+  };
+}
+
+export async function createList({ session, data }: ListProps): Promise<void> {
   if (!session?.user?.id) {
     throw new Error("User ID is missing.");
   }
@@ -64,5 +68,32 @@ export async function fetchGroupLists({ groupIdPrisma }: groupProps) {
     return lists;
   } catch (error: any) {
     throw new Error(`Failed to fetch post: ${error.message}`);
+  }
+}
+
+export async function createProduct({
+  listId,
+  data,
+}: ProductProps): Promise<void> {
+  if (!listId) {
+    throw new Error("List ID is missing");
+  }
+
+  const list = await prisma.list.findUnique({
+    where: { id: listId },
+  });
+
+  try {
+    const newProduct = await prisma.product.create({
+      data: {
+        name: data.name,
+        status: "Not Completed",
+        listid: listId,
+      },
+    });
+    console.log(newProduct);
+    revalidatePath("/lists");
+  } catch (error: any) {
+    throw new Error(`Failed to create post: ${error.message}`);
   }
 }

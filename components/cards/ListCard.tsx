@@ -1,5 +1,8 @@
 import { updateTask } from "@/lib/actions/task.actions";
 import TaskButton from "../shared/TaskButton";
+import Product from "../forms/Product";
+import AddButton from "../shared/AddButton";
+import { createProduct } from "@/lib/actions/list.actions";
 
 interface ListCardProps {
   id: string;
@@ -21,11 +24,19 @@ function ListCard({ id, list, author, status }: ListCardProps) {
             <div className="thread-card_bar" />
           </div>
           <div className="flex w-full flex-col">
-            <h4 className="cursor-pointer text-base-semibold text-light-1">
-              {author.name}
-            </h4>
-            <p className="mt-2 text-small-regular text-light-2">{list}</p>
-            <p className="mt-2 text-small-regular text-light-2">{status}</p>
+            <div>
+              <h4 className="cursor-pointer text-base-semibold text-light-1">
+                {author.name}
+              </h4>
+              <p className="mt-2 text-small-regular text-light-2">{list}</p>
+              <p className="mt-2 text-small-regular text-light-2">{status}</p>
+            </div>
+            <div>
+              <h4 className="cursor-pointer text-base-semibold text-light-1">
+                test
+              </h4>
+              <Product listId={id} />
+            </div>
           </div>
           <div>
             {status !== "Completed" && (
