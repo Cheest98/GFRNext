@@ -18,3 +18,23 @@ export const UserValidation = z.object({
     .max(14, { message: "Maximum 14 caracters." })
     .optional(),
 });
+
+export const RegisterUserValidation = z.object({
+  email: z
+  .string()
+  .min(5, { message: "This field has to be filled." })
+  .email("This is not a valid email."),
+  password: z
+    .string()
+    .min(5, { message: "Minimum 5 characters." })
+});
+
+export const LoginUserValidation = z.object({
+  email: z
+  .string()
+  .min(5, { message: "This field has to be filled." })
+  .email("This is not a valid email."),
+  password: z
+  .string()
+  .min(5, { message: "Minimum 5 characters." })
+});

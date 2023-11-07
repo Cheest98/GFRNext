@@ -2,6 +2,7 @@
 
 import { prisma } from "../db/prisma";
 import { Session } from "next-auth";
+import bcrypt from  "bcryptjs"
 
 interface UpdateUserProps {
   session: Session | null;
@@ -12,6 +13,14 @@ interface UpdateUserProps {
     phone?: string;
   };
 }
+
+interface CreateUserProps {
+  data: {
+    email?: string;
+    password: string;
+  };
+}
+
 export async function updateUser({
   session,
   data,
@@ -31,5 +40,32 @@ export async function updateUser({
   } catch (error: any) {
     console.error("Error details:", error);
     throw new Error(`Failed to create group: ${error.message}`);
+  }
+}
+
+
+export async function createUser({
+  data,
+}: CreateUserProps): Promise<void> {
+  const user = await prisma.user.findUnique({
+    where: { email: data.email },
+  });
+
+  if (user ===  null) {
+    throw new Error("This user already exist");
+  }
+
+  const hashedPassword = await bcrypt.hash(data.password, 10)
+
+  try {
+    const newUser = await prisma.user.create({
+      data: {
+        email: data.email,
+        password: hashedPassword,
+      },
+    });
+    console.log(newUser);
+  } catch (error: any) {
+    throw new Error(`Failed to create User: ${error.message}`);
   }
 }
