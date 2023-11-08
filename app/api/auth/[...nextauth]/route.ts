@@ -24,11 +24,8 @@ export const authOptions: NextAuthOptions = {
           where: { email: email },
         });
         if (!user || !user.hashedPassword) return null;
-
         const isPasswordValid = await bcrypt.compare(password, user.hashedPassword);
-
         if (!isPasswordValid) return null;
-
         return user;
       },
     }),
@@ -37,15 +34,26 @@ export const authOptions: NextAuthOptions = {
       clientSecret: env.GOOGLE_CLIENT_SECRET,
     }),
   ],
+
   callbacks: {
-    session({ session, user, }) {
-      session.user.id = user.id;
-      session.user.bio = (user as User).bio;
-      session.user.phone = (user as User).phone;
-      session.user.groupId = (user as User).groupId;
+    session: async ({ session, user }) => {
+      if (user) {
+        session.user.id = user.id;
+        session.user.bio = (user as User).bio;
+        session.user.phone = (user as User).phone;
+        session.user.groupId = (user as User).groupId;
+      }
       return session;
     },
+    jwt: async ({ token, user }) => {
+      if (user) {
+        token.id = user.id;
+        // other properties
+      }
+      return token;
+    },
   },
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
 const handler = NextAuth(authOptions);

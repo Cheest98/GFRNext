@@ -1,8 +1,10 @@
 "use server";
 
-import { prisma } from "../db/prisma";
+import bcrypt from "bcryptjs";
 import { Session } from "next-auth";
-import bcrypt from  "bcryptjs"
+import { prisma } from "../db/prisma";
+import { signIn } from 'next-auth/react';
+
 
 interface UpdateUserProps {
   session: Session | null;
@@ -17,7 +19,7 @@ interface UpdateUserProps {
 interface CreateUserProps {
   data: {
     email?: string;
-    password: string;
+    hashedPassword: string;
   };
 }
 
@@ -45,27 +47,53 @@ export async function updateUser({
 
 
 export async function createUser({
-  data,
-}: CreateUserProps): Promise<void> {
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}): Promise<void> {
   const user = await prisma.user.findUnique({
-    where: { email: data.email },
+    where: { email },
   });
 
-  if (user ===  null) {
-    throw new Error("This user already exist");
+  if (user) {
+    throw new Error("User already exists");
   }
 
-  const hashedPassword = await bcrypt.hash(data.password, 10)
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   try {
     const newUser = await prisma.user.create({
       data: {
-        email: data.email,
-        password: hashedPassword,
+        email,
+        hashedPassword,
       },
     });
-    console.log(newUser);
-  } catch (error: any) {
-    throw new Error(`Failed to create User: ${error.message}`);
+    console.log("User created:", newUser)
+  } catch (error) {
+    console.error('Failed to create user:', error);
+    throw new Error('Failed to create user');
+  }
+}
+
+export async function LogiInUser({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}): Promise<void> {
+
+  try {
+    await signIn('credentials', {
+      email: email,
+      password: password,
+      callbackUrl: '/',
+    });
+    console.log("dziala")
+  } catch (error) {
+    console.error('Failed to login user:', error);
+    throw new Error('Failed to login user');
   }
 }
