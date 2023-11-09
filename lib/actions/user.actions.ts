@@ -19,7 +19,7 @@ interface UpdateUserProps {
 interface CreateUserProps {
   data: {
     email?: string;
-    hashedPassword: string;
+    password: string;
   };
 }
 
@@ -47,33 +47,28 @@ export async function updateUser({
 
 
 export async function createUser({
-  email,
-  password,
-}: {
-  email: string;
-  password: string;
-}): Promise<void> {
+  data,
+}: CreateUserProps): Promise<void> {
   const user = await prisma.user.findUnique({
-    where: { email },
+    where: { email: data.email },
   });
 
   if (user) {
-    throw new Error("User already exists");
+    throw new Error("This user already exist");
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await bcrypt.hash(data.password, 10)
 
   try {
     const newUser = await prisma.user.create({
       data: {
-        email,
-        hashedPassword,
+        email: data.email,
+        password: hashedPassword,
       },
     });
-    console.log("User created:", newUser)
-  } catch (error) {
-    console.error('Failed to create user:', error);
-    throw new Error('Failed to create user');
+    console.log( "User created sucessfully", newUser);
+  } catch (error: any) {
+    throw new Error(`Failed to create User: ${error.message}`);
   }
 }
 

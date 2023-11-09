@@ -1,5 +1,5 @@
 
-import Register from "@/components/forms/RegisterForm";
+import Register from "@/components/forms/SignUpForm";
 
 async function Page() {
   return (
