@@ -18,7 +18,7 @@ interface UpdateUserProps {
 
 interface CreateUserProps {
   data: {
-    email?: string;
+    email: string;
     password: string;
   };
 }
@@ -41,7 +41,7 @@ export async function updateUser({
     });
   } catch (error: any) {
     console.error("Error details:", error);
-    throw new Error(`Failed to create group: ${error.message}`);
+    throw new Error(`Failed to update usser: ${error.message}`);
   }
 }
 
@@ -49,6 +49,8 @@ export async function updateUser({
 export async function createUser({
   data,
 }: CreateUserProps): Promise<void> {
+  console.log(data);
+
   const user = await prisma.user.findUnique({
     where: { email: data.email },
   });
@@ -64,6 +66,7 @@ export async function createUser({
       data: {
         email: data.email,
         password: hashedPassword,
+        groupId: "65142379c592bef7f2b1e3c7",
       },
     });
     console.log( "User created sucessfully", newUser);

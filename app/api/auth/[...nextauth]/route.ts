@@ -12,19 +12,23 @@ import { LoginUserValidation } from "@/lib/validations/user";
 
 export const authOptions: NextAuthOptions = {
   adapter: CustomPrismaAdapter(prisma as PrismaClient) as Adapter,
+  session:{
+    strategy: 'jwt'
+  },
   providers: [
     CredentialsProvider({
+      name:"Credentials",
       credentials: {
-        email: { type: 'text', placeholder: 'test@test.com' },
-        password: { type: 'password', placeholder: 'Pa$$w0rd' },
+        email: { label:"Email", type: 'text', placeholder: 'test@test.com' },
+        password: { label:"Password", type: 'password', placeholder: 'Pa$$w0rd' },
       },
       async authorize(credentials, req) {
         const { email, password } = LoginUserValidation.parse(credentials);
         const user = await prisma.user.findUnique({
           where: { email: email },
         });
-        if (!user || !user.hashedPassword) return null;
-        const isPasswordValid = await bcrypt.compare(password, user.hashedPassword);
+        if (!user || !user.password) return null;
+        const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) return null;
         return user;
       },

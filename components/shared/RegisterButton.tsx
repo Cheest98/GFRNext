@@ -10,12 +10,12 @@ interface RegisterProps {
   };
 }
 
-function RegisterButton({ data: { email, password }, action }: RegisterProps) {
+function RegisterButton({ data, action }: RegisterProps) {
     return (
       <>
         <Button
           className="bg-primary-500"
-          onClick={() => action({ email, password })}
+          onClick={() => action({ data })}
         >
           Register
         </Button>

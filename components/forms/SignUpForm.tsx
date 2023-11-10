@@ -41,12 +41,14 @@ const SignUpForm = () => {
        <form className="mt-10 flex flex-col justify-start gap-10">
           <FormField
             control={form.control}
-            name='email'
+            name="email"
             render={({ field }) => (
               <FormItem className="flex w-full flex-col gap-3">
                 <FormLabel className="flex-1 text-base-semibold text-gray-200" >Email</FormLabel>
                 <FormControl className="no-focus border border-dark-4 bg-dark-3 text-light-1">
-                  <Input placeholder='mail@example.com'
+                  <Input
+                  type="email" 
+                  placeholder='mail@example.com'
                   className="account-form_input no-focus"
                   {...field} />
                 </FormControl>
@@ -102,7 +104,7 @@ const SignUpForm = () => {
       </div>
       <p className='text-center text-sm text-gray-200'>
         If you  have an account, please 
-        <Link className=' text-gray-200 hover:underline' href='/sign-in'>
+        <Link className=' text-gray-200 hover:underline' href='/signin'>
            Sign in
         </Link>
       </p>

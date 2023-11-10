@@ -1,8 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { createProduct } from "@/lib/actions/list.actions";
-import { Session } from "next-auth";
 
 interface CreateProductProps {
   listId: string;
