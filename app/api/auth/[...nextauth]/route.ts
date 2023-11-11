@@ -15,6 +15,10 @@ export const authOptions: NextAuthOptions = {
   session:{
     strategy: 'jwt'
   },
+  pages:{
+    signIn:'/signin'
+  },
+    secret: process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
       name:"Credentials",
@@ -24,13 +28,25 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials, req) {
         const { email, password } = LoginUserValidation.parse(credentials);
+
         const user = await prisma.user.findUnique({
           where: { email: email },
         });
+
         if (!user || !user.password) return null;
         const isPasswordValid = await bcrypt.compare(password, user.password);
+
         if (!isPasswordValid) return null;
-        return user;
+
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          bio: user.bio,
+          phone: user.phone,
+          picturePath: user.picturePath,
+          groupId: user.groupId,
+        };
       },
     }),
     GoogleProvider({
@@ -40,24 +56,37 @@ export const authOptions: NextAuthOptions = {
   ],
 
   callbacks: {
-    session: async ({ session, user }) => {
-      if (user) {
-        session.user.id = user.id;
-        session.user.bio = (user as User).bio;
-        session.user.phone = (user as User).phone;
-        session.user.groupId = (user as User).groupId;
-      }
-      return session;
-    },
-    jwt: async ({ token, user }) => {
-      if (user) {
-        token.id = user.id;
-        // other properties
-      }
-      return token;
-    },
-  },
-  secret: process.env.NEXTAUTH_SECRET,
+async jwt({ token, user}){
+  if(user){
+    return {
+      ...token,
+          id: user.id,
+          bio: user.bio,
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          picturePath: user.picturePath,
+          groupId: user.groupId,
+    }
+  }
+  return token;
+},
+async session ({session, token}){
+  return {
+    ...session,
+    user: {
+      ...session.user,
+      id: token.id,
+          bio: token.bio,
+          name: token.name,
+          email: token.email,
+          phone: token.phone,
+          picturePath: token.picturePath,
+          groupId: token.groupId,
+    }
+  }
+},
+  }
 };
 
 const handler = NextAuth(authOptions);

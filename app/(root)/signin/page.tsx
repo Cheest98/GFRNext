@@ -1,5 +1,5 @@
 
-import SingIn from "@/components/forms/SignInForm";
+import SingInForm from "@/components/forms/SignInForm";
 
 async function Page() {
   return (
@@ -7,7 +7,7 @@ async function Page() {
       <h1 className="head-text"> Logowanko</h1>
       <p className="mt-3 text-base-regular text-light-2"> tuaj do porpawy</p>
       <section className="mt-9 bg-dark-2 p-10">
-        <SingIn />
+        <SingInForm />
       </section>
     </main>
   );

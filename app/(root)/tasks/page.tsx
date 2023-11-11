@@ -7,6 +7,7 @@ import { getServerSession } from "next-auth";
 export default async function Page() {
   const session = await getServerSession(authOptions);
   const groupIdPrisma = session?.user?.groupId || undefined;
+  console.log("tasks session: ", session)
 
   const tasks = await fetchGroupTasks({ groupIdPrisma });
   return (

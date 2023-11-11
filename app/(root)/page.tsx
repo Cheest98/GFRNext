@@ -7,6 +7,7 @@ import { getServerSession } from "next-auth";
 export default async function Home() {
   const session = await getServerSession(authOptions);
   const groupIdPrisma = session?.user?.groupId || undefined;
+  console.log(session)
 
   const test = await fetchGroupPosts({ groupIdPrisma });
 

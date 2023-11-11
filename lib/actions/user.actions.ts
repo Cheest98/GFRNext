@@ -3,7 +3,7 @@
 import bcrypt from "bcryptjs";
 import { Session } from "next-auth";
 import { prisma } from "../db/prisma";
-import { signIn } from 'next-auth/react';
+
 
 
 interface UpdateUserProps {
@@ -17,6 +17,13 @@ interface UpdateUserProps {
 }
 
 interface CreateUserProps {
+  data: {
+    email: string;
+    password: string;
+  };
+}
+
+interface  LogInUserProps {
   data: {
     email: string;
     password: string;
@@ -72,26 +79,5 @@ export async function createUser({
     console.log( "User created sucessfully", newUser);
   } catch (error: any) {
     throw new Error(`Failed to create User: ${error.message}`);
-  }
-}
-
-export async function LogiInUser({
-  email,
-  password,
-}: {
-  email: string;
-  password: string;
-}): Promise<void> {
-
-  try {
-    await signIn('credentials', {
-      email: email,
-      password: password,
-      callbackUrl: '/',
-    });
-    console.log("dziala")
-  } catch (error) {
-    console.error('Failed to login user:', error);
-    throw new Error('Failed to login user');
   }
 }

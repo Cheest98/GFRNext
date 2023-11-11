@@ -1,13 +1,27 @@
-import { DefaultSession, DefaultUser } from "next-auth";
+import { DefaultSession, DefaultUser, NextAuth } from "next-auth";
 
 declare module "next-auth" {
+  interface User{
+    id: string;
+    bio: string | null;
+    phone: string | null;
+    groupId: string | null;
+    picturePath: string | null;
+  }
   interface Session {
-    user: {
+    user: User & {
       id: string;
       bio: string | null;
       phone: string | null;
-      token?: string;
+      picturePath: string | null;
       groupId: string | null;
-    } & DefaultSession["user"];
+    },
+    token: {
+      id: string;
+      bio: string | null;
+      phone: string | null;
+      picturePath: string | null;
+      groupId: string | null;
+    };
   }
 }

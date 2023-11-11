@@ -12,15 +12,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Input } from "@/components/ui/input";
-import { LogiInUser } from "@/lib/actions/user.actions";
 import { LoginUserValidation } from "@/lib/validations/user";
-import RegisterButton from "../shared/RegisterButton";
 import GoogleSignInButton from "../shared/GoogleSignInButton";
 import Link from "next/link";
+import { signIn } from 'next-auth/react';
+import { useRouter } from "next/router";
 
 
-const SingIn = () => {
-
+const SingInForm = () => {
   const form = useForm<z.infer<typeof LoginUserValidation>>({
     resolver: zodResolver(LoginUserValidation),
     defaultValues: {
@@ -28,6 +27,22 @@ const SingIn = () => {
       password: "",
     },
   });
+
+  const onSubmit = async (values: z.infer<typeof LoginUserValidation> ) => {
+    const signInData = await signIn('credentials', {
+      email: values.email,
+      password: values.password
+    })
+    console.log(signInData)
+
+    if(signInData?.error){
+      console.log(signInData.error)
+    } else {
+      console.log("jj")
+
+    }
+  };
+
 
 
   const data = form.watch();
@@ -69,7 +84,6 @@ const SingIn = () => {
               </FormItem>
             )}
           />
-       
       </form>
       <div className='mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400  text-gray-200'>
         or
@@ -90,4 +104,4 @@ const SingIn = () => {
   );
 };
 
-export default SingIn;
+export default SingInForm;
