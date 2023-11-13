@@ -17,9 +17,10 @@ import GoogleSignInButton from "../shared/GoogleSignInButton";
 import Link from "next/link";
 import { signIn } from 'next-auth/react';
 import { useRouter } from "next/router";
+import { Button } from "../ui/button";
 
 
-const SingInForm = () => {
+const SignInForm = () => {
   const form = useForm<z.infer<typeof LoginUserValidation>>({
     resolver: zodResolver(LoginUserValidation),
     defaultValues: {
@@ -50,7 +51,7 @@ const SingInForm = () => {
   return (
  <>
         <Form {...form}>
-       <form className="mt-10 flex flex-col justify-start gap-10">
+       <form onSubmit={form.handleSubmit(onSubmit)} className="mt-10 flex flex-col justify-start gap-10">
           <FormField
             control={form.control}
             name='email'
@@ -84,13 +85,17 @@ const SingInForm = () => {
               </FormItem>
             )}
           />
+        <Button className='w-full mt-6' type='submit'>
+          Sign in
+        </Button>
       </form>
+
       <div className='mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400  text-gray-200'>
         or
       </div>
       <div>
       <div className="flex justify-center">
-    <GoogleSignInButton label="Sign up with Google" />
+    <GoogleSignInButton >  Sign up with Google</GoogleSignInButton>
       </div>
       </div>
       <p className='text-center text-sm text-gray-200'>
@@ -104,4 +109,4 @@ const SingInForm = () => {
   );
 };
 
-export default SingInForm;
+export default SignInForm;

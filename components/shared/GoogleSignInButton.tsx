@@ -2,16 +2,18 @@
 
 import { Button } from "@/components/ui/button";
 import { signIn } from "next-auth/react";
+import { FC, ReactNode } from "react";
 
-interface ButtonProps {
-  label: string;
+interface GoogleSignInButtonProps {
+  children: ReactNode
 }
 
-function GoogleSignInButton({label}: ButtonProps) {
+const GoogleSignInButton: FC <GoogleSignInButtonProps> =( {children}) => {
+  const loginWithGoogle =() => signIn('google', {callbackUrl: "http://localhost:3000/"})
   return (
     <>
-      <Button className="bg-primary-500" onClick={() => signIn() }>
-        {label}
+      <Button className="bg-primary-500" onClick={loginWithGoogle }>
+        {children}
       </Button>
     </>
   );

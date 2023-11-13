@@ -7,6 +7,7 @@ import { sidebarLinks } from "../../app/constants/index.js";
 
 export default async function LeftSidebar() {
   const pathname = usePathname();
+  
   return (
     <section className="custom-scrollbar leftsidebar">
       <div className="flex w-full flex-1 flex-col gap-6 px-6">
@@ -26,6 +27,7 @@ export default async function LeftSidebar() {
                 width={24}
                 height={24}
               />
+              
               <p className="text-light-1 max-lg:hidden">{link.label}</p>
             </Link>
           );
