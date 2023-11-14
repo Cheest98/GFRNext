@@ -13,7 +13,7 @@ export default async function Home() {
 
   return (
     <main className="mx-auto flex max-w-3xl flex-col justify-start">
-      <section className="bg-dark-2 p-10">
+      <section className="bg-dark-2 p-10 rounded-lg">
         <Post session={session} />
       </section>
       <section className="mt-9 flex flex-col gap-10">

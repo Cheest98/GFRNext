@@ -8,7 +8,7 @@ import Navbar from "@/components/shared/Navbar";
 import "../globals.css";
 import LeftSidebar from "@/components/shared/LeftSidebar";
 import { SessionProvider } from "next-auth/react";
-
+import RightSidebar from "@/components/shared/RightSidebar";
 
 export default function RootLayout({
   children,

@@ -6,6 +6,8 @@ import LeftSidebar from "@/components/shared/LeftSidebar";
 import Navbar from "@/components/shared/Navbar";
 import SessionProvider from "../SessionProvider";
 import "../globals.css";
+import RightSidebar from "@/components/shared/RightSidebar";
+import Bottombar from "@/components/shared/BottomBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +23,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className=" bg-dark-1">
         <SessionProvider>
           <Navbar />
           <main className="flex flex-row">
@@ -29,7 +31,9 @@ export default function RootLayout({
             <section className="main-container">
               <div className="w-full max-w-4xl">{children}</div>
             </section>
+            <RightSidebar />
           </main>
+          <Bottombar />
         </SessionProvider>
       </body>
     </html>

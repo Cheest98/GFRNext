@@ -11,7 +11,7 @@ export default async function Page() {
   const lists = await fetchGroupLists({ groupIdPrisma });
   return (
     <main className="mx-auto flex max-w-3xl flex-col justify-start">
-      <section className="bg-dark-2 p-10">
+      <section className="bg-dark-2 p-10 rounded-lg">
         <List session={session} />
       </section>
       <section className="mt-9 flex flex-col gap-10">

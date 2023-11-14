@@ -30,4 +30,5 @@ export const sidebarLinks = [
     route: "/profile",
     label: "Profile",
   },
+  
 ];

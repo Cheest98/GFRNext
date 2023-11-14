@@ -68,7 +68,7 @@ const Post = ({ session }: UserProps) => {
     <>
       <h1 className="head-text text-left">Create post</h1>
       <Form {...form}>
-        <form className="mt-10 flex flex-col justify-start gap-10">
+        <form className="mt-10 flex flex-col justify-start gap-10 rounded-lg">
           <FormField
             control={form.control}
             name="content"
