@@ -16,6 +16,7 @@ interface groupProps {
 }
 
 interface UpdateTaskProps {
+  session: Session | null;
   data: {
     id: string;
     status: string;
@@ -47,6 +48,13 @@ export async function createTask({
         groupId: user.groupId,
       },
     });
+    await prisma.activity.create({
+      data: {
+        type: "TASK_CREATED",
+        userId: session.user.id,
+        groupId: user.groupId,
+      },
+    });
     console.log(newTask);
     revalidatePath("/tasks");
   } catch (error: any) {
@@ -74,8 +82,18 @@ export async function fetchGroupTasks({ groupIdPrisma }: groupProps) {
   }
 }
 
-export async function updateTask({ data }: UpdateTaskProps): Promise<void> {
+export async function updateTask({ data, session }: UpdateTaskProps): Promise<void> {
   // Filter out undefined fields
+  if (!session?.user?.id) {
+    throw new Error("User ID is missing.");
+  }
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+  });
+
+  if (!user || !user.groupId) {
+    throw new Error("User's group ID is missing.");
+  }
 
   try {
     await prisma.task.update({
@@ -84,6 +102,13 @@ export async function updateTask({ data }: UpdateTaskProps): Promise<void> {
       },
       data: {
         status: data.status,
+      },
+    });
+    await prisma.activity.create({
+      data: {
+        type: "TASK_UPDATED",
+        userId: session.user.id,
+        groupId: user.groupId,
       },
     });
     revalidatePath("/tasks");

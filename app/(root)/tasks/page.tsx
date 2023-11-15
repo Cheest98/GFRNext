@@ -7,7 +7,6 @@ import { getServerSession } from "next-auth";
 export default async function Page() {
   const session = await getServerSession(authOptions);
   const groupIdPrisma = session?.user?.groupId || undefined;
-  console.log("tasks session: ", session)
 
   const tasks = await fetchGroupTasks({ groupIdPrisma });
   return (
@@ -18,6 +17,7 @@ export default async function Page() {
       <section className="mt-9 flex flex-col gap-10">
         {tasks.map((task) => (
           <TaskCard
+          session={session}
             key={task.id}
             id={task.id}
             task={task.task}

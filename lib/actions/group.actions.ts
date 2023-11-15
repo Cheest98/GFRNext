@@ -10,8 +10,9 @@ interface CreateGroupProps {
     description: string;
   };
 }
-
-interface JoinGroupProps {}
+interface recentActivitiesProps {
+  groupId: string | null
+}
 
 export async function createGroup({
   session,
@@ -34,6 +35,10 @@ export async function createGroup({
       members: true,
     },
   });
+  if (!existingGroup) {
+    throw new Error("Group ID is missing.");
+  }
+
 
   if (existingGroup) {
     // If the user is the last member of the group
@@ -81,6 +86,13 @@ export async function createGroup({
         groupId: newGroup.id,
       },
     });
+    await prisma.activity.create({
+      data: {
+        type: "GROUP_LEFT",
+        userId: session.user.id,
+        groupId: existingGroup.id,
+      },
+    });
     console.log(newGroup);
   } catch (error: any) {
     throw new Error(`Failed to create group: ${error.message}`);
@@ -97,6 +109,7 @@ export async function joinGroup({
   if (!session?.user?.id) {
     throw new Error("User ID is missing.");
   }
+  
 
   // Check if the user is already a member of another group
   const existingGroup = await prisma.group.findFirst({
@@ -111,6 +124,9 @@ export async function joinGroup({
       members: true,
     },
   });
+  if (!existingGroup) {
+    throw new Error("Group ID is missing.");
+  }
 
   if (existingGroup) {
     // If the user is the last member of the group
@@ -148,8 +164,40 @@ export async function joinGroup({
         groupId: joinGroupId,
       },
     });
+
+    await prisma.activity.create({
+      data: {
+        type: "GROUP_LEFT",
+        userId: session.user.id,
+        groupId: existingGroup.id,
+      },
+    });
     console.log(`User joined group: ${joinGroupId}`);
   } catch (error: any) {
     throw new Error(`Failed to join group: ${error.message}`);
   }
+}
+
+export async function fetchRecentActivities({ groupId }: recentActivitiesProps) {
+  if (!groupId) {
+    throw new Error("Group ID is missing.");
+  }
+  
+  try {
+    const activities = prisma.activity.findMany({
+    where: { 
+      groupId
+     },
+    orderBy: { 
+      createdAt: 'desc' 
+    },
+    take: 10, // Fetch the 10 most recent activities
+    include: { 
+      user: true 
+    }, // Include user information
+  });
+  return activities;
+} catch (error: any) {
+  throw new Error(`Failed to fetch activities: ${error.message}`);
+}
 }

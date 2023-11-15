@@ -1,7 +1,9 @@
 import { updateTask } from "@/lib/actions/task.actions";
 import TaskButton from "../shared/TaskButton";
+import { Session } from "next-auth";
 
 interface TaskCardProps {
+  session: Session | null;
   id: string;
   task: string;
   status: string;
@@ -12,7 +14,7 @@ interface TaskCardProps {
   };
 }
 
-function TaskCard({ id, task, author, status }: TaskCardProps) {
+function TaskCard({ id, task, author, status,  session }: TaskCardProps) {
   return (
     <article className="flex w-full flex-col rounded-xl">
       <div className="flex items-start justify-between">
@@ -30,21 +32,24 @@ function TaskCard({ id, task, author, status }: TaskCardProps) {
           <div>
             {status !== "To do" && (
               <TaskButton
-                data={{ id, status: "To do" }}
+              session={session}
+                data={{ id, status: "To do", session }}
                 action={updateTask}
                 label="To do"
               />
             )}
             {status !== "Doing" && (
               <TaskButton
-                data={{ id, status: "Doing" }}
+              session={session}
+                data={{ id, status: "Doing", }}
                 action={updateTask}
                 label="Doing"
               />
             )}
             {status !== "Done" && (
               <TaskButton
-                data={{ id, status: "Done" }}
+              session={session}
+                data={{ id, status: "Done",}}
                 action={updateTask}
                 label="Done"
               />

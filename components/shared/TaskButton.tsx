@@ -1,17 +1,20 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Session } from "next-auth";
+
 
 interface ButtonProps {
+  session: Session | null;
   data: any;
   action: (props: any) => void;
   label: string;
 }
 
-function TaskButton({ data, action, label }: ButtonProps) {
+function TaskButton({ data, action, label, session }: ButtonProps) {
   return (
     <>
-      <Button className="bg-primary-500" onClick={() => action({ data })}>
+      <Button className="bg-primary-500" onClick={() => action({ data, session })}>
         {label}
       </Button>
     </>

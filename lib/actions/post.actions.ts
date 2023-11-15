@@ -39,6 +39,13 @@ export async function createPost({
         content: data.content,
         authorId: session.user.id,
         groupId: user.groupId,
+      },  
+    });
+    await prisma.activity.create({
+      data: {
+        type: "POST_CREATED",
+        userId: session.user.id,
+        groupId: user.groupId,
       },
     });
     console.log(newPost);

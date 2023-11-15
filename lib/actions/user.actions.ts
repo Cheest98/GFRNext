@@ -4,8 +4,6 @@ import bcrypt from "bcryptjs";
 import { Session } from "next-auth";
 import { prisma } from "../db/prisma";
 
-
-
 interface UpdateUserProps {
   session: Session | null;
   data: {
@@ -81,3 +79,4 @@ export async function createUser({
     throw new Error(`Failed to create User: ${error.message}`);
   }
 }
+

@@ -57,6 +57,7 @@ model User {
   posts         Post[]
   tasks         Task[]
   lists         List[]
+  activities Activity[]
 
   @@map("users")
 }
@@ -70,9 +71,22 @@ model Group {
   posts       Post[]
   tasks       Task[]
   lists       List[]
+  activities Activity[]
 
   @@map("groups")
 }
+
+model Activity {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  type       String   // e.g., "POST_CREATED", "TASK_UPDATED"
+  userId     String   @db.ObjectId
+  groupId    String   @db.ObjectId
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id])
+  group      Group    @relation(fields: [groupId], references: [id])
+
+  @@map("activities")
+  }
 
 model Post {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId

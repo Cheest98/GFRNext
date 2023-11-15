@@ -44,6 +44,13 @@ export async function createList({ session, data }: ListProps): Promise<void> {
         groupId: user.groupId,
       },
     });
+    await prisma.activity.create({
+      data: {
+        type: "LIST_CREATED",
+        userId: session.user.id,
+        groupId: user.groupId,
+      },
+    });
     console.log(newList);
     revalidatePath("/lists");
   } catch (error: any) {
@@ -90,7 +97,9 @@ export async function createProduct({
         status: "Not Completed",
         listid: listId,
       },
+      
     });
+    
     console.log(newProduct);
     revalidatePath("/lists");
   } catch (error: any) {
