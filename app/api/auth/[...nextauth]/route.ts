@@ -32,6 +32,7 @@ export const authOptions: NextAuthOptions = {
         const user = await prisma.user.findUnique({
           where: { email: email },
         });
+        console.log(user); 
 
         if (!user || !user.password) return null;
         const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -80,7 +81,7 @@ async session ({session, token}){
           bio: token.bio,
           name: token.name,
           email: token.email,
-          phone: token.phone,
+          phone: token.phone, // Add this line
           picturePath: token.picturePath,
           groupId: token.groupId,
     }

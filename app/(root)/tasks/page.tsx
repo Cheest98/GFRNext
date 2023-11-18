@@ -9,6 +9,8 @@ export default async function Page() {
   const groupIdPrisma = session?.user?.groupId || undefined;
 
   const tasks = await fetchGroupTasks({ groupIdPrisma });
+  //const tasks = await fetch('/tasks', {cache: "no-cache"}  )
+  
   return (
     <main className="mx-auto flex max-w-3xl flex-col justify-start">
       <section className="bg-dark-2 p-10 rounded-lg">

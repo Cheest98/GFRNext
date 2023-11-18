@@ -1,22 +1,47 @@
 "use client";
 
 import { Session } from "next-auth";
-import { signIn, signOut } from "next-auth/react";
-import Image from "next/image";
+import { signIn, signOut, useSession } from "next-auth/react";
+import Image, { StaticImageData } from "next/image";
 import profilePicPlaceholder from "../../public/assets/profile-pic-placeholder.png";
+import { getUserImage } from "@/lib/actions/user.actions";
+import React, { useState, useEffect } from 'react';
 
 interface UserMenuButtonProps {
   session: Session | null;
 }
 
 export default function UserMenuButton({ session }: UserMenuButtonProps) {
+  const [imageUrl, setImageUrl] = useState<string | StaticImageData>(profilePicPlaceholder);
   const user = session?.user;
+  const { data: imageSession } = useSession();
+
+  const email = imageSession?.user.email;
+
+
+  useEffect(() => {
+    const fetchImageUrl = async () => {
+      const email = session?.user?.email;
+      if (email) {
+        try {
+          const response = await getUserImage({ email });
+          if (response.image) {
+            setImageUrl(response.image);
+          }
+        } catch (error) {
+          console.error("Error fetching image:", error);
+        }
+      }
+    };
+
+    fetchImageUrl();
+  }, [session]);
 
   return (
     <div className="flex items-center gap-1">
       {user ? (
         <Image
-          src={user?.image || profilePicPlaceholder}
+          src={imageUrl}
           alt="Profile picture"
           width={40}
           height={40}
@@ -51,3 +76,5 @@ export default function UserMenuButton({ session }: UserMenuButtonProps) {
     </div>
   );
 }
+
+

@@ -111,7 +111,7 @@ export async function updateTask({ data, session }: UpdateTaskProps): Promise<vo
         groupId: user.groupId,
       },
     });
-    revalidatePath("/tasks");
+    revalidatePath("/tasks", 'page');
   } catch (error: any) {
     console.error("Error details:", error);
     throw new Error(`Failed to create task: ${error.message}`);

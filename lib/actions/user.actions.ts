@@ -21,11 +21,9 @@ interface CreateUserProps {
   };
 }
 
-interface  LogInUserProps {
-  data: {
-    email: string;
-    password: string;
-  };
+
+interface GetUserImageProps {
+  email: string | null;
 }
 
 export async function updateUser({
@@ -77,6 +75,34 @@ export async function createUser({
     console.log( "User created sucessfully", newUser);
   } catch (error: any) {
     throw new Error(`Failed to create User: ${error.message}`);
+  }
+}
+
+
+
+export async function getUserImage({
+  email,
+}: GetUserImageProps):  Promise<{ image: string | null }> {
+
+
+
+  if (!email ) {
+    throw new Error(" Missing email ");
+  }
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email: email },
+      select: { image: true }
+    });
+
+    if (!user) {
+      throw new Error("This email not  exist");
+    }
+
+    return user;
+  } catch (error) {
+    throw new Error("This email not  exist");
   }
 }
 
