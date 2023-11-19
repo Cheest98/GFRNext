@@ -7,7 +7,6 @@ declare module "next-auth" {
     phone: string | null;
     groupId: string | null;
     picturePath: string | null;
-    image:string | null;
   }
   interface Session {
     user: User & {
@@ -16,7 +15,6 @@ declare module "next-auth" {
       phone: string | null;
       picturePath: string | null;
       groupId: string | null;
-      image:string | null;
     },
     token: {
       id: string;
@@ -24,7 +22,6 @@ declare module "next-auth" {
       phone: string | null;
       picturePath: string | null;
       groupId: string | null;
-      image:string | null;
     };
   }
 }

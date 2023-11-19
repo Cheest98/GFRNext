@@ -34,7 +34,7 @@ const SignInForm = () => {
       email: values.email,
       password: values.password
     })
-    console.log(signInData)
+    console.log("logowanie", signInData)
 
     if(signInData?.error){
       console.log(signInData.error)

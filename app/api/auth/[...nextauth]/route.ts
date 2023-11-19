@@ -32,7 +32,6 @@ export const authOptions: NextAuthOptions = {
         const user = await prisma.user.findUnique({
           where: { email: email },
         });
-        console.log(user); 
 
         if (!user || !user.password) return null;
         const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -45,7 +44,6 @@ export const authOptions: NextAuthOptions = {
           email: user.email,
           bio: user.bio,
           phone: user.phone,
-          picturePath: user.picturePath,
           groupId: user.groupId,
         };
       },
@@ -53,6 +51,15 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
+      profile(profile) {
+        console.log("Google profile data:", profile);
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+
+        };
+      },
     }),
   ],
 
@@ -66,7 +73,6 @@ async jwt({ token, user}){
           name: user.name,
           email: user.email,
           phone: user.phone,
-          picturePath: user.picturePath,
           groupId: user.groupId,
     }
   }
@@ -82,7 +88,6 @@ async session ({session, token}){
           name: token.name,
           email: token.email,
           phone: token.phone, // Add this line
-          picturePath: token.picturePath,
           groupId: token.groupId,
     }
   }

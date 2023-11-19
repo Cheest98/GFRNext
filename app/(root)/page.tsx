@@ -7,7 +7,8 @@ import { getServerSession } from "next-auth";
 export default async function Home() {
   const session = await getServerSession(authOptions);
   const groupIdPrisma = session?.user?.groupId || undefined;
-  console.log(session)
+  console.log("session", session)
+  
 
   const test = await fetchGroupPosts({ groupIdPrisma });
 
@@ -22,9 +23,11 @@ export default async function Home() {
             key={post.id}
             id={post.id}
             content={post.content}
+            picturePath={post.picturePath}
+            createdAt={post.createdAt.toISOString()}
             author={{
               name: post.author.name || "Unknown",
-              image: post.author.image || "DefaultImageURL",
+              image: post.author.image,
               id: post.author.id,
             }}
           />
