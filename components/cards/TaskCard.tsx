@@ -1,6 +1,6 @@
 import { updateTask } from "@/lib/actions/task.actions";
-import TaskButton from "../shared/TaskButton";
 import { Session } from "next-auth";
+import TaskButton from "../shared/TaskButton";
 
 interface TaskCardProps {
   session: Session | null;

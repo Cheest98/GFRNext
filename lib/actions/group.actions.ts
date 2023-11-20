@@ -191,7 +191,7 @@ export async function fetchRecentActivities({ groupId }: recentActivitiesProps) 
     orderBy: { 
       createdAt: 'desc' 
     },
-    take: 10, // Fetch the 10 most recent activities
+    take: 5, // Fetch the 5 lastets activities
     include: { 
       user: true 
     }, // Include user information

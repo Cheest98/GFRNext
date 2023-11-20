@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { fetchRecentActivities } from '@/lib/actions/group.actions';
+import ActivityCard from '../cards/ActivityCard';
 
 interface Activity {
   id: string;
@@ -9,7 +10,8 @@ interface Activity {
   createdAt: Date; // Include date if you want to display it
   user: {
     id: string;
-    name: string| null; // and any other user details you need
+    name: string| null;
+    image: string | null; // and any other user details you need
   };
 }
 
@@ -59,11 +61,20 @@ const RightSidebar = () => {
               Activity
             </h3>
             <div>
-      {activities.map(activity => (
-        <div key={activity.id}>
-          <p className='text-heading4-medium text-light-1'>{activity.user.name}  {getActivityDescription(activity.type)} {activity.createdAt.toLocaleString()}</p>
-        </div>
-      ))}
+
+ {activities.map((activity) => (
+          <ActivityCard
+            key={activity.id}
+            id={activity.id} 
+            userName={activity.user.name || "Unknown"}
+            userImage={activity.user.image}
+            createdAt={activity.createdAt.toISOString()}
+            description ={getActivityDescription(activity.type)}
+          />
+        ))}
+
+
+
     </div>
     
             <div className='mt-7 flex w-[350px] flex-col gap-9'>

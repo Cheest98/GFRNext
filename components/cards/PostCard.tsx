@@ -1,6 +1,6 @@
+import { formatDateString } from "@/lib/utils";
 import Image from "next/image";
 import profilePicPlaceholder from "../../public/assets/profile-pic-placeholder.png";
-import { formatDateString } from "@/lib/utils";
 
 interface PostCardProps {
   id: string;
