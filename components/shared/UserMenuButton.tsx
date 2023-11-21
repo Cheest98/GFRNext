@@ -14,10 +14,6 @@ interface UserMenuButtonProps {
 export default function UserMenuButton({ session }: UserMenuButtonProps) {
   const [imageUrl, setImageUrl] = useState<string | StaticImageData>(profilePicPlaceholder);
   const user = session?.user;
-  const { data: imageSession } = useSession();
-
-  const email = imageSession?.user.email;
-
 
   useEffect(() => {
     const fetchImageUrl = async () => {

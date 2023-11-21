@@ -56,7 +56,7 @@ function PostCard({ id, content, author, createdAt, picturePath }: PostCardProps
 
           {picturePath && (
         <div className='mb-2 mt-2 flex flex-col gap-1'>
-          <div className='flex gap-3.5'>
+          <div className='flex gap-3.5 max-size-image'>
             <Image
               src={picturePath}
               alt='post image'

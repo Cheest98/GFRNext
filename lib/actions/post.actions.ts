@@ -16,6 +16,11 @@ interface groupProps {
   groupIdPrisma: string | undefined;
 }
 
+interface userProps {
+  authorId: string | undefined;
+}
+
+
 export async function createPost({
   session,
   data,
@@ -71,5 +76,24 @@ export async function fetchGroupPosts({ groupIdPrisma }: groupProps) {
     return posts;
   } catch (error: any) {
     throw new Error(`Failed to fetch post: ${error.message}`);
+  }
+}
+
+export async function fetchUserPosts({ authorId }: userProps) {
+  try {
+    const posts = await prisma.post.findMany({
+      where: {
+        authorId: authorId,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        author: true,
+      },
+    });
+    return posts;
+  } catch (error: any) {
+    throw new Error(`Failed to fetch user post: ${error.message}`);
   }
 }

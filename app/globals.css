@@ -113,6 +113,11 @@
     @apply border border-dark-4 bg-dark-3 text-light-1 !important;
   }
 }
+@layer components {
+  .max-size-image {
+    @apply max-w-[600px] max-h-[600px] overflow-hidden;
+  }
+}
 
 @layer utilities {
   .css-invert {

@@ -32,3 +32,10 @@ export const sidebarLinks = [
   },
   
 ];
+
+export const profileTabs = [
+  { value: "posts", label: "Posts", icon: "/assets/reply.svg" },
+  { value: "tasks", label: "Tasks", icon: "/assets/members.svg" },
+  { value: "lists", label: "Shopping Lists", icon: "/assets/tag.svg" },
+  { value: "events", label: "Events", icon: "/assets/tag.svg" },
+];

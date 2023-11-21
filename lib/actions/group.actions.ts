@@ -14,6 +14,11 @@ interface recentActivitiesProps {
   groupId: string | null
 }
 
+
+interface getGroupInfoProps {
+  groupIdPrisma: string 
+}
+
 export async function createGroup({
   session,
   data,
@@ -176,6 +181,25 @@ export async function joinGroup({
   } catch (error: any) {
     throw new Error(`Failed to join group: ${error.message}`);
   }
+}
+
+export async function getGroupInfo({ groupIdPrisma }: getGroupInfoProps) {
+  if (!groupIdPrisma) {
+    throw new Error("Group ID is missing.");
+  }
+  
+  try {
+    const groupInfo = prisma.group.findUnique({
+      where: { id: groupIdPrisma },
+      select: { 
+        name: true,
+        description: true,
+       }
+  });
+  return groupInfo;
+} catch (error: any) {
+  throw new Error(`Failed to fetch group info: ${error.message}`);
+}
 }
 
 export async function fetchRecentActivities({ groupId }: recentActivitiesProps) {
