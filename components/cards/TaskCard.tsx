@@ -1,12 +1,20 @@
-import { updateTask } from "@/lib/actions/task.actions";
+import { deleteTask, updateTask } from "@/lib/actions/task.actions";
 import { Session } from "next-auth";
 import TaskButton from "../shared/TaskButton";
+import { Button } from "../ui/button";
+import Image from "next/image";
+import { formatDateString } from "@/lib/utils";
+import profilePicPlaceholder from "../../public/assets/profile-pic-placeholder.png";
+import DeleteButton from "../shared/DeleteButton";
+
 
 interface TaskCardProps {
   session: Session | null;
   id: string;
   task: string;
+  description: string;
   status: string;
+  createdAt: string;
   author: {
     name: string;
     image: string;
@@ -14,49 +22,56 @@ interface TaskCardProps {
   };
 }
 
-function TaskCard({ id, task, author, status,  session }: TaskCardProps) {
+function TaskCard({ id, task, author, status, description, createdAt,  session }: TaskCardProps) {
+
+  const authorImage = author.image ? author.image : profilePicPlaceholder;
   return (
-    <article className="flex w-full flex-col rounded-xl">
-      <div className="flex items-start justify-between">
-        <div className="flex w-full flex-1 flex-row gap-4">
-          <div className="flex flex-col items-center">
-            <div className="thread-card_bar" />
-          </div>
-          <div className="flex w-full flex-col">
-            <h4 className="cursor-pointer text-base-semibold text-light-1">
-              {author.name}
-            </h4>
-            <p className="mt-2 text-small-regular text-light-2">{task}</p>
-            <p className="mt-2 text-small-regular text-light-2">{status}</p>
-          </div>
-          <div>
-            {status !== "To do" && (
-              <TaskButton
+<article className="p-5 rounded-lg bg-dark-2   border-r-dark-1 flex flex-col gap-2 h-64">
+<div className='flex w-full flex-col justify-between'>  
+            <div className='flex justify-between'>
+            <h1 className="text-1.5rem font-semibold text-light-1">{task}</h1>
+            <div>
+            <DeleteButton
               session={session}
-                data={{ id, status: "To do", session }}
-                action={updateTask}
-                label="To do"
+                data={{ id}}
+                action={deleteTask}
               />
-            )}
-            {status !== "Doing" && (
+              </div>
+            </div>
+      </div>
+      <p className="text-light-1">{description}</p>
+      
+      <div className="mt-auto flex items-center gap-3">
+  
+            {status === "To do" && (
               <TaskButton
               session={session}
-                data={{ id, status: "Doing", }}
+                data={{ id, status: "Doing", session }}
                 action={updateTask}
                 label="Doing"
               />
             )}
-            {status !== "Done" && (
+            {status === "Doing" && (
               <TaskButton
               session={session}
-                data={{ id, status: "Done",}}
+                data={{ id, status: "Done", }}
                 action={updateTask}
                 label="Done"
               />
             )}
-          </div>
-        </div>
+            {status === "Done" && (
+              <p className="text-light-1"> Task completed at: {description}</p>
+            )}
       </div>
+      <div>
+            </div>
+            <div className='h-0.5 w-full bg-dark-3' />
+           <div className='mt-2 flex justify-between items-center'>
+        <p className='text-subtle-medium text-gray-1'>{author.name}</p>
+        <p className='text-subtle-medium text-gray-1'>{formatDateString(createdAt)}</p>
+      </div>
+  
+
     </article>
   );
 }

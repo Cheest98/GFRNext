@@ -104,6 +104,7 @@ model Post {
 model Task {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   task      String
+  description String?
   status    String
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  String   @db.ObjectId

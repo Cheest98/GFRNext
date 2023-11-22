@@ -14,7 +14,7 @@ interface ButtonProps {
 function TaskButton({ data, action, label, session }: ButtonProps) {
   return (
     <>
-      <Button className="bg-primary-500" onClick={() => action({ data, session })}>
+      <Button className="bg-primar-200" onClick={() => action({ data, session })}>
         {label}
       </Button>
     </>

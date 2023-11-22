@@ -39,3 +39,10 @@ export const profileTabs = [
   { value: "lists", label: "Shopping Lists", icon: "/assets/tag.svg" },
   { value: "events", label: "Events", icon: "/assets/tag.svg" },
 ];
+
+export const tasksTabs = [
+  { value: "To do", label: "To do", icon: "/assets/reply.svg" },
+  { value: "Doing", label: "Doing", icon: "/assets/members.svg" },
+  { value: "Done", label: "Done", icon: "/assets/tag.svg" },
+  
+];

@@ -23,6 +23,13 @@ interface UpdateTaskProps {
   };
 }
 
+interface deleteTaskProps {
+  session: Session | null;
+  data: {
+    id: string;
+  };
+}
+
 export async function createTask({
   session,
   data,
@@ -69,7 +76,7 @@ export async function fetchGroupTasks({ groupIdPrisma }: groupProps) {
         groupId: groupIdPrisma,
       },
       orderBy: {
-        createdAt: "desc",
+        updatedAt: "desc",
       },
       include: {
         author: true,
@@ -117,3 +124,39 @@ export async function updateTask({ data, session }: UpdateTaskProps): Promise<vo
     throw new Error(`Failed to create task: ${error.message}`);
   }
 }
+
+export async function deleteTask({ data, session }: deleteTaskProps): Promise<void> {
+  // Filter out undefined fields
+  if (!session?.user?.id) {
+    throw new Error("User ID is missing.");
+  }
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+  });
+
+  if (!user || !user.groupId) {
+    throw new Error("User's group ID is missing.");
+  }
+
+  try {
+    await prisma.task.delete({
+      where: {
+        id: data.id,
+      },
+    });
+  
+    await prisma.activity.create({
+      data: {
+        type: "TASK_DELETED",
+        userId: session.user.id,
+        groupId: user.groupId,
+      },
+    });
+    console.log("Task", data.id,  "has been removed ")
+    revalidatePath("/tasks", 'page');
+  } catch (error: any) {
+    console.error("Error details:", error);
+    throw new Error(`Failed to DELETE task: ${error.message}`);
+  }
+}
+
