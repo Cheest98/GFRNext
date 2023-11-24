@@ -8,19 +8,21 @@ interface RegisterProps {
     email: string;
     password: string;
   };
+  type: string;
 }
 
-function RegisterButton({ data, action }: RegisterProps) {
-    return (
-      <>
-        <Button
-          className="bg-primary-500"
-          onClick={() => action({ data })}
-        >
-          Register
-        </Button>
-      </>
-    );
-  }
+function RegisterButton({ data, action, type }: RegisterProps) {
+  return (
+    <>
+      <Button
+        type={type}
+        className="bg-primary-500"
+        onClick={() => action(data)} 
+      >
+        Register
+      </Button>
+    </>
+  );
+}
 
-export default  RegisterButton;
+export default RegisterButton;

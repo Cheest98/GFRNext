@@ -51,30 +51,30 @@ export async function updateUser({
 
 export async function createUser({
   data,
-}: CreateUserProps): Promise<void> {
-  console.log(data);
+}: CreateUserProps): Promise<{ success: boolean; message: string }> {
+  console.log(data.email)
 
   const user = await prisma.user.findUnique({
     where: { email: data.email },
   });
 
   if (user) {
-    throw new Error("This user already exist");
+    return { success: false, message: "This user already exists" };
   }
 
-  const hashedPassword = await bcrypt.hash(data.password, 10)
-
   try {
-    const newUser = await prisma.user.create({
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+
+    await prisma.user.create({
       data: {
         email: data.email,
         password: hashedPassword,
         groupId: "65142379c592bef7f2b1e3c7",
       },
     });
-    console.log( "User created sucessfully", newUser);
-  } catch (error: any) {
-    throw new Error(`Failed to create User: ${error.message}`);
+    return { success: true, message: "User created successfully" };
+  } catch (error) {
+    return { success: false, message: "Failed to create user, please try again" };
   }
 }
 

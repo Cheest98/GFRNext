@@ -9,6 +9,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
@@ -17,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { createTask } from "@/lib/actions/task.actions";
 import { TaskValidation } from "@/lib/validations/task";
 import SharedButton from "../shared/SharedButton";
+import { Textarea } from "../ui/textarea";
 
 interface UserProps {
   session: Session | null;
@@ -29,24 +31,47 @@ const Task = ({ session }: UserProps) => {
     resolver: zodResolver(TaskValidation),
     defaultValues: {
       task: "",
+      description: "",
     },
+    
   });
 
   const data = form.watch();
 
   return (
     <>
-      <h1 className="head-text text-left">Create Task</h1>
       <Form {...form}>
-        <form className="mt-10 flex justify-start gap-10">
+        <form className="flex flex-col justify-start gap-10">
           <FormField
             control={form.control}
             name="task"
             render={({ field }) => (
               <FormItem className="flex w-full flex-col gap-3">
+                 <FormLabel className="text-base-semibold text-light-2">
+                  Task
+                </FormLabel>
                 <FormControl>
                   <Input
                     type="text"
+                    className="account-form_input no-focus"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+                    <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem className="flex w-full flex-col gap-3">
+                <FormLabel className="text-base-semibold text-light-2">
+                  Description
+                </FormLabel>
+                <FormControl>
+                  <Textarea
+                    rows={2}
                     className="account-form_input no-focus"
                     {...field}
                   />

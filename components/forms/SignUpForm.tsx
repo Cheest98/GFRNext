@@ -17,11 +17,13 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import GoogleSignInButton from "../shared/GoogleSignInButton";
 import RegisterButton from "../shared/RegisterButton";
+import { useToast } from "../ui/use-toast";
+import { Button } from "../ui/button";
 
 
 
 const SignUpForm = () => {
-
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof RegisterUserValidation>>({
     resolver: zodResolver(RegisterUserValidation),
@@ -34,11 +36,41 @@ const SignUpForm = () => {
 
 
   const data = form.watch();
-
+  const onSubmit = async ( values: z.infer<typeof RegisterUserValidation>) => {
+  
+    try {
+      const response = await createUser({ data: { email: values.email, password: values.password } });
+      if (response.success) {
+        toast({
+          title: "Success",
+          description: "User created successfully",
+          variant: "default", // Change variant to test
+          duration: 5000
+        });
+        console.log("Response from createUser:", response);
+      } else {
+        toast({
+          title: "Error",
+          description: response.message,
+          variant: "destructive",
+          duration: 5000
+        });
+      }
+      
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+        duration: 5000
+      });
+      console.error("Error in createUser:", error);
+    }
+  };
   return (
     <>
         <Form {...form}>
-       <form className="mt-10 flex flex-col justify-start gap-10">
+       <form  onSubmit={form.handleSubmit(onSubmit)} className="mt-10 flex flex-col justify-start gap-10">
           <FormField
             control={form.control}
             name="email"
@@ -92,7 +124,12 @@ const SignUpForm = () => {
               </FormItem>
             )}
           />
-        <RegisterButton data={data} action={createUser} />
+      <Button
+        type="submit"
+        className="bg-primary-500"
+      >
+        Register
+      </Button>
       </form>
       <div className='mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400  text-gray-200'>
         or

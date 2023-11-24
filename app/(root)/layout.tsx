@@ -8,6 +8,7 @@ import SessionProvider from "../SessionProvider";
 import "../globals.css";
 import RightSidebar from "@/components/shared/RightSidebar";
 import Bottombar from "@/components/shared/BottomBar";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,6 +35,7 @@ export default function RootLayout({
             <RightSidebar />
           </main>
           <Bottombar />
+          <Toaster />
         </SessionProvider>
       </body>
     </html>

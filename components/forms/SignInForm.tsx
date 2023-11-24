@@ -18,9 +18,11 @@ import Link from "next/link";
 import { signIn } from 'next-auth/react';
 import { useRouter } from "next/router";
 import { Button } from "../ui/button";
+import { useToast } from "../ui/use-toast";
 
 
 const SignInForm = () => {
+  const { toast } = useToast()
   const form = useForm<z.infer<typeof LoginUserValidation>>({
     resolver: zodResolver(LoginUserValidation),
     defaultValues: {
@@ -32,12 +34,17 @@ const SignInForm = () => {
   const onSubmit = async (values: z.infer<typeof LoginUserValidation> ) => {
     const signInData = await signIn('credentials', {
       email: values.email,
-      password: values.password
+      password: values.password,
+      redirect: false
     })
     console.log("logowanie", signInData)
 
     if(signInData?.error){
-      console.log(signInData.error)
+       toast({
+        title: "Error!",
+        description: "Wrong credentials",
+        variant: "destructive"
+       })
     } else {
       console.log("jj")
 

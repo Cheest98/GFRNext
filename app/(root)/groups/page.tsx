@@ -23,7 +23,7 @@ async function Page() {
         <Searchbar action={searchGroup} />
       </section>
       <h1 className="head-text"> Create group</h1>
-      <section className="mt-9 bg-dark-2 p-10">
+      <section className="mt-9 bg-dark-2 p-10 rounded-lg">
         <CreateGroup session={session} />
       </section>
     </main>

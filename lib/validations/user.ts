@@ -21,18 +21,17 @@ export const UserValidation = z.object({
 
 export const RegisterUserValidation = z.object({
   email: z
-  .string()
-  .min(5, { message: "This field has to be filled." })
-  .email("This is not a valid email."),
+    .string()
+    .min(5, { message: "This field has to be filled." })
+    .email("This is not a valid email."),
   password: z
     .string()
-    .min(1, { message: "Password is required" })
     .min(5, { message: "Minimum 5 characters." }),
   confirmPassword: z.string().min(1, "Password confirmation is required"),
 })
 .refine((data) => data.password === data.confirmPassword, {
-  path: ['confirmPassowrd'],
-  message: 'Password do not mach'
+  path: ['confirmPassword'],  // Corrected typo here
+  message: 'Passwords do not match'
 });
 
 export const LoginUserValidation = z.object({
