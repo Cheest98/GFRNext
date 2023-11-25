@@ -1,3 +1,5 @@
+"use client"
+
 import { deleteTask, updateTask } from "@/lib/actions/task.actions";
 import { Session } from "next-auth";
 import TaskButton from "../shared/TaskButton";
@@ -6,6 +8,8 @@ import Image from "next/image";
 import { formatDateString } from "@/lib/utils";
 import profilePicPlaceholder from "../../public/assets/profile-pic-placeholder.png";
 import DeleteButton from "../shared/DeleteButton";
+import { useState } from "react";
+import TaskModal from "../modals/TaskModal";
 
 
 interface TaskCardProps {
@@ -23,10 +27,20 @@ interface TaskCardProps {
 }
 
 function TaskCard({ id, task, author, status, description, createdAt,  session }: TaskCardProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleTaskClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   const authorImage = author.image ? author.image : profilePicPlaceholder;
   return (
-<article className="p-5 rounded-lg bg-dark-2   border-r-dark-1 flex flex-col gap-2 h-64">
+    <>
+<article className="p-5 rounded-lg bg-dark-2   border-r-dark-1 flex flex-col gap-2 h-64" onClick={(handleTaskClick)} >
 <div className='flex w-full flex-col justify-between'>  
             <div className='flex justify-between'>
             <h1 className="text-1.5rem font-semibold text-light-1">{task}</h1>
@@ -73,6 +87,21 @@ function TaskCard({ id, task, author, status, description, createdAt,  session }
   
 
     </article>
+    {isModalOpen && (
+        <TaskModal             id={id}
+        task={task}
+        description={description || "Brak"}
+        status={status}
+        createdAt={createdAt}
+        author={{
+          name: author.name || "Unknown",
+          image: author.image || "DefaultImageURL",
+          id: author.id,
+        }} 
+        onClose={handleCloseModal}
+        />
+      )}
+    </>
   );
 }
 

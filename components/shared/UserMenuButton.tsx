@@ -7,12 +7,11 @@ import profilePicPlaceholder from "../../public/assets/profile-pic-placeholder.p
 import { getUserImage } from "@/lib/actions/user.actions";
 import React, { useState, useEffect } from 'react';
 
-interface UserMenuButtonProps {
-  session: Session | null;
-}
 
-export default function UserMenuButton({ session }: UserMenuButtonProps) {
+
+export default function UserMenuButton() {
   const [imageUrl, setImageUrl] = useState<string | StaticImageData>(profilePicPlaceholder);
+  const { data: session, status } = useSession();
   const user = session?.user;
 
   useEffect(() => {
@@ -32,6 +31,10 @@ export default function UserMenuButton({ session }: UserMenuButtonProps) {
 
     fetchImageUrl();
   }, [session]);
+
+  if (status === "loading") {
+    return <div>Loading...</div>; // Or any other loading state representation
+  }
 
   return (
     <div className="flex items-center gap-1">

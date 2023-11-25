@@ -16,7 +16,6 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import GoogleSignInButton from "../shared/GoogleSignInButton";
-import RegisterButton from "../shared/RegisterButton";
 import { useToast } from "../ui/use-toast";
 import { Button } from "../ui/button";
 
@@ -48,6 +47,7 @@ const SignUpForm = () => {
           duration: 5000
         });
         console.log("Response from createUser:", response);
+        window.location.href = '/singin';
       } else {
         toast({
           title: "Error",
@@ -118,6 +118,7 @@ const SignUpForm = () => {
                     type='password'
                     className="account-form_input no-focus"
                     {...field}
+                    
                   />
                 </FormControl>
                 <FormMessage />
@@ -136,7 +137,7 @@ const SignUpForm = () => {
       </div>
       <div>
       <div className="flex justify-center">
-    <GoogleSignInButton label="Sign up with Google" />
+    <GoogleSignInButton> Sign up with Google </GoogleSignInButton>
       </div>
       </div>
       <p className='text-center text-sm text-gray-200'>

@@ -16,9 +16,9 @@ import { LoginUserValidation } from "@/lib/validations/user";
 import GoogleSignInButton from "../shared/GoogleSignInButton";
 import Link from "next/link";
 import { signIn } from 'next-auth/react';
-import { useRouter } from "next/router";
 import { Button } from "../ui/button";
 import { useToast } from "../ui/use-toast";
+import { revalidatePath } from "next/cache";
 
 
 const SignInForm = () => {
@@ -46,8 +46,7 @@ const SignInForm = () => {
         variant: "destructive"
        })
     } else {
-      console.log("jj")
-
+      window.location.href = '/';
     }
   };
 
