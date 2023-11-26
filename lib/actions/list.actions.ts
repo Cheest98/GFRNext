@@ -1,8 +1,8 @@
 "use server";
 
 import { Session } from "next-auth";
-import { prisma } from "../db/prisma";
 import { revalidatePath } from "next/cache";
+import { prisma } from "../db/prisma";
 
 interface ListProps {
   session: Session | null;

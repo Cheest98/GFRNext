@@ -1,11 +1,11 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { profileTabs } from "@/app/constants";
+import PostTab from "@/components/shared/PostTab";
 import ProfileHeader from "@/components/shared/ProfileHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getGroupInfo } from "@/lib/actions/group.actions";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
-import PostTab from"@/components/shared/PostTab";
 
 
 

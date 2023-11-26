@@ -2,7 +2,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { tasksTabs } from "@/app/constants";
 import TaskCard from "@/components/cards/TaskCard";
 import Task from "@/components/forms/Task";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList } from "@/components/ui/tabs";
 import { fetchGroupTasks } from "@/lib/actions/task.actions";
 import { getServerSession } from "next-auth";
 import Image from "next/image";

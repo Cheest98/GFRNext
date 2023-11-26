@@ -1,8 +1,6 @@
 import { updateTask } from "@/lib/actions/task.actions";
-import TaskButton from "../shared/TaskButton";
 import Product from "../forms/Product";
-import AddButton from "../shared/AddButton";
-import { createProduct } from "@/lib/actions/list.actions";
+import TaskButton from "../shared/TaskButton";
 
 interface ListCardProps {
   id: string;

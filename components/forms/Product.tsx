@@ -13,9 +13,9 @@ import {
 import { useForm } from "react-hook-form";
 
 import { Input } from "@/components/ui/input";
+import { createProduct } from "@/lib/actions/list.actions";
 import { ProductValidation } from "@/lib/validations/product";
 import AddButton from "../shared/AddButton";
-import { createProduct } from "@/lib/actions/list.actions";
 
 interface ListProps {
   listId: string;

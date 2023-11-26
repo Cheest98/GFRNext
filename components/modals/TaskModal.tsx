@@ -1,6 +1,5 @@
 "use client"
 
-import React from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -8,8 +7,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+  DialogTitle
 } from "@/components/ui/dialog";
 
 interface Task {

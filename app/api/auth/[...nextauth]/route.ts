@@ -1,14 +1,14 @@
 import { prisma } from "@/lib/db/prisma";
 import { env } from "@/lib/env";
+import { LoginUserValidation } from "@/lib/validations/user";
 import { CustomPrismaAdapter } from "@/prisma/customPrismaAdapter";
-import { PrismaClient, User } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
+import bcrypt from 'bcryptjs';
 import { NextAuthOptions } from "next-auth";
 import { Adapter } from "next-auth/adapters";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from "next-auth/providers/google";
-import bcrypt from 'bcryptjs';
-import { LoginUserValidation } from "@/lib/validations/user";
 
 export const authOptions: NextAuthOptions = {
   adapter: CustomPrismaAdapter(prisma as PrismaClient) as Adapter,

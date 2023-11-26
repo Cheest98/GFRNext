@@ -1,10 +1,10 @@
 
 "use client"
-import Link from "next/link";
-import Image, { StaticImageData } from "next/image";
-import profilePicPlaceholder from "../../public/assets/profile-pic-placeholder.png";
 import { getUserImage } from "@/lib/actions/user.actions";
-import React, { useState, useEffect } from 'react';
+import Image, { StaticImageData } from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from 'react';
+import profilePicPlaceholder from "../../public/assets/profile-pic-placeholder.png";
 
 interface ProfileHeaderProps {
   name: string;

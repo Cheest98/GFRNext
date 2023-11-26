@@ -1,7 +1,7 @@
 "use client"
-import React, { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
 import { fetchRecentActivities } from '@/lib/actions/group.actions';
+import { useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
 import ActivityCard from '../cards/ActivityCard';
 
 interface Activity {

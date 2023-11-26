@@ -1,15 +1,13 @@
 "use client"
 
 import { deleteTask, updateTask } from "@/lib/actions/task.actions";
-import { Session } from "next-auth";
-import TaskButton from "../shared/TaskButton";
-import { Button } from "../ui/button";
-import Image from "next/image";
 import { formatDateString } from "@/lib/utils";
-import profilePicPlaceholder from "../../public/assets/profile-pic-placeholder.png";
-import DeleteButton from "../shared/DeleteButton";
+import { Session } from "next-auth";
 import { useState } from "react";
+import profilePicPlaceholder from "../../public/assets/profile-pic-placeholder.png";
 import TaskModal from "../modals/TaskModal";
+import DeleteButton from "../shared/DeleteButton";
+import TaskButton from "../shared/TaskButton";
 
 
 interface TaskCardProps {

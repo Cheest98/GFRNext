@@ -1,9 +1,7 @@
-import { redirect } from "next/navigation";
 
 import { fetchUserPosts } from "@/lib/actions/post.actions";
+import { Session } from "next-auth";
 import PostCard from "../cards/PostCard";
-import { Session, getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 
 interface UserProps {

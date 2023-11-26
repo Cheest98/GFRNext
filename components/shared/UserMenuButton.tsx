@@ -1,11 +1,10 @@
 "use client";
 
-import { Session } from "next-auth";
+import { getUserImage } from "@/lib/actions/user.actions";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image, { StaticImageData } from "next/image";
+import { useEffect, useState } from 'react';
 import profilePicPlaceholder from "../../public/assets/profile-pic-placeholder.png";
-import { getUserImage } from "@/lib/actions/user.actions";
-import React, { useState, useEffect } from 'react';
 
 
 
