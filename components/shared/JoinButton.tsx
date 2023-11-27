@@ -7,15 +7,16 @@ interface ButtonProps {
   joinGroupId: string;
   session: Session | null;
   action: (props: any) => void;
+  password: string
   label: string;
 }
 
-function JoinButton({ session, action, label, joinGroupId }: ButtonProps) {
+function JoinButton({ session, action, label, joinGroupId, password }: ButtonProps) {
   return (
     <>
       <Button
         className="bg-primary-500"
-        onClick={() => action({ session, joinGroupId })}
+        onClick={() => action({ session, joinGroupId, password })}
       >
         {label}
       </Button>

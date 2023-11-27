@@ -9,4 +9,16 @@ export const GroupValidation = z.object({
     .string()
     .min(3, { message: "Minimum 3 characters." })
     .max(200, { message: "Maximum 200 caracters." }),
+   password: z
+    .string()
+    .min(3, { message: "Minimum 3 characters." })
+    .max(200, { message: "Maximum 200 caracters." }),
+});
+
+
+export const JoinGroupValidation = z.object({
+   password: z
+    .string()
+    .min(3, { message: "Minimum 3 characters." })
+    .max(200, { message: "Maximum 200 caracters." }),
 });

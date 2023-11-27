@@ -67,6 +67,7 @@ model Group {
   name        String
   description String
   ownerId     String @unique @db.ObjectId
+  password    String
   members     User[]
   posts       Post[]
   tasks       Task[]

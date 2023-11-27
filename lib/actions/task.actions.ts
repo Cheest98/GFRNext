@@ -8,6 +8,7 @@ interface CreateTaskProps {
   session: Session | null;
   data: {
     task: string;
+    description: string;
   };
 }
 
@@ -51,6 +52,7 @@ export async function createTask({
       data: {
         task: data.task,
         status: "To do",
+        description: data.description,
         authorId: session.user.id,
         groupId: user.groupId,
       },

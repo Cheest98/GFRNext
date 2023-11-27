@@ -25,7 +25,7 @@ interface UserProps {
   session: Session | null;
 }
 
-const AccountProfile = ({ session }: UserProps) => {
+const CreateGroup= ({ session }: UserProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const user = session?.user;
@@ -35,6 +35,7 @@ const AccountProfile = ({ session }: UserProps) => {
     defaultValues: {
       name: "",
       description: "",
+      password:"",
     },
   });
 
@@ -82,6 +83,25 @@ const AccountProfile = ({ session }: UserProps) => {
               </FormItem>
             )}
           />
+                    <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem className="flex w-full flex-col gap-3">
+                <FormLabel className="text-base-semibold text-light-2">
+                  Password
+                </FormLabel>
+                <FormControl>
+                  <Textarea
+                    rows={10}
+                    className="account-form_input no-focus"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <SharedButton
             session={session}
             data={data}
@@ -94,4 +114,4 @@ const AccountProfile = ({ session }: UserProps) => {
   );
 };
 
-export default AccountProfile;
+export default CreateGroup;

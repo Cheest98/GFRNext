@@ -1,4 +1,5 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import GroupCard from "@/components/cards/GroupCard";
 import JoinButton from "@/components/shared/JoinButton";
 import { joinGroup } from "@/lib/actions/group.actions";
 import { prisma } from "@/lib/db/prisma";
@@ -28,20 +29,12 @@ export default async function searchParams({
         ) : (
           <>
             {group.map((group) => (
-              <div
-                className="flex gap-1 rounded-lg bg-dark-3 px-4 py-2 mt-2"
-                key={group.id}
-              >
-                <div className="text-small-regular text-light-2">
-                  {group.name}
-                </div>
-                <JoinButton
-                  session={session}
-                  joinGroupId={group.id}
-                  action={joinGroup}
-                  label="Join"
-                />
-              </div>
+              <GroupCard
+              session={session}
+              joinGroupId={group.id}
+              groupName={group.name}
+              password={group.password} 
+              />            
             ))}
           </>
         )}

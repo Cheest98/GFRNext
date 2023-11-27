@@ -8,6 +8,7 @@ interface CreateGroupProps {
   data: {
     name: string;
     description: string;
+    password: string;
   };
 }
 interface recentActivitiesProps {
@@ -23,10 +24,13 @@ export async function createGroup({
   session,
   data,
 }: CreateGroupProps): Promise<void> {
+  console.log(data)
   if (!session?.user?.id) {
     throw new Error("User ID is missing.");
   }
-
+  if (!data.password || typeof data.password !== 'string' || data.password.length < 3) {
+    throw new Error("Invalid password. Password must be at least 3 characters long.");
+  }
   // Check if the user is already a member of another group
   const existingGroup = await prisma.group.findFirst({
     where: {
@@ -77,12 +81,14 @@ export async function createGroup({
       data: {
         name: data.name,
         description: data.description,
+        password: data.password,
         ownerId: session.user.id,
         members: {
           connect: { id: session.user.id },
         },
       },
     });
+
     await prisma.user.update({
       where: {
         id: session.user.id,
@@ -91,6 +97,7 @@ export async function createGroup({
         groupId: newGroup.id,
       },
     });
+
     await prisma.activity.create({
       data: {
         type: "GROUP_LEFT",
@@ -98,8 +105,9 @@ export async function createGroup({
         groupId: existingGroup.id,
       },
     });
-    console.log(newGroup);
+    console.log("New group created:", newGroup);
   } catch (error: any) {
+    console.error("Failed to create group:", error);
     throw new Error(`Failed to create group: ${error.message}`);
   }
 }
@@ -107,16 +115,19 @@ export async function createGroup({
 export async function joinGroup({
   session,
   joinGroupId,
+  password,
 }: {
   session: Session | null;
   joinGroupId: string;
+  password: string;
 }): Promise<void> {
   if (!session?.user?.id) {
     throw new Error("User ID is missing.");
   }
   
 
-  // Check if the user is already a member of another group
+  // Check if the user is already a member of another group - czy ten warunek nie jest bez senus? 
+  //TODO  WERYFIAKCJA WARUNKU 
   const existingGroup = await prisma.group.findFirst({
     where: {
       members: {
@@ -160,7 +171,25 @@ export async function joinGroup({
   }
 
   // Proceed to join the group
+
+  // Get password
+
+  // TODO - ADD toast resposne
   try {
+    const groupToJoin = await prisma.group.findUnique({
+      where: {
+        id: joinGroupId,
+      },
+    });
+
+    if (!groupToJoin) {
+      throw new Error("Group not found.");
+    }
+
+    if (groupToJoin.password !== password) {
+      throw new Error("Invalid password. Please try again.");
+    }
+
     await prisma.user.update({
       where: {
         id: session.user.id,
@@ -177,8 +206,9 @@ export async function joinGroup({
         groupId: existingGroup.id,
       },
     });
-    console.log(`User joined group: ${joinGroupId}`);
+    console.log(`User ${session.user.id} joined group: ${joinGroupId}`);
   } catch (error: any) {
+    console.error("Failed to join group:", error);
     throw new Error(`Failed to join group: ${error.message}`);
   }
 }
