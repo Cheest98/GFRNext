@@ -86,7 +86,9 @@ function TaskCard({ id, task, author, status, description, createdAt,  session }
 
     </article>
     {isModalOpen && (
-        <TaskModal             id={id}
+        <TaskModal  
+        session={session}           
+        id={id}
         task={task}
         description={description || "Brak"}
         status={status}

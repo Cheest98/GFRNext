@@ -1,6 +1,5 @@
 "use client"
 
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,17 +8,15 @@ import {
   DialogHeader,
   DialogTitle
 } from "@/components/ui/dialog";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { useForm } from "react-hook-form";
-import { UserValidation } from "@/lib/validations/user";
+import { joinGroup } from "@/lib/actions/group.actions";
+import { JoinGroupValidation } from "@/lib/validations/group";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Session } from "next-auth";
+import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { GroupValidation, JoinGroupValidation } from "@/lib/validations/group";
 import JoinButton from "../shared/JoinButton";
-import { joinGroup } from "@/lib/actions/group.actions";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { Input } from "../ui/input";
 
 interface GroupProps {
     joinGroupId: string;
@@ -33,22 +30,15 @@ interface GroupProps {
   const form = useForm<z.infer<typeof JoinGroupValidation>>({
     resolver: zodResolver(JoinGroupValidation),
     defaultValues: {
-      password: "Password"
+      password: ""
     },
   });
 
   
     const data = form.watch()
     return (
-        <Dialog open={true} onOpenChange={onClose}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>{joinGroupId}</DialogTitle>
-              {/* Other task details */}
-            </DialogHeader>
-            <DialogDescription>
-           {password}
-          </DialogDescription>
+        <Dialog open={true} onOpenChange={onClose} >
+          <DialogContent className="rounded-lg bg-dark-4">
           <Form {...form}>
         <form className="mt-10 flex flex-col justify-start gap-10 rounded-lg">
           <FormField
@@ -78,8 +68,6 @@ interface GroupProps {
                   action={joinGroup}
                   label="Join"
                 />
-                
-              <Button onClick={onClose}>Close</Button>
             </DialogFooter>
             </form>
       </Form>

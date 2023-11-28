@@ -1,16 +1,9 @@
 "use client"
 
-import { deleteTask, updateTask } from "@/lib/actions/task.actions";
-import { formatDateString } from "@/lib/utils";
 import { Session } from "next-auth";
 import { useState } from "react";
-import profilePicPlaceholder from "../../public/assets/profile-pic-placeholder.png";
-import TaskModal from "../modals/TaskModal";
-import DeleteButton from "../shared/DeleteButton";
-import TaskButton from "../shared/TaskButton";
-import JoinButton from "../shared/JoinButton";
-import { joinGroup } from "@/lib/actions/group.actions";
 import GroupModal from "../modals/GroupModal";
+import { Button } from "../ui/button";
 
 
 interface GroupCardProps {
@@ -34,23 +27,25 @@ function GroupCard({ joinGroupId, groupName, password,  session }: GroupCardProp
 
   return (
     <>
-        <article className="flex gap-1 rounded-lg bg-dark-3 px-4 py-2 mt-2" onClick={(handleOpenClick)} >
-            <div className="flex gap-1 rounded-lg bg-dark-3 px-4 py-2 mt-2">
-                <div className="text-small-regular text-light-2">
-                  {groupName}
+        <article className="flex gap-1 rounded-lg bg-dark-3 px-4 py-2 mt-2" >
+            <div className="flex w-full flex-col justify-between">
+                <div className='flex justify-between items-center'> {/* Add items-center here */}
+                    <p className="text-small-regular text-light-2">
+                      {groupName}
+                    </p>
+      
+                <Button className="bg-primary-500" onClick={handleOpenClick}> Join </Button>
                 </div>
-              </div>
-  
-
-    </article>
-    {isModalOpen && (
-        <GroupModal             
-        joinGroupId={joinGroupId}
-        password={password}
-        session={session}
-        onClose={handleCloseModal}
-        />
-      )}
+            </div>
+        </article>
+        {isModalOpen && (
+            <GroupModal             
+            joinGroupId={joinGroupId}
+            password={password}
+            session={session}
+            onClose={handleCloseModal}
+            />
+        )}
     </>
   );
 }
