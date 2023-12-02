@@ -27,9 +27,11 @@ interface Task {
     id: string;
   };
     onClose: () => void;
+    src: string;
+    alt:string
   }
 
- function TaskModal({ id, task, author, status, description, createdAt, session, onClose }: Task) {
+ function TaskModal({ id, task, author, status, description, createdAt, session, src, alt, onClose }: Task) {
 
     return (
         <Dialog open={true} onOpenChange={onClose}>
@@ -72,6 +74,8 @@ interface Task {
               session={session}
                 data={{ id}}
                 action={deleteTask}
+                src= {src}
+                alt= {alt}
               />
             </DialogFooter>
           </DialogContent>

@@ -31,6 +31,11 @@ interface deleteTaskProps {
   };
 }
 
+interface userProps {
+  authorId: string | undefined;
+}
+
+
 export async function createTask({
   session,
   data,
@@ -159,6 +164,25 @@ export async function deleteTask({ data, session }: deleteTaskProps): Promise<vo
   } catch (error: any) {
     console.error("Error details:", error);
     throw new Error(`Failed to DELETE task: ${error.message}`);
+  }
+}
+
+export async function fetchUserTasks({ authorId }: userProps) {
+  try {
+    const tasks = await prisma.task.findMany({
+      where: {
+        authorId: authorId,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        author: true,
+      },
+    });
+    return tasks;
+  } catch (error: any) {
+    throw new Error(`Failed to fetch user post: ${error.message}`);
   }
 }
 

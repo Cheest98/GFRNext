@@ -38,7 +38,7 @@ function TaskCard({ id, task, author, status, description, createdAt,  session }
   const authorImage = author.image ? author.image : profilePicPlaceholder;
   return (
     <>
-<article className="p-5 rounded-lg bg-dark-2   border-r-dark-1 flex flex-col gap-2 h-64" onClick={(handleTaskClick)} >
+<article className="p-5 rounded-lg bg-dark-2   border-r-dark-1 flex flex-col gap-2 h-64">
 <div className='flex w-full flex-col justify-between'>  
             <div className='flex justify-between'>
             <h1 className="text-1.5rem font-semibold text-light-1">{task}</h1>
@@ -46,7 +46,16 @@ function TaskCard({ id, task, author, status, description, createdAt,  session }
             <DeleteButton
               session={session}
                 data={{ id}}
+                action={handleTaskClick}
+                src= "/assets/edit.svg"
+                alt= "Edit"
+              />
+                          <DeleteButton
+              session={session}
+                data={{ id}}
                 action={deleteTask}
+                src= "/assets/delete.svg"
+                alt= "Trash"
               />
               </div>
             </div>
@@ -99,6 +108,8 @@ function TaskCard({ id, task, author, status, description, createdAt,  session }
           id: author.id,
         }} 
         onClose={handleCloseModal}
+        src= "/assets/delete.svg"
+        alt= "Trash"
         />
       )}
     </>

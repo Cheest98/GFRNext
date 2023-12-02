@@ -2,6 +2,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { profileTabs } from "@/app/constants";
 import PostTab from "@/components/shared/PostTab";
 import ProfileHeader from "@/components/shared/ProfileHeader";
+import TaskTab from "@/components/shared/TaskTab";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getGroupInfo } from "@/lib/actions/group.actions";
 import { getServerSession } from "next-auth";
@@ -56,9 +57,12 @@ async function Page() {
               className='w-full text-light-1'
             >
               {/* @ts-ignore */}
-              <PostTab
-                session={session}
-              />
+              {tab.value === 'posts' && (
+                <PostTab session={session} />
+              )}
+              {tab.value === 'tasks' && (
+                <TaskTab session={session} />
+              )}
             </TabsContent>
           ))}
         </Tabs>
