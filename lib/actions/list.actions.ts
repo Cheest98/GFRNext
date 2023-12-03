@@ -21,6 +21,17 @@ interface ProductProps {
     name: string;
   };
 }
+interface ProductListProps {
+  listId: string;
+}
+
+interface UpdateListProps {
+  session: Session | null;
+  data: {
+    id: string;
+    status: string;
+  };
+}
 
 export async function createList({ session, data }: ListProps): Promise<void> {
   if (!session?.user?.id) {
@@ -104,5 +115,55 @@ export async function createProduct({
     revalidatePath("/lists");
   } catch (error: any) {
     throw new Error(`Failed to create post: ${error.message}`);
+  }
+}
+
+
+export async function updateList({ data, session }: UpdateListProps): Promise<void> {
+  // Filter out undefined fields
+  if (!session?.user?.id) {
+    throw new Error("User ID is missing.");
+  }
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+  });
+
+  if (!user || !user.groupId) {
+    throw new Error("User's group ID is missing.");
+  }
+
+  try {
+    await prisma.list.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        status: data.status,
+      },
+    });
+    await prisma.activity.create({
+      data: {
+        type: "LIST_UPDATED",
+        userId: session.user.id,
+        groupId: user.groupId,
+      },
+    });
+  } catch (error: any) {
+    console.error("Error details:", error);
+    throw new Error(`Failed to create task: ${error.message}`);
+  }
+}
+
+export async function fetchListProducts({ listId }: ProductListProps) {
+  try {
+    const product = await prisma.product.findMany({
+      where: {
+        listid: listId,
+      },
+    });
+
+    return product;
+  } catch (error: any) {
+    throw new Error(`Failed to fetch post: ${error.message}`);
   }
 }

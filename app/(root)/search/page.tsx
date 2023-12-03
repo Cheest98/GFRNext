@@ -1,7 +1,5 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import GroupCard from "@/components/cards/GroupCard";
-import JoinButton from "@/components/shared/JoinButton";
-import { joinGroup } from "@/lib/actions/group.actions";
 import { prisma } from "@/lib/db/prisma";
 import { getServerSession } from "next-auth";
 

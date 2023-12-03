@@ -7,7 +7,7 @@ import { useState } from "react";
 import profilePicPlaceholder from "../../public/assets/profile-pic-placeholder.png";
 import TaskModal from "../modals/TaskModal";
 import DeleteButton from "../shared/DeleteButton";
-import TaskButton from "../shared/TaskButton";
+import StatusButton from "../shared/StatusButton";
 
 
 interface TaskCardProps {
@@ -65,7 +65,7 @@ function TaskCard({ id, task, author, status, description, createdAt,  session }
       <div className="mt-auto flex items-center gap-3">
   
             {status === "To do" && (
-              <TaskButton
+              <StatusButton
               session={session}
                 data={{ id, status: "Doing", session }}
                 action={updateTask}
@@ -73,7 +73,7 @@ function TaskCard({ id, task, author, status, description, createdAt,  session }
               />
             )}
             {status === "Doing" && (
-              <TaskButton
+              <StatusButton
               session={session}
                 data={{ id, status: "Done", }}
                 action={updateTask}

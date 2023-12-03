@@ -33,7 +33,6 @@ const Product = ({ listId }: ListProps) => {
 
   return (
     <>
-      <h1 className="head-text text-left">Add product</h1>
       <Form {...form}>
         <form className="mt-10 flex justify-start gap-10">
           <FormField

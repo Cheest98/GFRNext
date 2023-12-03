@@ -11,7 +11,7 @@ interface ButtonProps {
   label: string;
 }
 
-function TaskButton({ data, action, label, session }: ButtonProps) {
+function StatusButton({ data, action, label, session }: ButtonProps) {
   return (
     <>
       <Button className="bg-primar-200" onClick={() => action({ data, session })}>
@@ -21,4 +21,4 @@ function TaskButton({ data, action, label, session }: ButtonProps) {
   );
 }
 
-export default TaskButton;
+export default StatusButton;

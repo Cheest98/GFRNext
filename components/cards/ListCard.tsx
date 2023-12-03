@@ -1,8 +1,12 @@
-import { updateTask } from "@/lib/actions/task.actions";
+"use client"
+import { fetchListProducts, updateList } from "@/lib/actions/list.actions";
 import Product from "../forms/Product";
-import TaskButton from "../shared/TaskButton";
+import StatusButton from "../shared/StatusButton";
+import { Session } from "next-auth";
+import { useEffect, useState } from "react";
 
 interface ListCardProps {
+  session: Session | null;
   id: string;
   list: string;
   status: string;
@@ -13,14 +17,35 @@ interface ListCardProps {
   };
 }
 
-function ListCard({ id, list, author, status }: ListCardProps) {
+interface Product {
+  id: string;
+  name: string;
+  status: string;
+  listid: string;
+}
+
+function ListCard({ id, list, author, status, session }: ListCardProps) {
+
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const fetchedProducts = await fetchListProducts({ listId: id });
+        setProducts(fetchedProducts);
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+        // Handle error appropriately
+      }
+    };
+
+    loadProducts();
+  }, [id]);
+
   return (
-    <article className="flex w-full flex-col rounded-xl">
+    <article className="p-5 rounded-lg bg-dark-2   border-r-dark-1 flex flex-col gap-2 h-64">
       <div className="flex items-start justify-between">
         <div className="flex w-full flex-1 flex-row gap-4">
-          <div className="flex flex-col items-center">
-            <div className="thread-card_bar" />
-          </div>
           <div className="flex w-full flex-col">
             <div>
               <h4 className="cursor-pointer text-base-semibold text-light-1">
@@ -29,19 +54,24 @@ function ListCard({ id, list, author, status }: ListCardProps) {
               <p className="mt-2 text-small-regular text-light-2">{list}</p>
               <p className="mt-2 text-small-regular text-light-2">{status}</p>
             </div>
+            {products.map((product) => (
+          <div key={product.id}>
+            <p className="mt-2 text-small-regular text-light-2">{product.name}</p>
+            {/* Render other product details as needed */}
+          </div>
+        ))}
             <div>
-              <h4 className="cursor-pointer text-base-semibold text-light-1">
-                test
-              </h4>
               <Product listId={id} />
             </div>
           </div>
           <div>
             {status !== "Completed" && (
-              <TaskButton
-                data={{ id, status: "Completed" }}
-                action={updateTask}
+              <StatusButton
+              session={session}
+                data={{ id, status: "Completed", session }}
+                action={updateList}
                 label="Completed"
+                
               />
             )}
           </div>

@@ -12,7 +12,7 @@ import { deleteTask, updateTask } from "@/lib/actions/task.actions";
 import { formatDateString } from "@/lib/utils";
 import { Session } from "next-auth";
 import DeleteButton from "../shared/DeleteButton";
-import TaskButton from "../shared/TaskButton";
+import StatusButton from "../shared/StatusButton";
 
 interface Task {
   session: Session | null;
@@ -52,7 +52,7 @@ interface Task {
         </div>
             <DialogFooter>
             {status === "To do" && (
-    <TaskButton
+    <StatusButton
     session={session}
       data={{ id, status: "Doing", session }}
       action={updateTask}
@@ -60,7 +60,7 @@ interface Task {
     />
   )}
   {status === "Doing" && (
-    <TaskButton
+    <StatusButton
     session={session}
       data={{ id, status: "Done", }}
       action={updateTask}
