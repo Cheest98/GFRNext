@@ -19,9 +19,10 @@ import AddButton from "../shared/AddButton";
 
 interface ListProps {
   listId: string;
+  refreshProductList: () => Promise<void>;
 }
 
-const Product = ({ listId }: ListProps) => {
+const Product = ({ listId, refreshProductList  }: ListProps) => {
   const form = useForm<z.infer<typeof ProductValidation>>({
     resolver: zodResolver(ProductValidation),
     defaultValues: {
@@ -29,12 +30,21 @@ const Product = ({ listId }: ListProps) => {
     },
   });
 
-  const data = form.watch();
+
+  const onSubmit = async (data: z.infer<typeof ProductValidation>) => {
+    try {
+      await createProduct({ listId, data });
+      form.reset();
+      await refreshProductList(); // Ensure that this is called after the product is created
+    } catch (error) {
+      console.error("Error creating product:", error);
+    }
+  };
 
   return (
     <>
       <Form {...form}>
-        <form className="mt-10 flex justify-start gap-10">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="mt-10 flex justify-start gap-10">
           <FormField
             control={form.control}
             name="name"
@@ -51,8 +61,8 @@ const Product = ({ listId }: ListProps) => {
               </FormItem>
             )}
           />
-          <AddButton listId={listId} data={data} action={createProduct} />
-        </form>
+          <AddButton listId={listId} data={form.getValues()} action={createProduct} />
+          </form>
       </Form>
     </>
   );

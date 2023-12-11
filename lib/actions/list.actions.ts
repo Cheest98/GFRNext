@@ -110,9 +110,7 @@ export async function createProduct({
       },
       
     });
-    
     console.log(newProduct);
-    revalidatePath("/lists");
   } catch (error: any) {
     throw new Error(`Failed to create post: ${error.message}`);
   }
