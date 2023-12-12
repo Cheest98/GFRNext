@@ -1,7 +1,7 @@
 "use server";
 
 import { Session } from "next-auth";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { prisma } from "../db/prisma";
 
 interface ListProps {
@@ -111,6 +111,7 @@ export async function createProduct({
       
     });
     console.log(newProduct);
+    revalidateTag('products')
   } catch (error: any) {
     throw new Error(`Failed to create post: ${error.message}`);
   }

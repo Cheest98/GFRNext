@@ -3,6 +3,7 @@
 import { Session } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { prisma } from "../db/prisma";
+import { revalidateTag } from 'next/cache'
 
 interface CreatePostProps {
   session: Session | null;
@@ -54,7 +55,7 @@ export async function createPost({
       },
     });
     console.log(newPost);
-    revalidatePath("/");
+    revalidateTag('posts')
   } catch (error: any) {
     throw new Error(`Failed to create post: ${error.message}`);
   }

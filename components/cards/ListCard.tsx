@@ -45,12 +45,12 @@ function ListCard({ id, list, author, status, session }: ListCardProps) {
   const refreshProductList = async () => {
     try {
       const fetchedProducts = await fetchListProducts({ listId: id });
-      setProducts(fetchedProducts); // This should update the state with the new list
+      setProducts(fetchedProducts); // Update the state with new product list
     } catch (error) {
       console.error("Failed to fetch products:", error);
     }
   };
-  
+
   return (
     <article className="p-5 rounded-lg bg-dark-2   border-r-dark-1 flex flex-col gap-2">
       <div className="flex items-start justify-between">

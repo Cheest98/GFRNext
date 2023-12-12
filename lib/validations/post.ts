@@ -1,9 +1,10 @@
 import * as z from "zod";
 
 export const PostValidation = z.object({
-  picturePath: z.string().url().nonempty().optional(),
+  picturePath: z.string().url().optional().nullable(), // Allow null values
   content: z
     .string()
-    .min(10, { message: "Minimum 3 characters." })
-    .max(1000, { message: "Maximum 1000 caracters." }),
+    .min(10, { message: "Minimum 10 characters." })
+    .max(1000, { message: "Maximum 1000 characters." })
+    .nonempty({ message: "Post is required." }),
 });

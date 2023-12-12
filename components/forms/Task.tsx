@@ -19,6 +19,7 @@ import { createTask } from "@/lib/actions/task.actions";
 import { TaskValidation } from "@/lib/validations/task";
 import SharedButton from "../shared/SharedButton";
 import { Textarea } from "../ui/textarea";
+import { Button } from "../ui/button";
 
 interface UserProps {
   session: Session | null;
@@ -36,12 +37,23 @@ const Task = ({ session }: UserProps) => {
     
   });
 
-  const data = form.watch();
+  async function onSubmit( values: z.infer<typeof TaskValidation>){
+    console.log(values); // Debug log
+    try {
+      await createTask({ data: { task: values.task, description: values.description }, session });
+      console.log("Task created successfully");
+      form.reset()
+    } catch (error: any) {
+      console.error("Error creating task:", error.message);
+      // Consider providing user feedback here
+    }
+  };
+
 
   return (
     <>
-      <Form {...form}>
-        <form className="flex flex-col justify-start gap-10">
+      <Form {...form} >
+        <form onSubmit={form.handleSubmit(onSubmit)}  className="flex flex-col justify-start gap-10">
           <FormField
             control={form.control}
             name="task"
@@ -61,7 +73,7 @@ const Task = ({ session }: UserProps) => {
               </FormItem>
             )}
           />
-                    <FormField
+          <FormField
             control={form.control}
             name="description"
             render={({ field }) => (
@@ -81,12 +93,7 @@ const Task = ({ session }: UserProps) => {
             )}
           />
 
-          <SharedButton
-            session={session}
-            data={data}
-            action={createTask}
-            label="Add"
-          />
+          <Button  className="bg-primary-500" type="submit">Submit</Button>
         </form>
       </Form>
     </>

@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { createPost } from "@/lib/actions/post.actions";
 import { PostValidation } from "@/lib/validations/post";
-import SharedButton from "../shared/SharedButton";
+import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 
 interface UserProps {
@@ -34,7 +34,7 @@ const Post = ({ session }: UserProps) => {
   const form = useForm<z.infer<typeof PostValidation>>({
     resolver: zodResolver(PostValidation),
     defaultValues: {
-      picturePath: "",
+      picturePath: null,
       content: "",
     },
   });
@@ -62,13 +62,26 @@ const Post = ({ session }: UserProps) => {
     }
   };
 
+  async function onSubmit( values: z.infer<typeof PostValidation>){
+    console.log(values); // Debug log
+    try {
+      const picturePath = values.picturePath || "";
+      await createPost({ data: { picturePath, content: values.content }, session });
+      console.log("Task created successfully");
+      form.reset()
+    } catch (error: any) {
+      console.error("Error creating task:", error.message);
+      // Consider providing user feedback here
+    }
+  };
+
   const data = form.watch();
 
   return (
     <>
       <h1 className="head-text text-left">Create post</h1>
       <Form {...form}>
-        <form className="mt-10 flex flex-col justify-start gap-10 rounded-lg">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="mt-10 flex flex-col justify-start gap-10 rounded-lg">
           <FormField
             control={form.control}
             name="content"
@@ -99,12 +112,7 @@ const Post = ({ session }: UserProps) => {
             )}
           />
 
-          <SharedButton
-            session={session}
-            data={data}
-            action={createPost}
-            label="Add"
-          />
+          <Button type="submit" className="bg-primary-500">Add Post</Button>
         </form>
       </Form>
     </>
