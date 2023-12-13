@@ -16,7 +16,7 @@ import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { createList } from "@/lib/actions/list.actions";
 import { ListValidation } from "@/lib/validations/list";
-import SharedButton from "../shared/SharedButton";
+import { Button } from "../ui/button";
 
 interface UserProps {
   session: Session | null;
@@ -32,13 +32,21 @@ const List = ({ session }: UserProps) => {
     },
   });
 
-  const data = form.watch();
+  async function onSubmit( values: z.infer<typeof ListValidation>){
+    console.log(values);
+    try {
+      await createList({ data: { list: values.list }, session });
+      console.log("List created successfully");
+      form.reset()
+    } catch (error: any) {
+      console.error("Error creating List:", error.message);
+    }
+  };
 
   return (
     <>
-      <h1 className="head-text text-left">Create List</h1>
       <Form {...form}>
-        <form className="mt-10 flex justify-start gap-10">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="mt-10 flex justify-start gap-10">
           <FormField
             control={form.control}
             name="list"
@@ -56,12 +64,7 @@ const List = ({ session }: UserProps) => {
             )}
           />
 
-          <SharedButton
-            session={session}
-            data={data}
-            action={createList}
-            label="Add"
-          />
+          <Button  className="bg-primary-500" type="submit">Submit</Button>
         </form>
       </Form>
     </>

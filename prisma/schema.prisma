@@ -135,7 +135,7 @@ model List {
 
 model Product {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
-  name   String
+  product   String
   status String
   list   List   @relation(fields: [listid], references: [id], onDelete: Cascade)
   listid String @db.ObjectId

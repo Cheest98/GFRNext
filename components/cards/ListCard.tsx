@@ -19,7 +19,7 @@ interface ListCardProps {
 
 interface Product {
   id: string;
-  name: string;
+  product: string;
   status: string;
   listid: string;
 }
@@ -65,12 +65,12 @@ function ListCard({ id, list, author, status, session }: ListCardProps) {
             </div>
             {products.map((product) => (
           <div key={product.id}>
-            <p className="mt-2 text-small-regular text-light-2">{product.name}</p>
+            <p className="mt-2 text-small-regular text-light-2">{product.product}</p>
             {/* Render other product details as needed */}
           </div>
         ))}
             <div>
-              <Product listId={id} refreshProductList={refreshProductList} />
+              <Product listId={id} />
             </div>
           </div>
           <div>

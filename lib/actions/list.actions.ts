@@ -18,7 +18,7 @@ interface groupProps {
 interface ProductProps {
   listId: string;
   data: {
-    name: string;
+    product: string;
   };
 }
 interface ProductListProps {
@@ -104,7 +104,7 @@ export async function createProduct({
   try {
     const newProduct = await prisma.product.create({
       data: {
-        name: data.name,
+        product: data.product,
         status: "Not Completed",
         listid: listId,
       },

@@ -15,27 +15,26 @@ import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { createProduct } from "@/lib/actions/list.actions";
 import { ProductValidation } from "@/lib/validations/product";
-import AddButton from "../shared/AddButton";
+import { Button } from "../ui/button";
 
 interface ListProps {
   listId: string;
-  refreshProductList: () => Promise<void>;
 }
 
-const Product = ({ listId, refreshProductList  }: ListProps) => {
+const Product = ({ listId  }: ListProps) => {
   const form = useForm<z.infer<typeof ProductValidation>>({
     resolver: zodResolver(ProductValidation),
     defaultValues: {
-      name: "",
+      product: "",
     },
   });
 
 
-  const onSubmit = async (data: z.infer<typeof ProductValidation>) => {
+  const onSubmit = async (values: z.infer<typeof ProductValidation>) => {
     try {
-      await createProduct({ listId, data });
-      form.reset();
-      await refreshProductList(); // Ensure that this is called after the product is created
+      await createProduct({ data: { product: values.product}, listId });;
+      console.log("Product created successfully");
+      form.reset()
     } catch (error) {
       console.error("Error creating product:", error);
     }
@@ -47,7 +46,7 @@ const Product = ({ listId, refreshProductList  }: ListProps) => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="mt-10 flex justify-start gap-10">
           <FormField
             control={form.control}
-            name="name"
+            name="product"
             render={({ field }) => (
               <FormItem className="flex w-full flex-col gap-3">
                 <FormControl>
@@ -61,7 +60,7 @@ const Product = ({ listId, refreshProductList  }: ListProps) => {
               </FormItem>
             )}
           />
-          <AddButton listId={listId} data={form.getValues()} action={createProduct} />
+          <Button  className="bg-primary-500" type="submit">Submit</Button>
           </form>
       </Form>
     </>
