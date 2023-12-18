@@ -15,6 +15,7 @@ interface ListCardProps {
     image: string;
     id: string;
   };
+  refreshProducts: () => Promise<void>;
 }
 
 interface Product {
@@ -24,7 +25,7 @@ interface Product {
   listid: string;
 }
 
-function ListCard({ id, list, author, status, session }: ListCardProps) {
+function ListCard({ id, list, author, status, session, refreshProducts }: ListCardProps) {
 
   const [products, setProducts] = useState<Product[]>([]);
 
@@ -70,7 +71,7 @@ function ListCard({ id, list, author, status, session }: ListCardProps) {
           </div>
         ))}
             <div>
-              <Product listId={id} />
+              <Product listId={id} onProductAdded={refreshProductList} />
             </div>
           </div>
           <div>

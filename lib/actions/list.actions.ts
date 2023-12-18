@@ -163,6 +163,6 @@ export async function fetchListProducts({ listId }: ProductListProps) {
 
     return product;
   } catch (error: any) {
-    throw new Error(`Failed to fetch post: ${error.message}`);
+    throw new Error(`Failed to fetch product: ${error.message}`);
   }
 }

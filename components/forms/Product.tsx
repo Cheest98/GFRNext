@@ -19,9 +19,10 @@ import { Button } from "../ui/button";
 
 interface ListProps {
   listId: string;
+  onProductAdded: () => Promise<void>;
 }
 
-const Product = ({ listId  }: ListProps) => {
+const Product = ({ listId, onProductAdded   }: ListProps) => {
   const form = useForm<z.infer<typeof ProductValidation>>({
     resolver: zodResolver(ProductValidation),
     defaultValues: {
@@ -35,6 +36,7 @@ const Product = ({ listId  }: ListProps) => {
       await createProduct({ data: { product: values.product}, listId });;
       console.log("Product created successfully");
       form.reset()
+      await onProductAdded();
     } catch (error) {
       console.error("Error creating product:", error);
     }
