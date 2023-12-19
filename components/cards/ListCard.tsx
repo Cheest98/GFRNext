@@ -4,6 +4,8 @@ import Product from "../forms/Product";
 import StatusButton from "../shared/StatusButton";
 import { Session } from "next-auth";
 import { useEffect, useState } from "react";
+import { Button } from "../ui/button";
+import ListModal from "../modals/ListModal";
 
 interface ListCardProps {
   session: Session | null;
@@ -15,7 +17,7 @@ interface ListCardProps {
     image: string;
     id: string;
   };
-  refreshProducts: () => Promise<void>;
+  
 }
 
 interface Product {
@@ -25,8 +27,8 @@ interface Product {
   listid: string;
 }
 
-function ListCard({ id, list, author, status, session, refreshProducts }: ListCardProps) {
-
+function ListCard({ id, list, author, status, session, onListUpdate  }: ListCardProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
@@ -52,7 +54,22 @@ function ListCard({ id, list, author, status, session, refreshProducts }: ListCa
     }
   };
 
+
+  const handleListClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleListStatusUpdate = (updatedList) => {
+    onListUpdate(updatedList); // Update the list status in the parent component
+    handleCloseModal(); // Close the modal
+  };
+
   return (
+    <>
     <article className="p-5 rounded-lg bg-dark-2   border-r-dark-1 flex flex-col gap-2">
       <div className="flex items-start justify-between">
         <div className="flex w-full flex-1 flex-row gap-4">
@@ -74,20 +91,31 @@ function ListCard({ id, list, author, status, session, refreshProducts }: ListCa
               <Product listId={id} onProductAdded={refreshProductList} />
             </div>
           </div>
+          <Button className="bg-primar-200" onClick={handleListClick}> Edit</Button>
           <div>
             {status !== "Completed" && (
               <StatusButton
               session={session}
                 data={{ id, status: "Completed", session }}
                 action={updateList}
-                label="Completed"
-                
-              />
+                label="Completed"              
+              />             
             )}
           </div>
         </div>
       </div>
     </article>
+    {isModalOpen && (
+        <ListModal  
+          session={session}           
+          id={id}
+          list={list}
+          status={status}
+          onClose={handleCloseModal}
+          onStatusUpdate={handleCloseModal}
+        />
+      )}
+    </>
   );
 }
 

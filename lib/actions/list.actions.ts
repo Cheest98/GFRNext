@@ -30,6 +30,7 @@ interface UpdateListProps {
   data: {
     id: string;
     status: string;
+    price: number | null;
   };
 }
 
@@ -132,13 +133,16 @@ export async function updateList({ data, session }: UpdateListProps): Promise<vo
   }
 
   try {
+    let updateData: { status: string; price?: number } = { status: data.status };
+
+    if (data.price !== null) {
+      updateData.price = parseFloat(data.price.toString()); // Convert to string before parsing
+    }
+
+
     await prisma.list.update({
-      where: {
-        id: data.id,
-      },
-      data: {
-        status: data.status,
-      },
+      where: { id: data.id },
+      data: updateData
     });
     await prisma.activity.create({
       data: {
@@ -147,6 +151,8 @@ export async function updateList({ data, session }: UpdateListProps): Promise<vo
         groupId: user.groupId,
       },
     });
+
+    revalidatePath("/lists", 'page');
   } catch (error: any) {
     console.error("Error details:", error);
     throw new Error(`Failed to create task: ${error.message}`);

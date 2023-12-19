@@ -41,37 +41,33 @@ interface Task {
                
             </DialogHeader>
             <DialogDescription>
-           <p className="text-light-1"> {description}</p>
-          </DialogDescription>
-        <div className="grid gap-4 py-4">
-        <div className="mt-auto flex items-center gap-3">
-  
-</div>
-
-
-        </div>
+              <p className="text-light-1"> {description}</p>
+            </DialogDescription>
+            <div className="grid gap-4 py-4">
+             <div className="mt-auto flex items-center gap-3" />
+            </div>
             <DialogFooter>
-            {status === "To do" && (
-    <StatusButton
-    session={session}
-      data={{ id, status: "Doing", session }}
-      action={updateTask}
-      label="Doing"
-    />
-  )}
-  {status === "Doing" && (
-    <StatusButton
-    session={session}
-      data={{ id, status: "Done", }}
-      action={updateTask}
-      label="Done"
-    />
-  )}
-  {status === "Done" && (
-    <p className="text-light-1"> Task completed at: {description}</p>
-  )}
-                          <DeleteButton
-              session={session}
+              {status === "To do" && (
+                <StatusButton
+                  session={session}
+                  data={{ id, status: "Doing", session }}
+                  action={updateTask}
+                  label="Doing"
+                />
+               )}
+              {status === "Doing" && (
+                <StatusButton
+                  session={session}
+                  data={{ id, status: "Done", }}
+                  action={updateTask}
+                  label="Done"
+                />
+              )}
+              {status === "Done" && (
+               <p className="text-light-1"> Task completed at: {description}</p>
+              )}
+              <DeleteButton
+                session={session}
                 data={{ id}}
                 action={deleteTask}
                 src= {src}
