@@ -39,23 +39,23 @@ interface GroupProps {
     return (
         <Dialog open={true} onOpenChange={onClose} >
           <DialogContent className="rounded-lg bg-dark-4">
-          <Form {...form}>
-        <form className="mt-10 flex flex-col justify-start gap-10 rounded-lg">
-          <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem className="flex w-full flex-col gap-3">
-              <FormLabel className="text-base-semibold text-light-2">
-                Password
-              </FormLabel>
-              <FormControl>
-                <Input
-                  type="text"
-                  className="account-form_input no-focus"
-                  {...field}
-                />
-              </FormControl>
+            <Form {...form}>
+              <form className="mt-10 flex flex-col justify-start gap-10 rounded-lg">
+                <FormField
+                  control={form.control}
+                   name="password"
+                    render={({ field }) => (
+                  <FormItem className="flex w-full flex-col gap-3">
+                    <FormLabel className="text-base-semibold text-light-2">
+                      Password
+                    </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      className="account-form_input no-focus"
+                      {...field}
+                    />
+                  </FormControl>
               <FormMessage />
             </FormItem>
           )}

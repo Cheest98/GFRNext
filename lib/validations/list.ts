@@ -13,3 +13,10 @@ export const ProdcutValidation = z.object({
     .min(3, { message: "Minimum 3 characters." })
     .max(1000, { message: "Maximum 1000 caracters." }),
 });
+
+export const PriceValidation = z.object({
+  price: z
+    .coerce 
+    .number()
+    .min(0),
+});

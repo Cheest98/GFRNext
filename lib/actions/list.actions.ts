@@ -133,12 +133,12 @@ export async function updateList({ data, session }: UpdateListProps): Promise<vo
   }
 
   try {
+
     let updateData: { status: string; price?: number } = { status: data.status };
 
-    if (data.price !== null) {
-      updateData.price = parseFloat(data.price.toString()); // Convert to string before parsing
+    if (data.price !== null && data.price !== undefined) {
+      updateData.price = typeof data.price === 'number' ? data.price : parseFloat(data.price);
     }
-
 
     await prisma.list.update({
       where: { id: data.id },
@@ -155,7 +155,7 @@ export async function updateList({ data, session }: UpdateListProps): Promise<vo
     revalidatePath("/lists", 'page');
   } catch (error: any) {
     console.error("Error details:", error);
-    throw new Error(`Failed to create task: ${error.message}`);
+    throw new Error(`Failed to update list: ${error.message}`);
   }
 }
 
