@@ -25,6 +25,23 @@ interface ProductListProps {
   listId: string;
 }
 
+interface UpadteProductStatusProps {
+  productId: string;
+  newStatus: string;
+}
+
+interface DeleteProductProps {
+  productId: string;
+}
+
+interface DeleteListProps {
+  session: Session | null;
+  data: {
+    id: string;
+  };
+}
+
+
 interface UpdateListProps {
   session: Session | null;
   data: {
@@ -124,6 +141,7 @@ export async function updateList({ data, session }: UpdateListProps): Promise<vo
   if (!session?.user?.id) {
     throw new Error("User ID is missing.");
   }
+
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
   });
@@ -170,5 +188,85 @@ export async function fetchListProducts({ listId }: ProductListProps) {
     return product;
   } catch (error: any) {
     throw new Error(`Failed to fetch product: ${error.message}`);
+  }
+}
+
+export async function updateProductStatus({ productId, newStatus }: UpadteProductStatusProps) {
+    
+  if (!productId) {
+    throw new Error("Product ID is missing.");
+  }
+
+  try {
+    await prisma.product.update({
+      where: {
+        id: productId,
+      },
+      data: {
+        status: newStatus,
+      },
+    });
+  }
+  catch (error: any) {
+    console.error("Error details:", error);
+    throw new Error(`Failed to update product: ${error.message}`);
+  }
+}
+
+export async function deleteProduct({ productId }: DeleteProductProps) {
+    
+  if (!productId) {
+    throw new Error("Product ID is missing.");
+  }
+
+  try {
+    await prisma.product.delete({
+      where: {
+        id: productId,
+      },
+
+    });
+  }
+  catch (error: any) {
+    console.error("Error details:", error);
+    throw new Error(`Failed to delete product: ${error.message}`);
+  }
+}
+
+export async function deleteList({ data, session }: DeleteListProps) {
+  console.log(data)
+  if (!session?.user?.id) {
+    throw new Error("User ID is missing.");
+  }  
+
+  if (!data.id) {
+    throw new Error("List ID is missing.");
+  }
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+  });
+
+  if (!user || !user.groupId) {
+    throw new Error("User's group ID is missing.");
+  }
+
+  try {
+    await prisma.list.delete({
+      where: {
+        id: data.id,
+      },
+
+    });
+    await prisma.activity.create({
+      data: {
+        type: "LIST_REMOVED",
+        userId: session.user.id,
+        groupId: user.groupId,
+      },
+    });
+    revalidatePath("/shopping");
+  } catch (error: any) {
+    console.error("Error details:", error);
+    throw new Error(`Failed to delete List: ${error.message}`);
   }
 }

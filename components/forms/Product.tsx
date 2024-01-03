@@ -62,7 +62,7 @@ const Product = ({ listId, onProductAdded   }: ListProps) => {
               </FormItem>
             )}
           />
-          <Button  className="bg-primary-500" type="submit">Submit</Button>
+          <Button  className="bg-primary-500" type="submit">Add</Button>
           </form>
       </Form>
     </>

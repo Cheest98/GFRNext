@@ -8,6 +8,7 @@ import profilePicPlaceholder from "../../public/assets/profile-pic-placeholder.p
 import TaskModal from "../modals/TaskModal";
 import DeleteButton from "../shared/DeleteButton";
 import StatusButton from "../shared/StatusButton";
+import EditButton from "../shared/EditButton";
 
 
 interface TaskCardProps {
@@ -43,19 +44,15 @@ function TaskCard({ id, task, author, status, description, createdAt,  session }
           <div className='flex justify-between'>
             <h1 className="text-1.5rem font-semibold text-light-1">{task}</h1>
               <div>
-                <DeleteButton
+                <EditButton
                   session={session}
-                  data={{ id}}
+                  data={{id}}
                   action={handleTaskClick}
-                  src= "/assets/edit.svg"
-                  alt= "Edit"
                 />
                 <DeleteButton
                   session={session}
                   data={{ id}}
                   action={deleteTask}
-                  src= "/assets/delete.svg"
-                  alt= "Trash"
                 />
               </div>
           </div>
@@ -105,8 +102,6 @@ function TaskCard({ id, task, author, status, description, createdAt,  session }
             id: author.id,
           }} 
           onClose={handleCloseModal}
-          src= "/assets/delete.svg"
-          alt= "Trash"
         />
       )}
     </>

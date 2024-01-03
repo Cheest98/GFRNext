@@ -1,20 +1,13 @@
 "use client"
 
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle
 } from "@/components/ui/dialog";
-import { updateList } from "@/lib/actions/list.actions";
-import { Session } from "next-auth";
-import { Button } from "../ui/button";
-import { useForm } from "react-hook-form";
-import { PriceValidation } from "@/lib/validations/list";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import {
   Form,
   FormControl,
@@ -22,7 +15,15 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import {  updateList } from "@/lib/actions/list.actions";
+import { PriceValidation } from "@/lib/validations/list";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Session } from "next-auth";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { Product } from "@prisma/client";
 
 interface ListModalProps {
     session: Session | null;
@@ -31,9 +32,12 @@ interface ListModalProps {
     status: string;
     onClose: () => void;
     onStatusUpdate: () => void; 
+    products: Product[];
   }
 
- function ListModal({ id, list, status,  session,onStatusUpdate ,  onClose }: ListModalProps) {
+  
+
+ function ListModal({ id, list, products,  session, onStatusUpdate,  onClose }: ListModalProps) {
 
   const form = useForm<z.infer<typeof PriceValidation>>({
     resolver: zodResolver(PriceValidation),
@@ -67,17 +71,16 @@ interface ListModalProps {
               <DialogTitle className="text-1.5rem font-semibold text-light-1">{list} </DialogTitle>
             </DialogHeader>
             <DialogDescription>
-                <p className="text-light-1"> Task1</p>
-                <p className="text-light-1"> Task2</p>
-                <p className="text-light-1"> Task3</p>
-                <p className="text-light-1"> Task4</p>
+              {products.map((product) => (
+                <div key={product.id} className="mt-1 flex justify-between items-center">
+                  <p className="text-small-regular text-light-2">{product.product}</p>
+              </div>
+            ))}
             </DialogDescription>
-            <div className="grid gap-4 py-4">
-                <div className="mt-auto flex items-center gap-3" />
-            </div>
             <DialogFooter>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(handleStatusUpdate)} className="mt-10 flex justify-start gap-10">
+              <form onSubmit={form.handleSubmit(handleStatusUpdate)} className="flex items-center justify-start gap-2 w-full">
+              <p className="text-small-regular text-light-2 flex-shrink-0">Total Price: </p>
               <FormField
                 control={form.control}
                 name="price"
@@ -94,7 +97,7 @@ interface ListModalProps {
                 </FormItem>
                  )}
                 />
-                <Button  className="bg-primary-500" type="submit">Submit</Button>
+                <Button  className="bg-primary-500" type="submit">Completed</Button>
                </form>
                </Form>
             </DialogFooter>

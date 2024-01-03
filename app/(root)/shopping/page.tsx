@@ -22,6 +22,7 @@ export default async function Page() {
             id={list.id}
             list={list.list}
             status={list.status}
+            price={list.price}
             session={session}
             author={{
               name: list.author.name || "Unknown",

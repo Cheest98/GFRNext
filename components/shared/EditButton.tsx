@@ -1,28 +1,26 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { updateUser } from "@/lib/actions/user.actions";
 import { Session } from "next-auth";
+import Image from "next/image";
 
-interface UpdateUserProps {
+interface ButtonProps {
   session: Session | null;
-  data: {
-    image?: string;
-    name?: string;
-    bio?: string;
-    phone?: string;
-  };
+  data: any;
+  action: (props: any) => void;
 }
 
-function EditButton({ session, data }: UpdateUserProps) {
+function EditButton({ data, action, session,}: ButtonProps) {
   return (
     <>
-      <Button
-        className="bg-primary-500"
-        onClick={() => updateUser({ session, data })}
-      >
-        Save
-      </Button>
+      <button  className="bg-primary" onClick={() => action({ data, session })}>
+        <Image
+          src= "/assets/edit.svg"
+          alt= "Edit"
+          width={14}
+          height={14}
+          className='cursor-pointer object-contain'
+        />
+      </button>
     </>
   );
 }
