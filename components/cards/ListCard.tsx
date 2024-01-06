@@ -14,11 +14,7 @@ interface ListCardProps {
   list: string;
   status: string;
   price: number | null;
-  author: {
-    name: string;
-    image: string;
-    id: string;
-  };
+
   
 }
 
@@ -29,7 +25,7 @@ interface Product {
   listid: string;
 }
 
-function ListCard({ id, list, author, status, price, session,  }: ListCardProps) {
+function ListCard({ id, list,  status, price, session,  }: ListCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
 
