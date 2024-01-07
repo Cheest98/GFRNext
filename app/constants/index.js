@@ -24,6 +24,11 @@ export const sidebarLinks = [
     route: "/events",
     label: "Events",
   },
+  {
+    imgURL: "/assets/community.svg",
+    route: "/activities",
+    label: "Activity",
+  },
 
   {
     imgURL: "/assets/user.svg",
@@ -51,3 +56,4 @@ export const listsTabs = [
   { value: "Not Completed", label: "Not Completed", icon: "/assets/reply.svg" },
   { value: "Completed", label: "Completed", icon: "/assets/members.svg" }, 
 ];
+

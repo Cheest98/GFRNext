@@ -1,4 +1,3 @@
-
 import SingInForm from "@/components/forms/SignInForm";
 
 async function Page() {

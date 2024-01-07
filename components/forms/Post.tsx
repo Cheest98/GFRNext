@@ -62,18 +62,21 @@ const Post = ({ session }: UserProps) => {
     }
   };
 
-  async function onSubmit( values: z.infer<typeof PostValidation>){
+  async function onSubmit(values: z.infer<typeof PostValidation>) {
     console.log(values); // Debug log
     try {
       const picturePath = values.picturePath || "";
-      await createPost({ data: { picturePath, content: values.content }, session });
+      await createPost({
+        data: { picturePath, content: values.content },
+        session,
+      });
       console.log("Task created successfully");
-      form.reset()
+      form.reset();
     } catch (error: any) {
       console.error("Error creating task:", error.message);
       // Consider providing user feedback here
     }
-  };
+  }
 
   const data = form.watch();
 
@@ -81,7 +84,10 @@ const Post = ({ session }: UserProps) => {
     <>
       <h1 className="head-text text-left">Create post</h1>
       <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="mt-10 flex flex-col justify-start gap-10 rounded-lg">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="mt-10 flex flex-col justify-start gap-10 rounded-lg"
+        >
           <FormField
             control={form.control}
             name="content"
@@ -112,7 +118,9 @@ const Post = ({ session }: UserProps) => {
             )}
           />
 
-          <Button type="submit" className="bg-primary-500">Add Post</Button>
+          <Button type="submit" className="bg-primary-500">
+            Add Post
+          </Button>
         </form>
       </Form>
     </>

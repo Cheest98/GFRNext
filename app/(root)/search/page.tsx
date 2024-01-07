@@ -28,11 +28,11 @@ export default async function searchParams({
           <>
             {group.map((group) => (
               <GroupCard
-              session={session}
-              joinGroupId={group.id}
-              groupName={group.name}
-              password={group.password} 
-              />            
+                session={session}
+                joinGroupId={group.id}
+                groupName={group.name}
+                password={group.password}
+              />
             ))}
           </>
         )}

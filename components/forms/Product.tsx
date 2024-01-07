@@ -22,7 +22,7 @@ interface ListProps {
   onProductAdded: () => Promise<void>;
 }
 
-const Product = ({ listId, onProductAdded   }: ListProps) => {
+const Product = ({ listId, onProductAdded }: ListProps) => {
   const form = useForm<z.infer<typeof ProductValidation>>({
     resolver: zodResolver(ProductValidation),
     defaultValues: {
@@ -30,12 +30,11 @@ const Product = ({ listId, onProductAdded   }: ListProps) => {
     },
   });
 
-
   const onSubmit = async (values: z.infer<typeof ProductValidation>) => {
     try {
-      await createProduct({ data: { product: values.product}, listId });;
+      await createProduct({ data: { product: values.product }, listId });
       console.log("Product created successfully");
-      form.reset()
+      form.reset();
       await onProductAdded();
     } catch (error) {
       console.error("Error creating product:", error);
@@ -45,7 +44,10 @@ const Product = ({ listId, onProductAdded   }: ListProps) => {
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="mt-10 flex justify-start gap-10">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="mt-10 flex justify-start gap-10"
+        >
           <FormField
             control={form.control}
             name="product"
@@ -62,8 +64,10 @@ const Product = ({ listId, onProductAdded   }: ListProps) => {
               </FormItem>
             )}
           />
-          <Button  className="bg-primary-500" type="submit">Add</Button>
-          </form>
+          <Button className="bg-primary-500" type="submit">
+            Add
+          </Button>
+        </form>
       </Form>
     </>
   );

@@ -32,21 +32,24 @@ const List = ({ session }: UserProps) => {
     },
   });
 
-  async function onSubmit( values: z.infer<typeof ListValidation>){
+  async function onSubmit(values: z.infer<typeof ListValidation>) {
     console.log(values);
     try {
       await createList({ data: { list: values.list }, session });
       console.log("List created successfully");
-      form.reset()
+      form.reset();
     } catch (error: any) {
       console.error("Error creating List:", error.message);
     }
-  };
+  }
 
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="mt-10 flex justify-start gap-10">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="mt-10 flex justify-start gap-10"
+        >
           <FormField
             control={form.control}
             name="list"
@@ -64,7 +67,9 @@ const List = ({ session }: UserProps) => {
             )}
           />
 
-          <Button  className="bg-primary-500" type="submit">Submit</Button>
+          <Button className="bg-primary-500" type="submit">
+            Submit
+          </Button>
         </form>
       </Form>
     </>

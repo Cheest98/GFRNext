@@ -1,4 +1,3 @@
-
 import Register from "@/components/forms/SignUpForm";
 
 async function Page() {

@@ -151,7 +151,7 @@ export async function deleteTask({ data, session }: deleteTaskProps): Promise<vo
         id: data.id,
       },
     });
-  
+
     await prisma.activity.create({
       data: {
         type: "TASK_DELETED",
@@ -159,7 +159,7 @@ export async function deleteTask({ data, session }: deleteTaskProps): Promise<vo
         groupId: user.groupId,
       },
     });
-    console.log("Task", data.id,  "has been removed ")
+    console.log("Task", data.id, "has been removed ")
     revalidatePath("/tasks", 'page');
   } catch (error: any) {
     console.error("Error details:", error);

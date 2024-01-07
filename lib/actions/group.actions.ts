@@ -15,9 +15,13 @@ interface recentActivitiesProps {
   groupId: string | null
 }
 
+interface groupActivitiesProps {
+  groupIdPrisma: string;
+}
+
 
 interface getGroupInfoProps {
-  groupIdPrisma: string 
+  groupIdPrisma: string
 }
 
 export async function createGroup({
@@ -124,7 +128,7 @@ export async function joinGroup({
   if (!session?.user?.id) {
     throw new Error("User ID is missing.");
   }
-  
+
 
   // Check if the user is already a member of another group - czy ten warunek nie jest bez senus? 
   //TODO  WERYFIAKCJA WARUNKU 
@@ -217,41 +221,64 @@ export async function getGroupInfo({ groupIdPrisma }: getGroupInfoProps) {
   if (!groupIdPrisma) {
     throw new Error("Group ID is missing.");
   }
-  
+
   try {
     const groupInfo = prisma.group.findUnique({
       where: { id: groupIdPrisma },
-      select: { 
+      select: {
         name: true,
         description: true,
-       }
-  });
-  return groupInfo;
-} catch (error: any) {
-  throw new Error(`Failed to fetch group info: ${error.message}`);
-}
+      }
+    });
+    return groupInfo;
+  } catch (error: any) {
+    throw new Error(`Failed to fetch group info: ${error.message}`);
+  }
 }
 
 export async function fetchRecentActivities({ groupId }: recentActivitiesProps) {
   if (!groupId) {
     throw new Error("Group ID is missing.");
   }
-  
+
   try {
     const activities = prisma.activity.findMany({
-    where: { 
-      groupId
-     },
-    orderBy: { 
-      createdAt: 'desc' 
-    },
-    take: 5, // Fetch the 5 lastets activities
-    include: { 
-      user: true 
-    }, // Include user information
-  });
-  return activities;
-} catch (error: any) {
-  throw new Error(`Failed to fetch activities: ${error.message}`);
+      where: {
+        groupId
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      take: 5, // Fetch the 5 lastets activities
+      include: {
+        user: true
+      }, // Include user information
+    });
+    return activities;
+  } catch (error: any) {
+    throw new Error(`Failed to fetch activities: ${error.message}`);
+  }
 }
+
+export async function fetchGroupActivities({ groupIdPrisma }: groupActivitiesProps) {
+  if (!groupIdPrisma) {
+    throw new Error("Group ID is missing.");
+  }
+
+  try {
+    const activities = prisma.activity.findMany({
+      where: {
+        groupId: groupIdPrisma,
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      include: {
+        user: true
+      }, // Include user information
+    });
+    return activities;
+  } catch (error: any) {
+    throw new Error(`Failed to fetch activities: ${error.message}`);
+  }
 }

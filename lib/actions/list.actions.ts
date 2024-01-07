@@ -51,6 +51,11 @@ interface UpdateListProps {
   };
 }
 
+interface userProps {
+  authorId: string | undefined;
+}
+
+
 export async function createList({ session, data }: ListProps): Promise<void> {
   if (!session?.user?.id) {
     throw new Error("User ID is missing.");
@@ -126,7 +131,7 @@ export async function createProduct({
         status: "Not Completed",
         listid: listId,
       },
-      
+
     });
     console.log(newProduct);
     revalidateTag('products')
@@ -192,7 +197,7 @@ export async function fetchListProducts({ listId }: ProductListProps) {
 }
 
 export async function updateProductStatus({ productId, newStatus }: UpadteProductStatusProps) {
-    
+
   if (!productId) {
     throw new Error("Product ID is missing.");
   }
@@ -214,7 +219,7 @@ export async function updateProductStatus({ productId, newStatus }: UpadteProduc
 }
 
 export async function deleteProduct({ productId }: DeleteProductProps) {
-    
+
   if (!productId) {
     throw new Error("Product ID is missing.");
   }
@@ -237,7 +242,7 @@ export async function deleteList({ data, session }: DeleteListProps) {
   console.log(data)
   if (!session?.user?.id) {
     throw new Error("User ID is missing.");
-  }  
+  }
 
   if (!data.id) {
     throw new Error("List ID is missing.");
@@ -268,5 +273,24 @@ export async function deleteList({ data, session }: DeleteListProps) {
   } catch (error: any) {
     console.error("Error details:", error);
     throw new Error(`Failed to delete List: ${error.message}`);
+  }
+}
+
+export async function fetchUserList({ authorId }: userProps) {
+  try {
+    const list = await prisma.list.findMany({
+      where: {
+        authorId: authorId,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        author: true,
+      },
+    });
+    return list;
+  } catch (error: any) {
+    throw new Error(`Failed to fetch user post: ${error.message}`);
   }
 }

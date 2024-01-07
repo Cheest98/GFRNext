@@ -3,13 +3,13 @@
 import { getUserImage } from "@/lib/actions/user.actions";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image, { StaticImageData } from "next/image";
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import profilePicPlaceholder from "../../public/assets/profile-pic-placeholder.png";
 
-
-
 export default function UserMenuButton() {
-  const [imageUrl, setImageUrl] = useState<string | StaticImageData>(profilePicPlaceholder);
+  const [imageUrl, setImageUrl] = useState<string | StaticImageData>(
+    profilePicPlaceholder
+  );
   const { data: session, status } = useSession();
   const user = session?.user;
 
@@ -74,5 +74,3 @@ export default function UserMenuButton() {
     </div>
   );
 }
-
-

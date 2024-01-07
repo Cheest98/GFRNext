@@ -25,7 +25,7 @@ interface UserProps {
   session: Session | null;
 }
 
-const CreateGroup= ({ session }: UserProps) => {
+const CreateGroup = ({ session }: UserProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const user = session?.user;
@@ -35,7 +35,7 @@ const CreateGroup= ({ session }: UserProps) => {
     defaultValues: {
       name: "",
       description: "",
-      password:"",
+      password: "",
     },
   });
 
@@ -83,7 +83,7 @@ const CreateGroup= ({ session }: UserProps) => {
               </FormItem>
             )}
           />
-                    <FormField
+          <FormField
             control={form.control}
             name="password"
             render={({ field }) => (

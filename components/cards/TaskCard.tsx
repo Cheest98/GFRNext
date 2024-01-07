@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { deleteTask, updateTask } from "@/lib/actions/task.actions";
 import { formatDateString } from "@/lib/utils";
@@ -9,7 +9,6 @@ import TaskModal from "../modals/TaskModal";
 import DeleteButton from "../shared/DeleteButton";
 import StatusButton from "../shared/StatusButton";
 import EditButton from "../shared/EditButton";
-
 
 interface TaskCardProps {
   session: Session | null;
@@ -25,7 +24,15 @@ interface TaskCardProps {
   };
 }
 
-function TaskCard({ id, task, author, status, description, createdAt,  session }: TaskCardProps) {
+function TaskCard({
+  id,
+  task,
+  author,
+  status,
+  description,
+  createdAt,
+  session,
+}: TaskCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleTaskClick = () => {
@@ -40,25 +47,25 @@ function TaskCard({ id, task, author, status, description, createdAt,  session }
   return (
     <>
       <article className="p-5 rounded-lg bg-dark-2   border-r-dark-1 flex flex-col gap-2 h-64">
-        <div className='flex w-full flex-col justify-between'>  
-          <div className='flex justify-between'>
+        <div className="flex w-full flex-col justify-between">
+          <div className="flex justify-between">
             <h1 className="text-1.5rem font-semibold text-light-1">{task}</h1>
-              <div>
-                <EditButton
-                  session={session}
-                  data={{id}}
-                  action={handleTaskClick}
-                />
-                <DeleteButton
-                  session={session}
-                  data={{ id}}
-                  action={deleteTask}
-                />
-              </div>
+            <div>
+              <EditButton
+                session={session}
+                data={{ id }}
+                action={handleTaskClick}
+              />
+              <DeleteButton
+                session={session}
+                data={{ id }}
+                action={deleteTask}
+              />
+            </div>
           </div>
         </div>
         <p className="text-light-1">{description}</p>
-      
+
         <div className="mt-auto flex items-center gap-3">
           {status === "To do" && (
             <StatusButton
@@ -67,30 +74,30 @@ function TaskCard({ id, task, author, status, description, createdAt,  session }
               action={updateTask}
               label="Doing"
             />
-            )}
-            {status === "Doing" && (
-              <StatusButton
-                session={session}
-                data={{ id, status: "Done", }}
-                action={updateTask}
-                label="Done"
-              />
-            )}
-            {status === "Done" && (
-              <p className="text-light-1"> Task completed at: {description}</p>
-            )}
+          )}
+          {status === "Doing" && (
+            <StatusButton
+              session={session}
+              data={{ id, status: "Done" }}
+              action={updateTask}
+              label="Done"
+            />
+          )}
+          {status === "Done" && (
+            <p className="text-light-1"> Task completed at: {description}</p>
+          )}
         </div>
-          <div className='h-0.5 w-full bg-dark-3' />
-            <div className='mt-2 flex justify-between items-center'>
-              <p className='text-subtle-medium text-gray-1'>{author.name}</p>
-              <p className='text-subtle-medium text-gray-1'>{formatDateString(createdAt)}</p>
-            </div>
-  
-
+        <div className="h-0.5 w-full bg-dark-3" />
+        <div className="mt-2 flex justify-between items-center">
+          <p className="text-subtle-medium text-gray-1">{author.name}</p>
+          <p className="text-subtle-medium text-gray-1">
+            {formatDateString(createdAt)}
+          </p>
+        </div>
       </article>
       {isModalOpen && (
-        <TaskModal  
-          session={session}           
+        <TaskModal
+          session={session}
           id={id}
           task={task}
           description={description || "Brak"}
@@ -100,7 +107,7 @@ function TaskCard({ id, task, author, status, description, createdAt,  session }
             name: author.name || "Unknown",
             image: author.image || "DefaultImageURL",
             id: author.id,
-          }} 
+          }}
           onClose={handleCloseModal}
         />
       )}

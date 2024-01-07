@@ -7,11 +7,17 @@ interface ButtonProps {
   joinGroupId: string;
   session: Session | null;
   action: (props: any) => void;
-  password: string
+  password: string;
   label: string;
 }
 
-function JoinButton({ session, action, label, joinGroupId, password }: ButtonProps) {
+function JoinButton({
+  session,
+  action,
+  label,
+  joinGroupId,
+  password,
+}: ButtonProps) {
   return (
     <>
       <Button

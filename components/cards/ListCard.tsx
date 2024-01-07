@@ -1,5 +1,10 @@
-"use client"
-import { deleteList, deleteProduct, fetchListProducts, updateProductStatus } from "@/lib/actions/list.actions";
+"use client";
+import {
+  deleteList,
+  deleteProduct,
+  fetchListProducts,
+  updateProductStatus,
+} from "@/lib/actions/list.actions";
 import { Session } from "next-auth";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -14,8 +19,6 @@ interface ListCardProps {
   list: string;
   status: string;
   price: number | null;
-
-  
 }
 
 interface Product {
@@ -25,7 +28,7 @@ interface Product {
   listid: string;
 }
 
-function ListCard({ id, list,  status, price, session,  }: ListCardProps) {
+function ListCard({ id, list, status, price, session }: ListCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
 
@@ -52,7 +55,6 @@ function ListCard({ id, list,  status, price, session,  }: ListCardProps) {
     }
   };
 
-
   const handleListClick = () => {
     setIsModalOpen(true);
   };
@@ -65,9 +67,9 @@ function ListCard({ id, list,  status, price, session,  }: ListCardProps) {
     try {
       const newStatus = checked ? "Completed" : "Not Completed";
       await updateProductStatus({
-      productId: productId,
-      newStatus: newStatus
-    });
+        productId: productId,
+        newStatus: newStatus,
+      });
 
       // Refresh the product list to show the new status
       refreshProductList();
@@ -75,7 +77,7 @@ function ListCard({ id, list,  status, price, session,  }: ListCardProps) {
       console.error("Failed to update product status:", error);
     }
   };
- 
+
   const handleDeleteProduct = async (productId: string) => {
     try {
       await deleteProduct({ productId: productId });
@@ -88,70 +90,73 @@ function ListCard({ id, list,  status, price, session,  }: ListCardProps) {
 
   return (
     <>
-    <article className="p-5 rounded-lg bg-dark-2   border-r-dark-1 flex flex-col gap-2">
-         <div className="flex justify-between items-center">
+      <article className="p-5 rounded-lg bg-dark-2   border-r-dark-1 flex flex-col gap-2">
+        <div className="flex justify-between items-center">
           <p className="text-1.5rem font-semibold text-light-1">{list}</p>
           <div className="flex items-center gap-2">
-            <EditButton                      
+            <EditButton
               session={session}
-              data={{id}} 
-              action={handleListClick} />
-            <DeleteButton
-              session={session}
-              data={{ id}}
-              action={deleteList}
+              data={{ id }}
+              action={handleListClick}
             />
-              <div>
-            </div>
+            <DeleteButton session={session} data={{ id }} action={deleteList} />
+            <div></div>
           </div>
-
-         </div>
-          <div className="flex w-full flex-col">
-            {products.map((product) => (
-              <div key={product.id} className="mt-2 flex justify-between items-center">
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={product.status === "Completed"}
-                    onChange={(e) => handleCheckboxChange(product.id, e.target.checked)}
-                    className="rounded " // Add more styling as needed
-                    />
-                  <p className=" text-small-regular text-light-2">{product.product}</p>
-                </div>
-                  <button onClick={() => handleDeleteProduct(product.id)}>
-                    <Image
-                      src= "/assets/delete.svg"
-                      alt= "Trash"
-                      width={14}
-                      height={14}
-                      className='cursor-pointer object-contain'
-                    />
-                  </button>
+        </div>
+        <div className="flex w-full flex-col">
+          {products.map((product) => (
+            <div
+              key={product.id}
+              className="mt-2 flex justify-between items-center"
+            >
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={product.status === "Completed"}
+                  onChange={(e) =>
+                    handleCheckboxChange(product.id, e.target.checked)
+                  }
+                  className="rounded " // Add more styling as needed
+                />
+                <p className=" text-small-regular text-light-2">
+                  {product.product}
+                </p>
               </div>
-            ))}
-            <div>
-              <Product listId={id} onProductAdded={refreshProductList} />
+              <button onClick={() => handleDeleteProduct(product.id)}>
+                <Image
+                  src="/assets/delete.svg"
+                  alt="Trash"
+                  width={14}
+                  height={14}
+                  className="cursor-pointer object-contain"
+                />
+              </button>
             </div>
-            <div className=' mt-2 h-0.5 w-full bg-dark-3' />
-            <div className='mt-2 flex justify-between items-center'>
-              <p className='text-subtle-medium text-gray-1'>{status}</p>
-              {status === "Completed" && (
-              <p className="text-subtle-medium text-gray-1"> Total price: {price}</p>
-            )}
-            </div>
-          
+          ))}
+          <div>
+            <Product listId={id} onProductAdded={refreshProductList} />
           </div>
-          
-          </article>
-            {isModalOpen && (
-            <ListModal  
-            session={session}           
-            id={id}
-            list={list}
-            status={status}
-            products={products} 
-            onClose={handleCloseModal}
-            onStatusUpdate={handleCloseModal}
+          <div className=" mt-2 h-0.5 w-full bg-dark-3" />
+          <div className="mt-2 flex justify-between items-center">
+            <p className="text-subtle-medium text-gray-1">{status}</p>
+            {status === "Completed" && (
+              <p className="text-subtle-medium text-gray-1">
+                {" "}
+                Total price: {price}
+              </p>
+            )}
+          </div>
+        </div>
+      </article>
+      {isModalOpen && (
+        <ListModal
+          session={session}
+          id={id}
+          list={list}
+          status={status}
+          products={products}
+          onClose={handleCloseModal}
+          onStatusUpdate={handleCloseModal}
         />
       )}
     </>

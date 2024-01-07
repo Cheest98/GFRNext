@@ -12,19 +12,19 @@ import GoogleProvider from "next-auth/providers/google";
 
 export const authOptions: NextAuthOptions = {
   adapter: CustomPrismaAdapter(prisma as PrismaClient) as Adapter,
-  session:{
+  session: {
     strategy: 'jwt'
   },
-  pages:{
-    signIn:'/signin'
+  pages: {
+    signIn: '/signin'
   },
-    secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
-      name:"Credentials",
+      name: "Credentials",
       credentials: {
-        email: { label:"Email", type: 'text', placeholder: 'test@test.com' },
-        password: { label:"Password", type: 'password', placeholder: 'Pa$$w0rd' },
+        email: { label: "Email", type: 'text', placeholder: 'test@test.com' },
+        password: { label: "Password", type: 'password', placeholder: 'Pa$$w0rd' },
       },
       async authorize(credentials, req) {
         const { email, password } = LoginUserValidation.parse(credentials);
@@ -64,34 +64,34 @@ export const authOptions: NextAuthOptions = {
   ],
 
   callbacks: {
-async jwt({ token, user}){
-  if(user){
-    return {
-      ...token,
+    async jwt({ token, user }) {
+      if (user) {
+        return {
+          ...token,
           id: user.id,
           bio: user.bio,
           name: user.name,
           email: user.email,
           phone: user.phone,
           groupId: user.groupId,
-    }
-  }
-  return token;
-},
-async session ({session, token}){
-  return {
-    ...session,
-    user: {
-      ...session.user,
-      id: token.id,
+        }
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id,
           bio: token.bio,
           name: token.name,
           email: token.email,
           phone: token.phone, // Add this line
           groupId: token.groupId,
-    }
-  }
-},
+        }
+      }
+    },
   }
 };
 

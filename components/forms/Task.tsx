@@ -33,32 +33,36 @@ const Task = ({ session }: UserProps) => {
       task: "",
       description: "",
     },
-    
   });
 
-  async function onSubmit( values: z.infer<typeof TaskValidation>){
+  async function onSubmit(values: z.infer<typeof TaskValidation>) {
     console.log(values); // Debug log
     try {
-      await createTask({ data: { task: values.task, description: values.description }, session });
+      await createTask({
+        data: { task: values.task, description: values.description },
+        session,
+      });
       console.log("Task created successfully");
-      form.reset()
+      form.reset();
     } catch (error: any) {
       console.error("Error creating task:", error.message);
       // Consider providing user feedback here
     }
-  };
-
+  }
 
   return (
     <>
-      <Form {...form} >
-        <form onSubmit={form.handleSubmit(onSubmit)}  className="flex flex-col justify-start gap-10">
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col justify-start gap-10"
+        >
           <FormField
             control={form.control}
             name="task"
             render={({ field }) => (
               <FormItem className="flex w-full flex-col gap-3">
-                 <FormLabel className="text-base-semibold text-light-2">
+                <FormLabel className="text-base-semibold text-light-2">
                   Task
                 </FormLabel>
                 <FormControl>
@@ -92,7 +96,9 @@ const Task = ({ session }: UserProps) => {
             )}
           />
 
-          <Button  className="bg-primary-500" type="submit">Submit</Button>
+          <Button className="bg-primary-500" type="submit">
+            Submit
+          </Button>
         </form>
       </Form>
     </>

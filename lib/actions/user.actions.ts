@@ -82,11 +82,11 @@ export async function createUser({
 
 export async function getUserImage({
   email,
-}: GetUserImageProps):  Promise<{ image: string | null }> {
+}: GetUserImageProps): Promise<{ image: string | null }> {
 
 
 
-  if (!email ) {
+  if (!email) {
     throw new Error(" Missing email ");
   }
 

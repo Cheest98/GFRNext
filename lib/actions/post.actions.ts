@@ -1,9 +1,8 @@
 "use server";
 
 import { Session } from "next-auth";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from 'next/cache';
 import { prisma } from "../db/prisma";
-import { revalidateTag } from 'next/cache'
 
 interface CreatePostProps {
   session: Session | null;
@@ -45,7 +44,7 @@ export async function createPost({
         content: data.content,
         authorId: session.user.id,
         groupId: user.groupId,
-      },  
+      },
     });
     await prisma.activity.create({
       data: {

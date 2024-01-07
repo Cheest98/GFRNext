@@ -9,16 +9,16 @@ interface ButtonProps {
   action: (props: any) => void;
 }
 
-function EditButton({ data, action, session,}: ButtonProps) {
+function EditButton({ data, action, session }: ButtonProps) {
   return (
     <>
-      <button  className="bg-primary" onClick={() => action({ data, session })}>
+      <button className="bg-primary" onClick={() => action({ data, session })}>
         <Image
-          src= "/assets/edit.svg"
-          alt= "Edit"
+          src="/assets/edit.svg"
+          alt="Edit"
           width={14}
           height={14}
-          className='cursor-pointer object-contain'
+          className="cursor-pointer object-contain"
         />
       </button>
     </>
