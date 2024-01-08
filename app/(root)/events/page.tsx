@@ -1,7 +1,13 @@
-export default function Page() {
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import Calendar from "@/components/shared/Calendar";
+
+import { getServerSession } from "next-auth";
+
+export default async function Page() {
+  const session = await getServerSession(authOptions);
   return (
     <div>
-      <h1 className="head-text text-left">events</h1>
+      <Calendar />
     </div>
   );
 }
