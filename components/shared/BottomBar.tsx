@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { sidebarLinks } from "../../app/constants/index.js";
+
 function Bottombar() {
   const { data: session, status } = useSession();
   const pathname = usePathname();

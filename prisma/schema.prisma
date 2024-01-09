@@ -57,6 +57,7 @@ model User {
   posts         Post[]
   tasks         Task[]
   lists         List[]
+  event       Event[]
   activities Activity[]
 
   @@map("users")
@@ -72,6 +73,7 @@ model Group {
   posts       Post[]
   tasks       Task[]
   lists       List[]
+  event       Event[]
   activities Activity[]
 
   @@map("groups")
@@ -141,4 +143,19 @@ model Product {
   listid String @db.ObjectId
 
   @@map("products")
+}
+
+model Event {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String?
+  start       DateTime
+  end         DateTime
+  allDay      Boolean   @default(false)
+  authorId    String    @db.ObjectId
+  groupId     String?   @db.ObjectId
+  author      User      @relation(fields: [authorId], references: [id])
+  group       Group?    @relation(fields: [groupId], references: [id])
+  
+  @@map("events")
 }

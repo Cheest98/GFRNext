@@ -5,9 +5,10 @@ import { getServerSession } from "next-auth";
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
+  
   return (
     <div>
-      <Calendar />
+      <Calendar session={session} />
     </div>
   );
 }
