@@ -6,27 +6,24 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import { Session } from "next-auth";
 import { useState } from "react";
 import EventModal from "../modals/EventModal";
+import DateSelectArg from "@fullcalendar/react"
+import DateClickArg from "@fullcalendar/react"
 
 const events = [
   { title: "Event 1", date: "2024-01-06" },
-  // ...other events
 ];
 
 interface CalendarProps {
   session: Session | null;
 }
 
-interface EventDetail {
-  id?: string;
-  title?: string;
-  start: Date;
-  end: Date;
-}
 
 function Calendar({ session }: CalendarProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
-  const handleOpenClick = () => {
+  const handleDateClick = (arg: DateClickArg) => {
+    setSelectedDate(arg.date);
     setIsModalOpen(true);
   };
 
@@ -53,14 +50,18 @@ function Calendar({ session }: CalendarProps) {
               }}
               events={events}
               eventColor="#877EFF"
-              dateClick={handleOpenClick}
+              dateClick={handleDateClick}
               eventClick={handleEventClick}
             />
           </div>
         </div>
       </section>
       {isModalOpen && (
-        <EventModal session={session} onClose={handleCloseModal} />
+        <EventModal
+        session={session}
+        onClose={handleCloseModal}
+        selectedDate={selectedDate}
+      />
       )}
     </>
   );

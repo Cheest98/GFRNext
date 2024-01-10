@@ -41,10 +41,10 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
-  email         String?   @unique
-  password String?
+  email         String?    @unique
+  password      String?
   emailVerified DateTime?
   image         String?
   accounts      Account[]
@@ -52,44 +52,44 @@ model User {
   bio           String?
   phone         String?
   picturePath   String?
-  group         Group?    @relation(fields: [groupId], references: [id])
-  groupId       String?   @db.ObjectId
+  group         Group?     @relation(fields: [groupId], references: [id])
+  groupId       String?    @db.ObjectId
   posts         Post[]
   tasks         Task[]
   lists         List[]
-  event       Event[]
-  activities Activity[]
+  event         Event[]
+  activities    Activity[]
 
   @@map("users")
 }
 
 model Group {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
-  ownerId     String @unique @db.ObjectId
+  ownerId     String     @unique @db.ObjectId
   password    String
   members     User[]
   posts       Post[]
   tasks       Task[]
   lists       List[]
   event       Event[]
-  activities Activity[]
+  activities  Activity[]
 
   @@map("groups")
 }
 
 model Activity {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  type       String   // e.g., "POST_CREATED", "TASK_UPDATED"
-  userId     String   @db.ObjectId
-  groupId    String   @db.ObjectId
-  createdAt  DateTime @default(now())
-  user       User     @relation(fields: [userId], references: [id])
-  group      Group    @relation(fields: [groupId], references: [id])
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  type      String // e.g., "POST_CREATED", "TASK_UPDATED"
+  userId    String   @db.ObjectId
+  groupId   String   @db.ObjectId
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  group     Group    @relation(fields: [groupId], references: [id])
 
   @@map("activities")
-  }
+}
 
 model Post {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -105,16 +105,16 @@ model Post {
 }
 
 model Task {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  task      String
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  task        String
   description String?
-  status    String
-  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId  String   @db.ObjectId
-  group     Group    @relation(references: [id], fields: [groupId], onUpdate: NoAction, onDelete: Cascade)
-  groupId   String   @db.ObjectId
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  status      String
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId    String   @db.ObjectId
+  group       Group    @relation(references: [id], fields: [groupId], onUpdate: NoAction, onDelete: Cascade)
+  groupId     String   @db.ObjectId
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
 
   @@map("tasks")
 }
@@ -136,26 +136,27 @@ model List {
 }
 
 model Product {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  product   String
-  status String
-  list   List   @relation(fields: [listid], references: [id], onDelete: Cascade)
-  listid String @db.ObjectId
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  product String
+  status  String
+  list    List   @relation(fields: [listid], references: [id], onDelete: Cascade)
+  listid  String @db.ObjectId
 
   @@map("products")
 }
 
 model Event {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String?
   start       DateTime
-  end         DateTime
-  allDay      Boolean   @default(false)
-  authorId    String    @db.ObjectId
-  groupId     String?   @db.ObjectId
-  author      User      @relation(fields: [authorId], references: [id])
-  group       Group?    @relation(fields: [groupId], references: [id])
-  
+  startTime   String
+  endTime     String
+  allDay      Boolean  @default(false)
+  authorId    String   @db.ObjectId
+  groupId     String?  @db.ObjectId
+  author      User     @relation(fields: [authorId], references: [id])
+  group       Group?   @relation(fields: [groupId], references: [id])
+
   @@map("events")
 }
