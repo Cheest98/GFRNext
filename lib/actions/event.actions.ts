@@ -10,10 +10,8 @@ interface CreateEventProps {
     data: {
         title: string;
         description: string;
-        start: string
-        startTime: string
-        endTime: string
-        allDay: Boolean
+        date: string;
+        allDay: Boolean;
     };
 }
 
@@ -53,9 +51,8 @@ export async function createEvent({
             data: {
                 title: data.title,
                 description: data.description,
-                start: data.start,
-                startTime: data.startTime,
-                endTime: data.endTime,
+                start: new Date(data.date), 
+                end:   new Date(data.date), 
                 authorId: session.user.id,
                 groupId: user.groupId,
             },

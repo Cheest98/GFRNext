@@ -1,16 +1,12 @@
 "use client";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogFooter } from "@/components/ui/dialog";
 import { createEvent } from "@/lib/actions/event.actions";
 import { EventValidation } from "@/lib/validations/event";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Session } from "next-auth";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 import SharedButton from "../shared/SharedButton";
 import {
   Form,
@@ -25,22 +21,34 @@ import { Input } from "../ui/input";
 interface EventModalProps {
   session: Session | null;
   onClose: () => void;
-  selectedDate: Date | null;
+  selectedDate: Date;
 }
 
 function EventModal({ session, onClose, selectedDate }: EventModalProps) {
+  
+  
+
+  const [eventDate, setEventDate] = useState(
+    selectedDate.toISOString().split("T")[0]
+  );
+  const [eventTime, setEventTime] = useState(
+    selectedDate.toISOString().split("T")[1].slice(0, 5)
+  );
 
   const form = useForm({
     resolver: zodResolver(EventValidation),
     defaultValues: {
-      title: '',
-      description: '',
-      startDate: selectedDate,
-      endDate: selectedDate,
-      startTime: '',
-      endTime: '',
+      title: "",
+      description: "",
+      date: eventDate,
+      time: eventTime,
     },
   });
+
+  useEffect(() => {
+    setEventDate(selectedDate.toISOString().split("T")[0]);
+    setEventTime(selectedDate.toISOString().split("T")[1].slice(0, 5));
+  }, [selectedDate]);
 
   const data = form.watch();
   return (
@@ -87,44 +95,45 @@ function EventModal({ session, onClose, selectedDate }: EventModalProps) {
               )}
             />
             <FormField
-  control={form.control}
-  name="startTime"
-  render={({ field }) => (
-    <FormItem className="flex w-full flex-col gap-3">
-      <FormLabel className="text-base-semibold text-light-2">
-        Start Time
-      </FormLabel>
-      <FormControl>
-        <Input
-          type="time"
-          className="account-form_input no-focus"
-          {...field}
-        />
-      </FormControl>
-      <FormMessage />
-    </FormItem>
-  )}
-/>
+              control={form.control}
+              name="date"
+              render={({ field }) => (
+                <FormItem className="flex w-full flex-col gap-3">
+                  <FormLabel className="text-base-semibold text-light-2">
+                    Start Date
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="date"
+                      value={eventDate}
+                      onChange={(e) => setEventDate(e.target.value)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-<FormField
-  control={form.control}
-  name="endTime"
-  render={({ field }) => (
-    <FormItem className="flex w-full flex-col gap-3">
-      <FormLabel className="text-base-semibold text-light-2">
-        End Time
-      </FormLabel>
-      <FormControl>
-        <Input
-          type="time"
-          className="account-form_input no-focus"
-          {...field}
-        />
-      </FormControl>
-      <FormMessage />
-    </FormItem>
-  )}
-/>
+            <FormField
+              control={form.control}
+              name="time"
+              render={({ field }) => (
+                <FormItem className="flex w-full flex-col gap-3">
+                  <FormLabel className="text-base-semibold text-light-2">
+                    Start Time
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="time"
+                      value={eventTime}
+                      onChange={(e) => setEventTime(e.target.value)}
+                      // ... other props ...
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <DialogFooter>
               <SharedButton
                 session={session}
@@ -132,7 +141,6 @@ function EventModal({ session, onClose, selectedDate }: EventModalProps) {
                 action={createEvent}
                 label="Add Event"
               />
-              <p className="text-light-1"> Delete Event</p>
             </DialogFooter>
           </form>
         </Form>

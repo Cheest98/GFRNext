@@ -1,10 +1,12 @@
 import * as z from 'zod';
 
 export const EventValidation = z.object({
-    title: z.string().min(1, 'Title is required'),
-    description: z.string().optional(),
-    startDate: z.date(),
-    endDate: z.date(),
-    startTime: z.string().optional(),
-    endTime: z.string().optional(),
-  });
+  title: z.string().min(1, 'Title is required'),
+  description: z.string().optional(),
+  date: z.string().refine(data => !isNaN(Date.parse(data)), {
+      message: "Invalid date format",
+  }),
+  time: z.string().refine(data => /^([0-9]{2}):([0-9]{2})$/.test(data), {
+      message: "Invalid time format",
+  }),
+});

@@ -150,8 +150,7 @@ model Event {
   title       String
   description String?
   start       DateTime
-  startTime   String
-  endTime     String
+  end         DateTime
   allDay      Boolean  @default(false)
   authorId    String   @db.ObjectId
   groupId     String?  @db.ObjectId
