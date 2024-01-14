@@ -1,7 +1,6 @@
 "use client";
 
 import { Dialog, DialogContent, DialogFooter } from "@/components/ui/dialog";
-import { createEvent } from "@/lib/actions/event.actions";
 import { EventValidation } from "@/lib/validations/event";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Session } from "next-auth";
@@ -17,16 +16,26 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
+import { updateEvent } from "@/lib/actions/event.actions";
+interface EventProps {
+  id: string | null;
+  title: string;
+  description: string;
+  date: string;
+  allDay: boolean;
+}
 
 interface EventModalProps {
   session: Session | null;
   onClose: () => void;
   selectedDate: Date;
+  eventData: EventProps;
+  action: (props: any) => void;
+
 }
 
-function EventModal({ session, onClose, selectedDate }: EventModalProps) {
-  
-  
+function EventModal({ session, onClose, selectedDate, eventData, action}: EventModalProps) {
+  const [isAllDay, setIsAllDay] = useState(false);
 
   const [eventDate, setEventDate] = useState(
     selectedDate.toISOString().split("T")[0]
@@ -38,10 +47,11 @@ function EventModal({ session, onClose, selectedDate }: EventModalProps) {
   const form = useForm({
     resolver: zodResolver(EventValidation),
     defaultValues: {
-      title: "",
-      description: "",
+      title: eventData.title ,
+      description: eventData.description,
       date: eventDate,
       time: eventTime,
+      allDay: isAllDay,
     },
   });
 
@@ -49,6 +59,10 @@ function EventModal({ session, onClose, selectedDate }: EventModalProps) {
     setEventDate(selectedDate.toISOString().split("T")[0]);
     setEventTime(selectedDate.toISOString().split("T")[1].slice(0, 5));
   }, [selectedDate]);
+
+  useEffect(() => {
+    form.setValue("allDay", isAllDay);
+  }, [isAllDay, form]);
 
   const data = form.watch();
   return (
@@ -94,52 +108,76 @@ function EventModal({ session, onClose, selectedDate }: EventModalProps) {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="date"
-              render={({ field }) => (
-                <FormItem className="flex w-full flex-col gap-3">
-                  <FormLabel className="text-base-semibold text-light-2">
-                    Start Date
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      type="date"
-                      value={eventDate}
-                      onChange={(e) => setEventDate(e.target.value)}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
             <FormField
               control={form.control}
-              name="time"
-              render={({ field }) => (
-                <FormItem className="flex w-full flex-col gap-3">
+              name="allDay"
+              render={() => (
+                <FormItem className="flex items-center gap-2">
                   <FormLabel className="text-base-semibold text-light-2">
-                    Start Time
+                    All day
                   </FormLabel>
                   <FormControl>
                     <Input
-                      type="time"
-                      value={eventTime}
-                      onChange={(e) => setEventTime(e.target.value)}
-                      // ... other props ...
+                      type="checkbox"
+                      checked={isAllDay}
+                      onChange={(e) => setIsAllDay(e.target.checked)}
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            {!isAllDay && (
+              <>
+                <FormField
+                  control={form.control}
+                  name="date"
+                  render={({ field }) => (
+                    <FormItem className="flex w-full flex-col gap-3">
+                      <FormLabel className="text-base-semibold text-light-2">
+                        Start Date
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="date"
+                          value={eventDate}
+                          onChange={(e) => setEventDate(e.target.value)}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="time"
+                  render={({ field }) => (
+                    <FormItem className="flex w-full flex-col gap-3">
+                      <FormLabel className="text-base-semibold text-light-2">
+                        Start Time
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="time"
+                          value={eventTime}
+                          onChange={(e) => setEventTime(e.target.value)}
+                          // ... other props ...
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </>
+            )}
             <DialogFooter>
               <SharedButton
                 session={session}
                 data={data}
-                action={createEvent}
-                label="Add Event"
+                action={updateEvent}
+                label= "Update Event"
               />
             </DialogFooter>
           </form>

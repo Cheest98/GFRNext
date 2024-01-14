@@ -11,7 +11,7 @@ interface CreateEventProps {
         title: string;
         description: string;
         date: string;
-        allDay: Boolean;
+        allDay: boolean;
     };
 }
 
@@ -28,6 +28,21 @@ interface userProps {
 
 interface groupProps {
     groupIdPrisma: string | undefined;
+}
+
+interface SingleEventProps {
+    eventId: string;
+}
+
+interface UpdateEventProps {
+    data: {
+        id: string;
+        title: string;
+        description: string;
+        start: string;
+        end: string;
+        allDay: boolean;
+    };
 }
 
 export async function createEvent({
@@ -51,10 +66,12 @@ export async function createEvent({
             data: {
                 title: data.title,
                 description: data.description,
-                start: new Date(data.date), 
-                end:   new Date(data.date), 
+                start: new Date(data.date),
+                end: new Date(data.date),
+                allDay: data.allDay,
                 authorId: session.user.id,
                 groupId: user.groupId,
+
             },
         });
         await prisma.activity.create({
@@ -137,5 +154,54 @@ export async function fetchGroupEvents({ groupIdPrisma }: groupProps) {
         return events;
     } catch (error: any) {
         throw new Error(`Failed to fetch events: ${error.message}`);
+    }
+}
+
+export async function getEventInfo({ eventId }: SingleEventProps) {
+    // Filter out undefined fields
+    if (!eventId) {
+        throw new Error("Event ID is missing.");
+    }
+
+    try {
+        const event = await prisma.event.findUnique({
+            where: { id: eventId },
+            select: {
+                title: true,
+                description: true,
+                start: true,
+                end: true,
+                allDay: true,
+
+            }
+        });
+        return event;
+    } catch (error: any) {
+        console.error("Error details:", error);
+        throw new Error(`Failed to DELETE Event: ${error.message}`);
+    }
+}
+
+export async function updateEvent({ data}: UpdateEventProps): Promise<void> {
+
+    try {
+        await prisma.event.update({
+            where: {
+                id: data.id,
+            },
+            data: {
+                title: data.title,
+                description: data.description,
+                start: new Date(data.start),
+                end: new Date(data.end),
+                allDay: data.allDay,
+            },
+        });
+
+        console.log("Event", data.id, "has been updated");
+        // Add revalidation or other post-update logic here
+    } catch (error: any) {
+        console.error("Error details:", error);
+        throw new Error(`Failed to UPDATE Event: ${error.message}`);
     }
 }

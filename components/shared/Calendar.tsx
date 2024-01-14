@@ -9,31 +9,66 @@ import EventModal from "../modals/EventModal";
 import DateSelectArg from "@fullcalendar/react"
 import DateClickArg from "@fullcalendar/react"
 import { Event } from "@prisma/client";
-
+import { EventClickArg } from "@fullcalendar/core/index.js";
+import { getEventInfo } from "@/lib/actions/event.actions";
+import { createEvent } from "@/lib/actions/event.actions";
 
 interface CalendarProps {
   session: Session | null;
   events: Event[]
 }
 
+interface EventProps {
+  id: string | null;
+  title: string;
+  description: string;
+  date: Date;
+  allDay: boolean;
+}
 
 function Calendar({ session, events }: CalendarProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [eventData, setEventData] = useState<EventProps | null>(null);
 
-  const handleDateClick = (arg: DateClickArg) => {
-    setSelectedDate(arg.date);
-    setIsModalOpen(true);
-  };
+const handleDateClick = (arg: DateClickArg) => {
+  setSelectedDate(arg.date);
+  setEventData({
+    id: null,
+    title: "editEvent.title",
+    description: "editEvent.description",
+    date: arg.date,
+    allDay: false,
+  });
+  setEventData(null);
+  setIsModalOpen(true);
+};
 
-  const handleEventClick = () => {
-    setIsModalOpen(true);
-  };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+const handleEventClick = async ({ event }: EventClickArg) => {
+  try {
+    const editEvent = await getEventInfo({ eventId: event.id });
+    if (editEvent) {
+      setEventData({
+        id: event.id,
+        title: editEvent.title,
+        description: editEvent.description || "",
+        date: editEvent.start,
+        allDay: editEvent.allDay,
+      });
+      setSelectedDate(editEvent.start)
+      setIsModalOpen(true);
+    }
+    console.log(eventData)
+    console.log(editEvent.start)
+  } catch (error: any) {
+    console.error("Error fetching event:", error.message);
+  }
+};
 
+const handleCloseModal = () => {
+  setIsModalOpen(false);
+};
   return (
     <>
       <section>
@@ -58,6 +93,8 @@ function Calendar({ session, events }: CalendarProps) {
               eventColor="#877EFF"
               dateClick={handleDateClick}
               eventClick={handleEventClick}
+              selectable
+              
             />
           </div>
         </div>
@@ -67,7 +104,7 @@ function Calendar({ session, events }: CalendarProps) {
         session={session}
         onClose={handleCloseModal}
         selectedDate={selectedDate}
-      />
+        eventData={eventData} />
       )}
     </>
   );

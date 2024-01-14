@@ -9,4 +9,5 @@ export const EventValidation = z.object({
   time: z.string().refine(data => /^([0-9]{2}):([0-9]{2})$/.test(data), {
       message: "Invalid time format",
   }),
+  allDay: z.boolean(),
 });

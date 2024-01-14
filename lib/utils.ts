@@ -30,15 +30,3 @@ export function formatDateString(dateString: string) {
   return `${time} - ${formattedDate}`;
 }
 
-export function convertUtcToCet(utcDateString: string) {
-  const utcDate = new Date(utcDateString);
-  return new Intl.DateTimeFormat('en-GB', {
-    timeZone: 'Europe/Paris', // Paris is in CET
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit'
-  }).format(utcDate);
-}

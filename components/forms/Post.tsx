@@ -74,7 +74,6 @@ const Post = ({ session }: UserProps) => {
       form.reset();
     } catch (error: any) {
       console.error("Error creating task:", error.message);
-      // Consider providing user feedback here
     }
   }
 
