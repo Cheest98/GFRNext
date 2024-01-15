@@ -67,7 +67,6 @@ export async function createEvent({
                 title: data.title,
                 description: data.description,
                 start: new Date(data.date),
-                end: new Date(data.date),
                 allDay: data.allDay,
                 authorId: session.user.id,
                 groupId: user.groupId,

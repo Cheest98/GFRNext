@@ -16,13 +16,14 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { updateEvent } from "@/lib/actions/event.actions";
+import { createEvent } from "@/lib/actions/event.actions";
 interface EventProps {
   id: string | null;
   title: string;
   description: string;
   date: string;
   allDay: boolean;
+  label: string;
 }
 
 interface EventModalProps {
@@ -30,11 +31,9 @@ interface EventModalProps {
   onClose: () => void;
   selectedDate: Date;
   eventData: EventProps;
-  action: (props: any) => void;
-
 }
 
-function EventModal({ session, onClose, selectedDate, eventData, action}: EventModalProps) {
+function EventModal({ session, onClose, selectedDate }: EventModalProps) {
   const [isAllDay, setIsAllDay] = useState(false);
 
   const [eventDate, setEventDate] = useState(
@@ -47,22 +46,52 @@ function EventModal({ session, onClose, selectedDate, eventData, action}: EventM
   const form = useForm({
     resolver: zodResolver(EventValidation),
     defaultValues: {
-      title: eventData.title ,
-      description: eventData.description,
-      date: eventDate,
-      time: eventTime,
-      allDay: isAllDay,
+      title: "",
+      description: "",
+      date: selectedDate.toISOString().split("T")[0],
+      time: selectedDate.toISOString().split("T")[1].slice(0, 5),
+      allDay: false,
     },
   });
 
   useEffect(() => {
-    setEventDate(selectedDate.toISOString().split("T")[0]);
-    setEventTime(selectedDate.toISOString().split("T")[1].slice(0, 5));
-  }, [selectedDate]);
+    // Update form values when selectedDate changes
+    const newDate = selectedDate.toISOString().split("T")[0];
+    const newTime = selectedDate.toISOString().split("T")[1].slice(0, 5);
+    form.setValue("date", newDate);
+    form.setValue("time", newTime);
+  }, [selectedDate, form]);
 
   useEffect(() => {
+    // Update form 'allDay' value when isAllDay state changes
     form.setValue("allDay", isAllDay);
   }, [isAllDay, form]);
+
+  useEffect(() => {
+    console.log("Event Time Updated:", eventTime); // Log the updated time
+    form.setValue("time", eventTime); // Update the form's time value
+  }, [eventTime, form]);
+
+  const handleCreateEvent = () => {
+    const formData = form.getValues();
+
+    // Checkpoint 2: Log formData to check if it has the updated values
+    console.log("Form Data on Submission:", formData);
+
+    // Combine date and time into a single DateTime string
+    const combinedDateTime = `${formData.date}T${formData.time}:00.000Z`;
+
+    console.log("Combined DateTime:", combinedDateTime); // Log the combined date and time
+
+    // Prepare the data for your createEvent function
+    const eventData = {
+      ...formData,
+      start: combinedDateTime,
+      // Other necessary fields...
+    };
+
+    createEvent({ session, data: eventData });
+  };
 
   const data = form.watch();
   return (
@@ -175,9 +204,9 @@ function EventModal({ session, onClose, selectedDate, eventData, action}: EventM
             <DialogFooter>
               <SharedButton
                 session={session}
-                data={data}
-                action={updateEvent}
-                label= "Update Event"
+                data={form.getValues()}
+                action={handleCreateEvent}
+                label="Create Event"
               />
             </DialogFooter>
           </form>

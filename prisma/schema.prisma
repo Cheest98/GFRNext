@@ -148,9 +148,8 @@ model Product {
 model Event {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
-  description String?
+  description String
   start       DateTime
-  end         DateTime
   allDay      Boolean  @default(false)
   authorId    String   @db.ObjectId
   groupId     String?  @db.ObjectId
