@@ -11,6 +11,7 @@ interface CreateEventProps {
         title: string;
         description: string;
         date: string;
+        time: string
         allDay: boolean;
     };
 }
@@ -39,8 +40,8 @@ interface UpdateEventProps {
         id: string;
         title: string;
         description: string;
-        start: string;
-        end: string;
+        date: string;
+        time: string
         allDay: boolean;
     };
 }
@@ -60,13 +61,18 @@ export async function createEvent({
     if (!user || !user.groupId) {
         throw new Error("User's group ID is missing.");
     }
+    const combinedDateTime = `${data.date}T${data.time}:00.000Z`;
+
+    console.log( "Data ", new Date(data.date))
+
+    console.log( "Total: ", data)
 
     try {
         const newEvent = await prisma.event.create({
             data: {
                 title: data.title,
                 description: data.description,
-                start: new Date(data.date),
+                start: combinedDateTime,
                 allDay: data.allDay,
                 authorId: session.user.id,
                 groupId: user.groupId,
@@ -166,10 +172,10 @@ export async function getEventInfo({ eventId }: SingleEventProps) {
         const event = await prisma.event.findUnique({
             where: { id: eventId },
             select: {
+                id:true,
                 title: true,
                 description: true,
                 start: true,
-                end: true,
                 allDay: true,
 
             }
@@ -182,7 +188,7 @@ export async function getEventInfo({ eventId }: SingleEventProps) {
 }
 
 export async function updateEvent({ data}: UpdateEventProps): Promise<void> {
-
+    const combinedDateTime = `${data.date}T${data.time}:00.000Z`;
     try {
         await prisma.event.update({
             where: {
@@ -191,8 +197,7 @@ export async function updateEvent({ data}: UpdateEventProps): Promise<void> {
             data: {
                 title: data.title,
                 description: data.description,
-                start: new Date(data.start),
-                end: new Date(data.end),
+                start: combinedDateTime,
                 allDay: data.allDay,
             },
         });
