@@ -1,12 +1,14 @@
 "use client";
 
 import { Dialog, DialogContent, DialogFooter } from "@/components/ui/dialog";
+import { createEvent } from "@/lib/actions/event.actions";
 import { EventValidation } from "@/lib/validations/event";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Session } from "next-auth";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import SharedButton from "../shared/SharedButton";
+import { z } from "zod";
+import { Button } from "../ui/button";
 import {
   Form,
   FormControl,
@@ -16,7 +18,6 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { createEvent, updateEvent } from "@/lib/actions/event.actions";
 interface EventProps {
   id: string | null;
   title: string;
@@ -35,7 +36,13 @@ interface EventModalProps {
   action: (data: any) => Promise<void>;
 }
 
-function EventModal({ session, onClose, selectedDate, eventInfo, action }: EventModalProps) {
+function EventModal({
+  session,
+  onClose,
+  selectedDate,
+  eventInfo,
+  action,
+}: EventModalProps) {
   const [isAllDay, setIsAllDay] = useState(eventInfo.allDay);
 
   const [eventDate, setEventDate] = useState(
@@ -69,17 +76,42 @@ function EventModal({ session, onClose, selectedDate, eventInfo, action }: Event
     form.setValue("allDay", isAllDay);
   }, [isAllDay, form]);
 
-  useEffect(() => { 
+  useEffect(() => {
     form.setValue("time", eventTime);
   }, [eventTime, form]);
 
+  async function onSubmit(values: z.infer<typeof EventValidation>) {
+    console.log(values); // Debug log
+    try {
+      await eventInfo.action({
+        data: {
+          id: eventInfo.id,
+          title: values.title,
+          description: values.description,
+          date: values.date,
+          time: values.time,
+          allDay: isAllDay,
+        },
+        session,
+      });
+      console.log("Event created successfully");
+      onClose()
+      form.reset();
+    } catch (error: any) {
+      console.error("Error creating event:", error.message);
+      // Consider providing user feedback here
+    }
+  }
 
   const data = form.watch();
   return (
     <Dialog open={true} onOpenChange={onClose}>
       <DialogContent className="rounded-lg bg-dark-4">
         <Form {...form}>
-          <form className="mt-10 flex flex-col justify-start gap-10 rounded-lg">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="mt-10 flex flex-col justify-start gap-10 rounded-lg"
+          >
             <FormField
               control={form.control}
               name="title"
@@ -183,12 +215,9 @@ function EventModal({ session, onClose, selectedDate, eventInfo, action }: Event
               </>
             )}
             <DialogFooter>
-              <SharedButton
-                session={session}
-                data={data}
-                action={eventInfo.action}
-                label={eventInfo.label}
-              />
+              <Button className="bg-primary-500" type="submit">
+                {eventInfo.label}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

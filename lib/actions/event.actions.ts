@@ -63,9 +63,9 @@ export async function createEvent({
     }
     const combinedDateTime = `${data.date}T${data.time}:00.000Z`;
 
-    console.log( "Data ", new Date(data.date))
+    console.log("Data ", new Date(data.date))
 
-    console.log( "Total: ", data)
+    console.log("Total: ", data)
 
     try {
         const newEvent = await prisma.event.create({
@@ -122,7 +122,7 @@ export async function deleteEvent({ data, session }: deleteEventProps): Promise<
             },
         });
         console.log("Event", data.id, "has been removed ")
-        revalidatePath("/event", 'page');
+        revalidateTag('events');
     } catch (error: any) {
         console.error("Error details:", error);
         throw new Error(`Failed to DELETE Event: ${error.message}`);
@@ -172,7 +172,7 @@ export async function getEventInfo({ eventId }: SingleEventProps) {
         const event = await prisma.event.findUnique({
             where: { id: eventId },
             select: {
-                id:true,
+                id: true,
                 title: true,
                 description: true,
                 start: true,
@@ -187,7 +187,7 @@ export async function getEventInfo({ eventId }: SingleEventProps) {
     }
 }
 
-export async function updateEvent({ data}: UpdateEventProps): Promise<void> {
+export async function updateEvent({ data }: UpdateEventProps): Promise<void> {
     const combinedDateTime = `${data.date}T${data.time}:00.000Z`;
     try {
         await prisma.event.update({
@@ -203,7 +203,7 @@ export async function updateEvent({ data}: UpdateEventProps): Promise<void> {
         });
 
         console.log("Event", data.id, "has been updated");
-        // Add revalidation or other post-update logic here
+        revalidateTag('events')
     } catch (error: any) {
         console.error("Error details:", error);
         throw new Error(`Failed to UPDATE Event: ${error.message}`);
