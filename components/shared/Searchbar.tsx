@@ -8,19 +8,19 @@ interface ButtonProps {
 function Searchbar({ action }: ButtonProps) {
   return (
     <form action={action}>
-      <div className="searchbar">
-        <Image
-          src="/assets/search-gray.svg"
-          alt="search"
-          width={24}
-          height={24}
-          className="object-contain"
-        />
-        <div className="form-control">
+      <div className="searchbar flex justify-between">
+        <div className="form-control flex justify-between gap-3">
           <Input
             name="searchQuery"
-            placeholder="Search"
-            className="input-bordered input w-full min-w-[100px]"
+            placeholder=" Group Search"
+            className="searchbar_input"
+          />
+          <Image
+            src="/assets/search-gray.svg"
+            alt="search"
+            width={24}
+            height={24}
+            className="object-contain"
           />
         </div>
       </div>

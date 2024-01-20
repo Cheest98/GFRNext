@@ -9,6 +9,8 @@ import { getServerSession } from "next-auth";
 import Image from "next/image";
 import { fetchUserList } from "@/lib/actions/list.actions";
 import ListTab from "@/components/shared/ListTab";
+import Calendar from "@/components/shared/Calendar";
+import { fetchUserEvents } from "@/lib/actions/event.actions";
 
 async function Page() {
   const session = await getServerSession(authOptions);
@@ -23,6 +25,7 @@ async function Page() {
   }
   const authorId = session?.user?.id;
   const lists = await fetchUserList({ authorId });
+  const events = await fetchUserEvents({ authorId });
 
   return (
     <section>
@@ -60,6 +63,9 @@ async function Page() {
               {tab.value === "tasks" && <TaskTab session={session} />}
               {tab.value === "lists" && (
                 <ListTab session={session} lists={lists} />
+              )}
+              {tab.value === "events" && (
+                <Calendar session={session} events={events} />
               )}
             </TabsContent>
           ))}
