@@ -103,21 +103,21 @@ function Calendar({ session, events }: CalendarProps) {
 
           {/* Append a remove button */}
           <div>
-          <button
-            className="bg-primary"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleRemoveEvent(eventInfo.event.id);
-            }}
-          >
-            <Image
-              src="/assets/delete.svg"
-              alt="Trash"
-              width={14}
-              height={14}
-              className="cursor-pointer object-contain"
-            />
-          </button>
+            <button
+              className="bg-primary"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleRemoveEvent(eventInfo.event.id);
+              }}
+            >
+              <Image
+                src="/assets/delete.svg"
+                alt="Trash"
+                width={14}
+                height={14}
+                className="cursor-pointer object-contain"
+              />
+            </button>
           </div>
         </div>
       </>

@@ -1,7 +1,7 @@
 "use server";
 
 import { Session } from "next-auth";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { prisma } from "../db/prisma";
 
 
@@ -95,7 +95,6 @@ export async function createEvent({
 
 
 export async function deleteEvent({ data, session }: deleteEventProps): Promise<void> {
-    // Filter out undefined fields
     if (!session?.user?.id) {
         throw new Error("User ID is missing.");
     }

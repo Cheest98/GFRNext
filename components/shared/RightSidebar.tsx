@@ -6,12 +6,12 @@ import ActivityCard from "../cards/ActivityCard";
 
 interface Activity {
   id: string;
-  type: string; // Activity type, e.g., "POST_CREATED", "TASK_UPDATED"
-  createdAt: Date; // Include date if you want to display it
+  type: string;
+  createdAt: Date;
   user: {
     id: string;
     name: string | null;
-    image: string | null; // and any other user details you need
+    image: string | null;
   };
 }
 
@@ -37,7 +37,6 @@ const RightSidebar = () => {
   const { data: session } = useSession();
   const groupId = session?.user.groupId;
   useEffect(() => {
-    // Fetch recent activities for the user's group
     const fetchActivities = async () => {
       if (groupId !== undefined) {
         const data: Activity[] = await fetchRecentActivities({ groupId });

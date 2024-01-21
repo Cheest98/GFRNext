@@ -1,4 +1,4 @@
-import LeftSidebar from "@/components/shared/LeftSidebar";
+git import LeftSidebar from "@/components/shared/LeftSidebar";
 import Navbar from "@/components/shared/Navbar";
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
