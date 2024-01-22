@@ -3,7 +3,7 @@
 import { Session } from "next-auth";
 import { prisma } from "../db/prisma";
 
-interface CreateGroupProps {
+interface CreateGroupProps { 
   session: Session | null;
   data: {
     name: string;
@@ -21,8 +21,18 @@ interface groupActivitiesProps {
 
 
 interface getGroupInfoProps {
-  groupIdPrisma: string
+  groupIdPrisma: string | undefined;
 }
+
+interface UpdateGroupProps {
+  session: Session | null;
+  data: {
+    image?: string;
+    name?: string;
+    description?: string;
+  };
+}
+
 
 export async function createGroup({
   session,
@@ -228,6 +238,7 @@ export async function getGroupInfo({ groupIdPrisma }: getGroupInfoProps) {
       select: {
         name: true,
         description: true,
+        image:true,
       }
     });
     return groupInfo;
@@ -280,5 +291,32 @@ export async function fetchGroupActivities({ groupIdPrisma }: groupActivitiesPro
     return activities;
   } catch (error: any) {
     throw new Error(`Failed to fetch activities: ${error.message}`);
+  }
+}
+
+export async function updateGroup({
+  session,
+  data,
+}: UpdateGroupProps): Promise<{ success: boolean; message: string }> {
+  // Filter out undefined fields
+  const updateData: Partial<typeof data> = Object.fromEntries(
+    Object.entries(data).filter(([_, value]) => value !== undefined)
+  );
+   const groupIdPrisma = session?.user.groupId;
+  if (!groupIdPrisma) {
+    throw new Error("Group ID is missing.");
+  }
+
+  try {
+    await prisma.group.update({
+      where: {
+        id: groupIdPrisma,
+      },
+      data: updateData,
+    });
+    return { success: true, message: "Group updated successfully" };
+  } catch (error) {
+    console.error("Error details:", error);
+    return { success: false, message: "Failed to update group, please try again" };
   }
 }

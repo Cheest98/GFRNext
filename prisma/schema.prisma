@@ -67,6 +67,7 @@ model Group {
   id          String     @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
+  image       String?
   ownerId     String     @unique @db.ObjectId
   password    String
   members     User[]

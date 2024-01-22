@@ -2,16 +2,60 @@
 import { Session } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import profilePicPlaceholder from "../../public/assets/profile-pic-placeholder.png";
 import CreateGroupModal from "../modals/CreateGroupModal";
+import { Group } from "@prisma/client";
+import { getGroupInfo } from "@/lib/actions/group.actions";
 
 interface GroupHeaderProps {
   session: Session | null;
+
 }
 
-const GroupHeader = ({ session }: GroupHeaderProps) => {
+interface GroupInfo {
+  name: string;
+  description: string;
+  image: string | null;
+}
+
+const GroupHeader = ({ session}: GroupHeaderProps) => {
+  const [groupInfo, setGroupInfo] = useState<GroupInfo | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const imageSrc = groupInfo?.image || profilePicPlaceholder;
+
+  useEffect(() => {
+    async function fetchGroupInfo() {
+      try {
+        const groupIdPrisma = session?.user?.groupId || undefined;
+
+        const fetchedGroupInfo = await getGroupInfo({ groupIdPrisma });
+        setGroupInfo(fetchedGroupInfo);
+      } catch (err) {
+        console.error('Error fetching group info:', err);
+        setError('Failed to load group information');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchGroupInfo();
+  }, []);
+
+  if (loading) {
+    return <div>Loading group information...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  if (!groupInfo) {
+    return <div>No group information available</div>;
+  }
 
   const handleGroupClick = () => {
     setIsModalOpen(true);
@@ -29,7 +73,7 @@ const GroupHeader = ({ session }: GroupHeaderProps) => {
             <div className="flex items-center gap-3">
               <div className="relative h-20 w-20 object-cover">
                 <Image
-                  src={profilePicPlaceholder}
+                  src={imageSrc} 
                   alt="logo"
                   fill
                   className="rounded-full object-cover shadow-2xl"
@@ -38,11 +82,11 @@ const GroupHeader = ({ session }: GroupHeaderProps) => {
 
               <div className="flex-1">
                 <h2 className="text-left text-heading3-bold text-light-1">
-                  Group Name
+                  {groupInfo.name}
                 </h2>
               </div>
             </div>
-            <Link href="/profile/edit">
+            <Link href="/groups/edit">
               <div className="flex cursor-pointer gap-3 rounded-lg bg-dark-3 px-4 py-2">
                 <Image
                   src="/assets/edit.svg"
@@ -55,7 +99,7 @@ const GroupHeader = ({ session }: GroupHeaderProps) => {
             </Link>
           </div>
           <p className="mt-6 max-w-lg text-base-regular text-light-2">
-            Group Bio
+            {groupInfo.description}
           </p>
           <div className="mt-12 h-0.5 w-full bg-dark-3" />
           <div className="flex justify-end mt-2">

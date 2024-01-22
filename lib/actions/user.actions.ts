@@ -44,7 +44,7 @@ export async function updateUser({
     });
   } catch (error: any) {
     console.error("Error details:", error);
-    throw new Error(`Failed to update usser: ${error.message}`);
+    throw new Error(`Failed to update user: ${error.message}`);
   }
 }
 
