@@ -1,16 +1,14 @@
 "use client";
+import { getGroupInfo } from "@/lib/actions/group.actions";
 import { Session } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import profilePicPlaceholder from "../../public/assets/profile-pic-placeholder.png";
 import CreateGroupModal from "../modals/CreateGroupModal";
-import { Group } from "@prisma/client";
-import { getGroupInfo } from "@/lib/actions/group.actions";
 
 interface GroupHeaderProps {
   session: Session | null;
-
 }
 
 interface GroupInfo {
@@ -19,10 +17,10 @@ interface GroupInfo {
   image: string | null;
 }
 
-const GroupHeader = ({ session}: GroupHeaderProps) => {
+const GroupHeader = ({ session }: GroupHeaderProps) => {
   const [groupInfo, setGroupInfo] = useState<GroupInfo | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const imageSrc = groupInfo?.image || profilePicPlaceholder;
@@ -35,8 +33,8 @@ const GroupHeader = ({ session}: GroupHeaderProps) => {
         const fetchedGroupInfo = await getGroupInfo({ groupIdPrisma });
         setGroupInfo(fetchedGroupInfo);
       } catch (err) {
-        console.error('Error fetching group info:', err);
-        setError('Failed to load group information');
+        console.error("Error fetching group info:", err);
+        setError("Failed to load group information");
       } finally {
         setLoading(false);
       }
@@ -73,7 +71,7 @@ const GroupHeader = ({ session}: GroupHeaderProps) => {
             <div className="flex items-center gap-3">
               <div className="relative h-20 w-20 object-cover">
                 <Image
-                  src={imageSrc} 
+                  src={imageSrc}
                   alt="logo"
                   fill
                   className="rounded-full object-cover shadow-2xl"
