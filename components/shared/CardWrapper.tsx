@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card";
 import { BackButton } from "./BackButton";
 import { Header } from "./Header";
+import { Social } from "./Social";
 
 interface CardWrapperProps {
   children: React.ReactNode;
@@ -32,7 +33,7 @@ export const CardWrapper = ({
       <CardContent>{children}</CardContent>
       {showSocial && (
         <CardFooter>
-          <p className="text-center text-sm text-gray-200">Fotter</p>
+          <Social />
         </CardFooter>
       )}
       <CardFooter>

@@ -35,11 +35,10 @@ export const RegisterUserValidation = z.object({
 });
 
 export const LoginUserValidation = z.object({
-  email: z
-  .string()
-  .min(5, { message: " User email is required." })
-  .email("This is not a valid email."),
-  password: z
-  .string()
-  .min(5, { message: "Minimum 5 characters." })
+  email: z.string().email({
+    message: "Email is required",
+  }),
+  password: z.string().min(1, {
+    message: "Password is required",
+  }),
 });
