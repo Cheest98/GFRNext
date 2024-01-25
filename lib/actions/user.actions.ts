@@ -7,7 +7,7 @@ import { prisma } from "../db/prisma";
 interface UpdateUserProps {
   session: Session | null;
   data: {
-    image?: string;
+    userImage?: string;
     name?: string;
     bio?: string;
     phone?: string;
@@ -82,7 +82,7 @@ export async function createUser({
 
 export async function getUserImage({
   email,
-}: GetUserImageProps): Promise<{ image: string | null }> {
+}: GetUserImageProps): Promise<{ userImage: string | null }> {
 
 
 
@@ -93,7 +93,7 @@ export async function getUserImage({
   try {
     const user = await prisma.user.findUnique({
       where: { email: email },
-      select: { image: true }
+      select: { userImage: true }
     });
 
     if (!user) {
@@ -106,3 +106,13 @@ export async function getUserImage({
   }
 }
 
+
+export const getUserById = async (id: string) => {
+  try {
+    const user = await prisma.user.findUnique({ where: { id } });
+
+    return user;
+  } catch {
+    return null;
+  }
+};

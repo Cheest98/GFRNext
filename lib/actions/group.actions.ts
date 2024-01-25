@@ -27,7 +27,7 @@ interface getGroupInfoProps {
 interface UpdateGroupProps {
   session: Session | null;
   data: {
-    image?: string;
+    groupImage?: string;
     name?: string;
     description?: string;
   };
@@ -238,7 +238,7 @@ export async function getGroupInfo({ groupIdPrisma }: getGroupInfoProps) {
       select: {
         name: true,
         description: true,
-        image:true,
+        groupImage:true,
       }
     });
     return groupInfo;

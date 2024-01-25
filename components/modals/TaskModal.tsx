@@ -23,7 +23,7 @@ interface Task {
   createdAt: string;
   author: {
     name: string;
-    image: string;
+    userImage: string;
     id: string;
   };
   onClose: () => void;

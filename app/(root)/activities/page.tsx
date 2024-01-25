@@ -3,6 +3,8 @@ import { fetchGroupActivities } from "@/lib/actions/group.actions";
 import { formatDateString } from "@/lib/utils";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
+import profilePicPlaceholder from "@/public/assets/profile-pic-placeholder.png"
+
 
 const getActivityDescription = (type: string) => {
   switch (type) {
@@ -31,6 +33,7 @@ async function Page() {
     activity = await fetchGroupActivities({ groupIdPrisma });
   }
 
+
   return (
     <>
       <h1 className="head-text">Activity</h1>
@@ -41,7 +44,7 @@ async function Page() {
             {activity.map((activity) => (
               <article className="activity-card">
                 <Image
-                  src={activity.user.image}
+                  src={activity.user.userImage|| profilePicPlaceholder }
                   alt="user_logo"
                   width={20}
                   height={20}

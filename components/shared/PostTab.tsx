@@ -28,7 +28,7 @@ async function PostTab({ session }: UserProps) {
           createdAt={post.createdAt.toISOString()}
           author={{
             name: post.author.name || "Unknown",
-            image: post.author.image,
+            userImage: post.author.userImage,
             id: post.author.id,
           }}
         />

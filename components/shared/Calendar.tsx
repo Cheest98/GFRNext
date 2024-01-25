@@ -91,7 +91,6 @@ function Calendar({ session, events }: CalendarProps) {
       console.log("Event deleted successfully");
     } catch (error: any) {
       console.error("Error deleting event:", error.message);
-      // Consider providing user feedback here
     }
   };
 
@@ -101,7 +100,6 @@ function Calendar({ session, events }: CalendarProps) {
         <div className=" flex justify-between items-center">
           <div className="truncate max-w-[80%]">{eventInfo.event.title}</div>
 
-          {/* Append a remove button */}
           <div>
             <button
               className="bg-primary"

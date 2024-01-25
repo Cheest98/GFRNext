@@ -26,7 +26,7 @@ export default async function Home() {
             createdAt={post.createdAt.toISOString()}
             author={{
               name: post.author.name || "Unknown",
-              image: post.author.image,
+              userImage: post.author.userImage,
               id: post.author.id,
             }}
           />

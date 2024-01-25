@@ -46,7 +46,7 @@ model User {
   email         String?    @unique
   password      String?
   emailVerified DateTime?
-  image         String?
+  userImage         String?
   accounts      Account[]
   sessions      Session[]
   bio           String?
@@ -67,7 +67,7 @@ model Group {
   id          String     @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
-  image       String?
+  groupImage       String?
   ownerId     String     @unique @db.ObjectId
   password    String
   members     User[]

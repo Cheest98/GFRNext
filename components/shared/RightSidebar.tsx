@@ -11,7 +11,7 @@ interface Activity {
   user: {
     id: string;
     name: string | null;
-    image: string | null;
+    userImage: string | null;
   };
 }
 
@@ -61,7 +61,7 @@ const RightSidebar = () => {
               key={activity.id}
               id={activity.id}
               userName={activity.user.name || "Unknown"}
-              userImage={activity.user.image}
+              userImage={activity.user.userImage}
               createdAt={activity.createdAt.toISOString()}
               description={getActivityDescription(activity.type)}
             />

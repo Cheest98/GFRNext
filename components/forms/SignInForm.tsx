@@ -19,6 +19,7 @@ import GoogleSignInButton from "../shared/GoogleSignInButton";
 import { Button } from "../ui/button";
 import { useToast } from "../ui/use-toast";
 import { CardWrapper } from "../shared/CardWrapper";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
 const SignInForm = () => {
   const { toast } = useToast();
@@ -36,7 +37,7 @@ const SignInForm = () => {
     const signInData = await signIn("credentials", {
       email: values.email,
       password: values.password,
-      redirect: false,
+      redirectTo: DEFAULT_LOGIN_REDIRECT,
     });
     console.log("logowanie", signInData);
 
@@ -46,8 +47,6 @@ const SignInForm = () => {
         description: "Wrong credentials",
         variant: "destructive",
       });
-    } else {
-      window.location.href = "/";
     }
   };
   return (

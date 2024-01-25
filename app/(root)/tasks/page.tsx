@@ -54,7 +54,7 @@ export default async function Page() {
               createdAt={task.createdAt.toISOString()}
               author={{
                 name: task.author.name || "Unknown",
-                image: task.author.image || "DefaultImageURL",
+                userImage: task.author.userImage || "DefaultImageURL",
                 id: task.author.id,
               }}
             />
@@ -72,7 +72,7 @@ export default async function Page() {
               createdAt={task.createdAt.toISOString()}
               author={{
                 name: task.author.name || "Unknown",
-                image: task.author.image || "DefaultImageURL",
+                userImage: task.author.userImage || "DefaultImageURL",
                 id: task.author.id,
               }}
             />
@@ -90,7 +90,7 @@ export default async function Page() {
               createdAt={task.createdAt.toISOString()}
               author={{
                 name: task.author.name || "Unknown",
-                image: task.author.image || "DefaultImageURL",
+                userImage: task.author.userImage || "DefaultImageURL",
                 id: task.author.id,
               }}
             />

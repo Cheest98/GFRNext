@@ -8,7 +8,7 @@ interface PostCardProps {
   picturePath: string | null;
   author: {
     name: string;
-    image: string | null;
+    userImage: string | null;
     id: string;
   };
   createdAt: string;
@@ -21,7 +21,7 @@ function PostCard({
   createdAt,
   picturePath,
 }: PostCardProps) {
-  const authorImage = author.image ? author.image : profilePicPlaceholder;
+  const authorImage = author.userImage ? author.userImage : profilePicPlaceholder;
   return (
     <article className="flex w-full flex-col rounded-xl bg-dark-2 p-7">
       <div className="flex items-start justify-between">

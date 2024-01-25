@@ -19,8 +19,8 @@ export default function UserMenuButton() {
       if (email) {
         try {
           const response = await getUserImage({ email });
-          if (response.image) {
-            setImageUrl(response.image);
+          if (response.userImage) {
+            setImageUrl(response.userImage);
           }
         } catch (error) {
           console.error("Error fetching image:", error);

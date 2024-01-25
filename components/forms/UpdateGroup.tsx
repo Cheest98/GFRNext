@@ -46,7 +46,7 @@ const UpdateGroup = ({ session }: GroupProps) => {
     const updateGroupInfo = await updateGroup({
       session,
       data: {
-        image: values.image,
+        groupImage: values.groupImage,
         name: values.name,
         description: values.description,
       },
@@ -99,7 +99,7 @@ const UpdateGroup = ({ session }: GroupProps) => {
       >
         <FormField
           control={form.control}
-          name="image"
+          name="groupImage"
           render={({ field }) => (
             <FormItem className="flex items-center gap-4">
               <FormLabel className="account-form_image-label">

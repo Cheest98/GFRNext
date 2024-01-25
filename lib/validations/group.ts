@@ -16,7 +16,7 @@ export const GroupValidation = z.object({
 });
 
 export const UpdateGroupValidation = z.object({
-  image: z.string().optional(),
+  groupImage: z.string().optional(),
   name: z
     .string()
     .min(3, { message: "Minimum 3 characters." })

@@ -7,7 +7,7 @@ type FetchedPostType = PostType & {
   id: string;
   author: {
     name: string;
-    image: string;
+    userImage: string;
     id: string;
   };
 };

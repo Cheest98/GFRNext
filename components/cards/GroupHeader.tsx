@@ -14,7 +14,7 @@ interface GroupHeaderProps {
 interface GroupInfo {
   name: string;
   description: string;
-  image: string | null;
+  groupImage: string | null;
 }
 
 const GroupHeader = ({ session }: GroupHeaderProps) => {
@@ -23,7 +23,7 @@ const GroupHeader = ({ session }: GroupHeaderProps) => {
   const [error, setError] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const imageSrc = groupInfo?.image || profilePicPlaceholder;
+  const imageSrc = groupInfo?.groupImage || profilePicPlaceholder;
 
   useEffect(() => {
     async function fetchGroupInfo() {

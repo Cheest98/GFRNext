@@ -13,14 +13,12 @@ declare module "next-auth" {
       id: string;
       bio: string | null;
       phone: string | null;
-      picturePath: string | null;
       groupId: string | null;
     },
     token: {
       id: string;
       bio: string | null;
       phone: string | null;
-      picturePath: string | null;
       groupId: string | null;
     };
   }

@@ -36,7 +36,7 @@ const AccountProfile = ({ session }: UserProps) => {
   const form = useForm<z.infer<typeof UserValidation>>({
     resolver: zodResolver(UserValidation),
     defaultValues: {
-      image: user?.image ? user.image : "",
+      userImage: user?.userImage ? user.userImage : "",
       name: user?.name ? user.name : "",
       bio: user?.bio ? user.bio : "",
       phone: user?.phone ? user.phone : "",
@@ -73,7 +73,7 @@ const AccountProfile = ({ session }: UserProps) => {
       <form className="flex flex-col justify-start gap-10">
         <FormField
           control={form.control}
-          name="image"
+          name="userImage"
           render={({ field }) => (
             <FormItem className="flex items-center gap-4">
               <FormLabel className="account-form_image-label">

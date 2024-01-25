@@ -19,7 +19,7 @@ interface TaskCardProps {
   createdAt: string;
   author: {
     name: string;
-    image: string;
+    userImage: string;
     id: string;
   };
 }
@@ -43,7 +43,7 @@ function TaskCard({
     setIsModalOpen(false);
   };
 
-  const authorImage = author.image ? author.image : profilePicPlaceholder;
+  const authorImage = author.userImage ? author.userImage : profilePicPlaceholder;
   return (
     <>
       <article className="p-5 rounded-lg bg-dark-2   border-r-dark-1 flex flex-col gap-2 h-64">
@@ -105,7 +105,7 @@ function TaskCard({
           createdAt={createdAt}
           author={{
             name: author.name || "Unknown",
-            image: author.image || "DefaultImageURL",
+            userImage: author.userImage || "DefaultImageURL",
             id: author.id,
           }}
           onClose={handleCloseModal}
