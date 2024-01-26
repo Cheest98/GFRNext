@@ -63,7 +63,6 @@ const Post = ({ session }: UserProps) => {
   };
 
   async function onSubmit(values: z.infer<typeof PostValidation>) {
-    console.log(values); // Debug log
     try {
       const picturePath = values.picturePath || "";
       await createPost({

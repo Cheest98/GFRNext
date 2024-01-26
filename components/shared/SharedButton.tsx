@@ -1,10 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Session } from "next-auth";
 
 interface ButtonProps {
-  session: Session | null;
+  session: string;
   data: any;
   action: (props: any) => void;
   label: string;

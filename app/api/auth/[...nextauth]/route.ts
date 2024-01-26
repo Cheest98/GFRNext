@@ -89,7 +89,7 @@ export const authOptions: NextAuthOptions = {
           bio: token.bio,
           name: token.name,
           email: token.email,
-          phone: token.phone, // Add this line
+          phone: token.phone, 
           groupId: token.groupId,
         }
       }

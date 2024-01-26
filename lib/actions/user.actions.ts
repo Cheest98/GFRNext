@@ -3,6 +3,8 @@
 import bcrypt from "bcryptjs";
 import { Session } from "next-auth";
 import { prisma } from "../db/prisma";
+import profilePicHolder from "@/public/assets/profile-pic-placeholder.png"
+import { revalidateTag } from "next/cache";
 
 interface UpdateUserProps {
   session: Session | null;
@@ -21,10 +23,10 @@ interface CreateUserProps {
   };
 }
 
-
-interface GetUserImageProps {
-  email: string | null;
+interface GetUserInfoProps {
+  session: Session | null;
 }
+
 
 export async function updateUser({
   session,
@@ -42,6 +44,8 @@ export async function updateUser({
       },
       data: updateData,
     });
+
+    revalidateTag('posts')
   } catch (error: any) {
     console.error("Error details:", error);
     throw new Error(`Failed to update user: ${error.message}`);
@@ -79,33 +83,34 @@ export async function createUser({
 }
 
 
-
-export async function getUserImage({
-  email,
-}: GetUserImageProps): Promise<{ userImage: string | null }> {
-
-
-
-  if (!email) {
-    throw new Error(" Missing email ");
+export async function getUserInfo({
+  session,
+}: GetUserInfoProps) {
+  if (!session) {
+    throw new Error("Missing session");
   }
 
   try {
     const user = await prisma.user.findUnique({
-      where: { email: email },
-      select: { userImage: true }
+      where: { id: session.user.id },
+      select: {
+        name: true,
+        userImage: true,
+        bio: true,
+        phone: true,
+        email: true,
+      }
     });
 
     if (!user) {
-      throw new Error("This email not  exist");
+      throw new Error("User not found");
     }
 
-    return user;
+    return user
   } catch (error) {
-    throw new Error("This email not  exist");
+    throw new Error("Failed to fetch user info");
   }
 }
-
 
 export const getUserById = async (id: string) => {
   try {

@@ -1,44 +1,70 @@
 "use client";
-import { getUserImage } from "@/lib/actions/user.actions";
+import { getUserInfo } from "@/lib/actions/user.actions";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import profilePicPlaceholder from "../../public/assets/profile-pic-placeholder.png";
+import { Session } from "next-auth";
 
 interface ProfileHeaderProps {
-  name: string;
-  bio: string;
-  phone: string;
+  session: Session | null;
   groupName: string;
-  email: string;
 }
 
-const ProfileHeader = ({
-  groupName,
-  name,
-  email,
-  bio,
-  phone,
-}: ProfileHeaderProps) => {
-  const [imageUrl, setImageUrl] = useState<string | StaticImageData>(
-    profilePicPlaceholder
-  );
-  useEffect(() => {
-    const fetchImageUrl = async () => {
-      if (email) {
-        try {
-          const response = await getUserImage({ email });
-          if (response.userImage) {
-            setImageUrl(response.userImage);
-          }
-        } catch (error) {
-          console.error("Error fetching image:", error);
-        }
-      }
-    };
+interface ProfileHeaderInfo {
+name: string;
+bio: string;
+phone: string;
+email:string;
+userImage:string | StaticImageData;
+}
 
-    fetchImageUrl();
-  }, []);
+
+
+const ProfileHeader = ({
+  session,
+  groupName
+}: ProfileHeaderProps) => {
+  const [userInfo, setUserInfo] = useState<ProfileHeaderInfo | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    async function fetchUserInfo() {
+      if (!session) {
+        setError("Session not available.");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const fetchedUserInfo = await getUserInfo({ session });
+        setUserInfo(fetchedUserInfo);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching user info:", err);
+        setError("Failed to load user information.");
+        setLoading(false);
+      }
+    }
+
+    fetchUserInfo();
+  }, [session]);  // Adding session as a dependency
+
+  if (loading) {
+    return <div>Loading user information...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  if (!userInfo) {
+    return <div>No user information available</div>;
+  }
+
+  const imageUrl = userInfo.userImage || profilePicPlaceholder;
+
 
   return (
     <article className="flex w-full flex-col rounded-xl  bg-dark-2 p-7">
@@ -56,7 +82,7 @@ const ProfileHeader = ({
 
             <div className="flex-1">
               <h2 className="text-left text-heading3-bold text-light-1">
-                {name}
+                {userInfo.name}
               </h2>
               <p className="text-base-medium text-gray-1">{groupName}</p>
             </div>
@@ -74,7 +100,7 @@ const ProfileHeader = ({
           </Link>
         </div>
 
-        <p className="mt-6 max-w-lg text-base-regular text-light-2">{bio}</p>
+        <p className="mt-6 max-w-lg text-base-regular text-light-2">{userInfo.bio}</p>
 
         <div className="mt-12 h-0.5 w-full bg-dark-3" />
       </div>

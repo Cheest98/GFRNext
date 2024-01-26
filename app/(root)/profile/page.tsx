@@ -1,16 +1,16 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { profileTabs } from "@/app/constants";
+import Calendar from "@/components/shared/Calendar";
+import ListTab from "@/components/shared/ListTab";
 import PostTab from "@/components/shared/PostTab";
 import ProfileHeader from "@/components/shared/ProfileHeader";
 import TaskTab from "@/components/shared/TaskTab";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { fetchUserEvents } from "@/lib/actions/event.actions";
 import { getGroupInfo } from "@/lib/actions/group.actions";
+import { fetchUserList } from "@/lib/actions/list.actions";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
-import { fetchUserList } from "@/lib/actions/list.actions";
-import ListTab from "@/components/shared/ListTab";
-import Calendar from "@/components/shared/Calendar";
-import { fetchUserEvents } from "@/lib/actions/event.actions";
 
 async function Page() {
   const session = await getServerSession(authOptions);
@@ -23,6 +23,8 @@ async function Page() {
     // For example, set groupInfo to null or some default value
     groupInfo = null;
   }
+
+  const userId = session?.user.id;
   const authorId = session?.user?.id;
   const lists = await fetchUserList({ authorId });
   const events = await fetchUserEvents({ authorId });
@@ -30,11 +32,8 @@ async function Page() {
   return (
     <section>
       <ProfileHeader
-        name={session?.user.name || " Unknow"}
-        bio={session?.user.bio || "Not updated yet"}
-        phone={session?.user.phone || "999 999 999"}
+        session={session}
         groupName={groupInfo?.name || " Something went wrong"}
-        email={session?.user.email || "public/assets/profile-pic-holder.png"}
       />
       <div className="mt-9">
         <Tabs defaultValue="posts" className="w-full">

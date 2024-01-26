@@ -22,21 +22,22 @@ import { Input } from "@/components/ui/input";
 import { updateUser } from "@/lib/actions/user.actions";
 import SharedButton from "../shared/SharedButton";
 import { Textarea } from "../ui/textarea";
+import { Button } from "../ui/button";
 
 interface UserProps {
   session: Session | null;
 }
 
-const AccountProfile = ({ session }: UserProps) => {
+const AccountProfile = ({ session}: UserProps) => {
   const [files, setFiles] = useState<File[]>([]);
   const router = useRouter();
   const pathname = usePathname();
   const user = session?.user;
 
+
   const form = useForm<z.infer<typeof UserValidation>>({
     resolver: zodResolver(UserValidation),
     defaultValues: {
-      userImage: user?.userImage ? user.userImage : "",
       name: user?.name ? user.name : "",
       bio: user?.bio ? user.bio : "",
       phone: user?.phone ? user.phone : "",
@@ -66,11 +67,26 @@ const AccountProfile = ({ session }: UserProps) => {
     }
   };
 
-  const data = form.watch();
+  async function onSubmit(values: z.infer<typeof UserValidation>) {
+    const updateGroupInfo = await updateUser({
+      session,
+      data: {
+        userImage: values.userImage,
+        name: values.name,
+        bio: values.bio,
+        phone: values.phone,
+      },
+    });
+    console.log("działa", updateGroupInfo);
+    router.push("/profile");
+  }
 
   return (
     <Form {...form}>
-      <form className="flex flex-col justify-start gap-10">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col justify-start gap-10"
+      >
         <FormField
           control={form.control}
           name="userImage"
@@ -169,12 +185,9 @@ const AccountProfile = ({ session }: UserProps) => {
           )}
         />
 
-        <SharedButton
-          session={session}
-          data={data}
-          action={updateUser}
-          label="Save"
-        />
+        <Button type="submit" className="bg-primary-500">
+          Save
+        </Button>
       </form>
     </Form>
   );
