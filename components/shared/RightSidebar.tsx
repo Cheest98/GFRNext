@@ -3,6 +3,7 @@ import { fetchRecentActivities } from "@/lib/actions/group.actions";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import ActivityCard from "../cards/ActivityCard";
+import RightSidebarSkeleton from "../Skeletons/RightSideBarSkeleton";
 
 interface Activity {
   id: string;
@@ -34,6 +35,7 @@ const getActivityDescription = (type: string) => {
 
 const RightSidebar = () => {
   const [activities, setActivities] = useState<Activity[]>([]);
+  const [loading, setLoading] = useState(true); // Loading state
   const { data: session } = useSession();
   const groupId = session?.user.groupId;
   useEffect(() => {
@@ -49,10 +51,16 @@ const RightSidebar = () => {
     if (session) {
       fetchActivities();
     }
+    setLoading(false)
   }, [session]);
 
+
+  if (loading) {
+    return <RightSidebarSkeleton />; // Render the skeleton loader when loading
+  }
+
   return (
-    <section className="custom-scrollbar rightsidebar">
+    <section className="custom-scrollbar rightsidebar ">
       <div className="flex flex-1 flex-col justify-start  bg-dark-2 rounded-lg p-4">
         <h3 className="text-heading4-medium text-light-1">Activity</h3>
         <div>
@@ -60,24 +68,25 @@ const RightSidebar = () => {
             <ActivityCard
               key={activity.id}
               id={activity.id}
-              userName={activity.user.name || "Unknown"}
+              userName={(activity.user.name || "Unknown").substring(0, 10)}
               userImage={activity.user.userImage}
               createdAt={activity.createdAt.toISOString()}
               description={getActivityDescription(activity.type)}
             />
           ))}
         </div>
-
         <div className="mt-7 flex w-[350px] flex-col gap-9"></div>
-      </div>
 
-      <div className="flex flex-1 flex-col justify-start  bg-dark-2 rounded-lg p-4">
+      </div>
+      <div className="flex flex-1 flex-col justify-start  bg-dark-2 rounded-lg p-4 mt-5">
         <h3 className="text-heading4-medium text-light-1">
           Tutaj ludzie z grupy?
         </h3>
         <div className="mt-7 flex w-[350px] flex-col gap-10"></div>
+
       </div>
     </section>
+  
   );
 };
 export default RightSidebar;

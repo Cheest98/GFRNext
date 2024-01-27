@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import profilePicPlaceholder from "../../public/assets/profile-pic-placeholder.png";
 import CreateGroupModal from "../modals/CreateGroupModal";
+import GroupHeaderSkeleton from "../Skeletons/GroupHeaderSkeleton";
 
 interface GroupHeaderProps {
   session: Session | null;
@@ -44,9 +45,8 @@ const GroupHeader = ({ session }: GroupHeaderProps) => {
   }, []);
 
   if (loading) {
-    return <div>Loading group information...</div>;
+    return <GroupHeaderSkeleton />;
   }
-
   if (error) {
     return <div>{error}</div>;
   }

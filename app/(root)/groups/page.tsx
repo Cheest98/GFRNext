@@ -1,4 +1,5 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import GroupHeaderSkeleton from "@/components/Skeletons/GroupHeaderSkeleton";
 import GroupHeader from "@/components/cards/GroupHeader";
 import { getServerSession } from "next-auth";
 

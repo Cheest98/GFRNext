@@ -19,7 +19,7 @@ function ActivityCard({
 }: ActivityCardProps) {
   const authorImage = userImage ? userImage : profilePicPlaceholder;
   return (
-    <article className="flex w-full flex-col rounded-xl bg-dark-2 p-7">
+    <article className="flex w-full flex-col rounded-xl bg-dark-2 p-2">
       <div className="flex items-start justify-between">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -31,7 +31,7 @@ function ActivityCard({
                 className="cursor-pointer rounded-full"
               />
             </div>
-            <p className="text-small-regular text-light-2">
+            <p className="text-small-regular text-light-2 ">
               {`${userName} ${description} ${formatDateString(createdAt)}`}
             </p>
           </div>
