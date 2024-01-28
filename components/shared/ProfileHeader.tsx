@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import profilePicPlaceholder from "../../public/assets/profile-pic-placeholder.png";
 import { Session } from "next-auth";
+import ProfileHeaderSkeleton from "../Skeletons/ProfileHeaderSkeleton";
 
 interface ProfileHeaderProps {
   session: Session | null;
@@ -44,7 +45,6 @@ const ProfileHeader = ({
       } catch (err) {
         console.error("Error fetching user info:", err);
         setError("Failed to load user information.");
-        setLoading(false);
       }
     }
 
@@ -52,7 +52,7 @@ const ProfileHeader = ({
   }, [session]);  // Adding session as a dependency
 
   if (loading) {
-    return <div>Loading user information...</div>;
+    return <ProfileHeaderSkeleton />;
   }
 
   if (error) {

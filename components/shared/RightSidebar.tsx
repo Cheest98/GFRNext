@@ -43,6 +43,7 @@ const RightSidebar = () => {
       if (groupId !== undefined) {
         const data: Activity[] = await fetchRecentActivities({ groupId });
         setActivities(data);
+        setLoading(false); 
       } else {
         console.log("Failed to fetch activites on frontend");
       }
@@ -51,7 +52,6 @@ const RightSidebar = () => {
     if (session) {
       fetchActivities();
     }
-    setLoading(false)
   }, [session]);
 
 
@@ -80,8 +80,11 @@ const RightSidebar = () => {
       </div>
       <div className="flex flex-1 flex-col justify-start  bg-dark-2 rounded-lg p-4 mt-5">
         <h3 className="text-heading4-medium text-light-1">
-          Tutaj ludzie z grupy?
+           - TODO
         </h3>
+        <p className=" text-light-1">- Fix łamania tekstu</p>
+        <p className=" text-light-1">- edycja grupy tylko dla autora</p>
+        <p className=" text-light-1">- opuszczenie grupy</p>
         <div className="mt-7 flex w-[350px] flex-col gap-10"></div>
 
       </div>
