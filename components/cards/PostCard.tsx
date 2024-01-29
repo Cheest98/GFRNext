@@ -21,11 +21,13 @@ function PostCard({
   createdAt,
   picturePath,
 }: PostCardProps) {
-  const authorImage = author.userImage ? author.userImage : profilePicPlaceholder;
+  const authorImage = author.userImage
+    ? author.userImage
+    : profilePicPlaceholder;
   return (
     <article className="flex w-full flex-col rounded-xl bg-dark-2 p-7">
       <div className="flex items-start justify-between">
-        <div className="flex w-full flex-1 flex-row gap-4">
+        <div className="flex w-full flex-1 flex-row gap-3 ">
           <div className="flex flex-col items-center">
             <div className="relative h-11 w-11">
               <Image
@@ -39,42 +41,35 @@ function PostCard({
             <div className="thread-card_bar" />
           </div>
 
-          <div className="flex w-full flex-col justify-between">
+          <div className="flex w-full flex-col justify-between ">
+          <div className="break-words overflow-wrap mr-12">
             <div className="flex justify-between">
               <h4 className="cursor-pointer text-base-semibold text-light-1">
                 {author.name}
               </h4>
-              <div>
-                <Image
-                  src="/assets/heart-gray.svg"
-                  alt="heart"
-                  width={24}
-                  height={24}
-                  className="cursor-pointer object-contain"
-                />
-              </div>
             </div>
+            
+              <p className="mt-2 text-small-regular text-light-2">{content}</p>
 
-            <p className="mt-2 text-small-regular text-light-2">{content}</p>
-
-            {picturePath && (
-              <div className="mb-2 mt-2 flex flex-col gap-1">
-                <div className="flex gap-3.5 max-size-image">
-                  <Image
-                    src={picturePath}
-                    alt="post image"
-                    layout="responsive"
-                    width={500}
-                    height={500}
-                    className="cursor-pointer object-contain"
-                  />
+              {picturePath && (
+                <div className="mb-2 mt-2 flex flex-col gap-1">
+                  <div className="flex gap-3.5 max-size-image">
+                    <Image
+                      src={picturePath}
+                      alt="post image"
+                      layout="responsive"
+                      width={500}
+                      height={500}
+                      className="cursor-pointer object-contain"
+                    />
+                  </div>
                 </div>
+              )}
+              <div className="mt-2 flex items-center">
+                <p className="text-subtle-medium text-gray-1">
+                  {formatDateString(createdAt)}
+                </p>
               </div>
-            )}
-            <div className="mt-2 flex items-center">
-              <p className="text-subtle-medium text-gray-1">
-                {formatDateString(createdAt)}
-              </p>
             </div>
           </div>
         </div>

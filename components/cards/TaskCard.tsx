@@ -43,13 +43,15 @@ function TaskCard({
     setIsModalOpen(false);
   };
 
-  const authorImage = author.userImage ? author.userImage : profilePicPlaceholder;
+  const authorImage = author.userImage
+    ? author.userImage
+    : profilePicPlaceholder;
   return (
     <>
-      <article className="p-5 rounded-lg bg-dark-2   border-r-dark-1 flex flex-col gap-2 h-64">
+      <article className="p-5 rounded-lg bg-dark-2   border-r-dark-1 flex flex-col gap-2 overflow-wrap ">
         <div className="flex w-full flex-col justify-between">
           <div className="flex justify-between">
-            <h1 className="text-1.5rem font-semibold text-light-1">{task}</h1>
+              <p className="text-1.5rem font-semibold text-light-1">{task}</p>
             <div>
               <EditButton
                 session={session}
@@ -64,8 +66,9 @@ function TaskCard({
             </div>
           </div>
         </div>
-        <p className="text-light-1">{description}</p>
-
+        <div className="break-words overflow-wrap mr-6">
+          <p className="text-light-1">{description}</p>
+        </div>
         <div className="mt-auto flex items-center gap-3">
           {status === "To do" && (
             <StatusButton
