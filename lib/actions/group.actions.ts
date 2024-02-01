@@ -2,8 +2,11 @@
 
 import { Session } from "next-auth";
 import { prisma } from "../db/prisma";
+import { revalidatePath } from "next/cache";
+import { getSession } from "next-auth/react";
+import { redirect } from 'next/navigation'
 
-interface CreateGroupProps { 
+interface CreateGroupProps {
   session: Session | null;
   data: {
     name: string;
@@ -112,14 +115,10 @@ export async function createGroup({
       },
     });
 
-    await prisma.activity.create({
-      data: {
-        type: "GROUP_LEFT",
-        userId: session.user.id,
-        groupId: existingGroup.id,
-      },
-    });
+    await getSession();
     console.log("New group created:", newGroup);
+    revalidatePath("/groups")
+
   } catch (error: any) {
     console.error("Failed to create group:", error);
     throw new Error(`Failed to create group: ${error.message}`);
@@ -140,8 +139,6 @@ export async function joinGroup({
   }
 
 
-  // Check if the user is already a member of another group - czy ten warunek nie jest bez senus? 
-  //TODO  WERYFIAKCJA WARUNKU 
   const existingGroup = await prisma.group.findFirst({
     where: {
       members: {
@@ -186,7 +183,6 @@ export async function joinGroup({
 
   // Proceed to join the group
 
-  // Get password
 
   // TODO - ADD toast resposne
   try {
@@ -221,6 +217,8 @@ export async function joinGroup({
       },
     });
     console.log(`User ${session.user.id} joined group: ${joinGroupId}`);
+
+    revalidatePath("/groups")
   } catch (error: any) {
     console.error("Failed to join group:", error);
     throw new Error(`Failed to join group: ${error.message}`);
@@ -238,7 +236,7 @@ export async function getGroupInfo({ groupIdPrisma }: getGroupInfoProps) {
       select: {
         name: true,
         description: true,
-        groupImage:true,
+        groupImage: true,
       }
     });
     return groupInfo;
@@ -302,7 +300,7 @@ export async function updateGroup({
   const updateData: Partial<typeof data> = Object.fromEntries(
     Object.entries(data).filter(([_, value]) => value !== undefined)
   );
-   const groupIdPrisma = session?.user.groupId;
+  const groupIdPrisma = session?.user.groupId;
   if (!groupIdPrisma) {
     throw new Error("Group ID is missing.");
   }

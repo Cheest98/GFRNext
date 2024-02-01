@@ -11,7 +11,9 @@ import { createGroup } from "@/lib/actions/group.actions";
 import { GroupValidation } from "@/lib/validations/group";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Session } from "next-auth";
+import { getSession } from "next-auth/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -31,6 +33,7 @@ interface CreateGroupProps {
 }
 
 function CreateGroupModal({ session, onClose }: CreateGroupProps) {
+  const router = useRouter();
   const form = useForm<z.infer<typeof GroupValidation>>({
     resolver: zodResolver(GroupValidation),
     defaultValues: {
@@ -41,7 +44,7 @@ function CreateGroupModal({ session, onClose }: CreateGroupProps) {
   });
 
   async function onSubmit(values: z.infer<typeof GroupValidation>) {
-    console.log(values); // Debug log
+    console.log(values);
     try {
       await createGroup({
         data: {
@@ -54,6 +57,8 @@ function CreateGroupModal({ session, onClose }: CreateGroupProps) {
       console.log("Group created successfully");
       onClose();
       form.reset();
+      await getSession();
+      router.push('/')
     } catch (error: any) {
       console.error("Error creating Group:", error.message);
     }
