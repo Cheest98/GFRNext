@@ -17,6 +17,8 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
+import { getSession } from "next-auth/react";
+import router from "next/router";
 
 interface GroupProps {
   joinGroupId: string;
@@ -33,12 +35,35 @@ function GroupModal({ joinGroupId, session, password, onClose }: GroupProps) {
     },
   });
 
-  const data = form.watch();
+
+
+  async function onSubmit(values: z.infer<typeof JoinGroupValidation>) {
+    console.log(values);
+    try {
+      await joinGroup({
+        data: {
+          joinGroupId: joinGroupId,
+          password: values.password,
+        },
+        session,
+      });
+      console.log("Group created successfully");
+      onClose();
+      form.reset();
+      await getSession();
+      router.push('/')
+    } catch (error: any) {
+      console.error("Error creating Group:", error.message);
+    }
+  }
+
   return (
     <Dialog open={true} onOpenChange={onClose}>
       <DialogContent className="rounded-lg bg-dark-4">
         <Form {...form}>
-          <form className="mt-10 flex flex-col justify-start gap-10 rounded-lg">
+          <form 
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="mt-10 flex flex-col justify-start gap-10 rounded-lg">
             <FormField
               control={form.control}
               name="password"
@@ -59,13 +84,7 @@ function GroupModal({ joinGroupId, session, password, onClose }: GroupProps) {
               )}
             />
             <DialogFooter>
-              <JoinButton
-                session={session}
-                joinGroupId={joinGroupId}
-                password={data.password}
-                action={joinGroup}
-                label="Join"
-              />
+            <button className="bg-primary" type="submit"> Join </button>
             </DialogFooter>
           </form>
         </Form>

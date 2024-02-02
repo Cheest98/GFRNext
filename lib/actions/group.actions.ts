@@ -2,7 +2,7 @@
 
 import { Session } from "next-auth";
 import { prisma } from "../db/prisma";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { getSession } from "next-auth/react";
 import { redirect } from 'next/navigation'
 
@@ -33,6 +33,14 @@ interface UpdateGroupProps {
     groupImage?: string;
     name?: string;
     description?: string;
+  };
+}
+
+interface JoinGroupProps {
+  session: Session | null;
+  data: {
+    joinGroupId: string;
+    password: string;
   };
 }
 
@@ -118,7 +126,7 @@ export async function createGroup({
     await getSession();
     console.log("New group created:", newGroup);
     revalidatePath("/groups")
-
+    revalidateTag('activities')
   } catch (error: any) {
     console.error("Failed to create group:", error);
     throw new Error(`Failed to create group: ${error.message}`);
@@ -127,13 +135,8 @@ export async function createGroup({
 
 export async function joinGroup({
   session,
-  joinGroupId,
-  password,
-}: {
-  session: Session | null;
-  joinGroupId: string;
-  password: string;
-}): Promise<void> {
+  data
+}: JoinGroupProps): Promise<void> {
   if (!session?.user?.id) {
     throw new Error("User ID is missing.");
   }
@@ -188,7 +191,7 @@ export async function joinGroup({
   try {
     const groupToJoin = await prisma.group.findUnique({
       where: {
-        id: joinGroupId,
+        id: data.joinGroupId,
       },
     });
 
@@ -196,7 +199,7 @@ export async function joinGroup({
       throw new Error("Group not found.");
     }
 
-    if (groupToJoin.password !== password) {
+    if (groupToJoin.password !== data.password) {
       throw new Error("Invalid password. Please try again.");
     }
 
@@ -205,7 +208,7 @@ export async function joinGroup({
         id: session.user.id,
       },
       data: {
-        groupId: joinGroupId,
+        groupId: data.joinGroupId,
       },
     });
 
@@ -216,9 +219,10 @@ export async function joinGroup({
         groupId: existingGroup.id,
       },
     });
-    console.log(`User ${session.user.id} joined group: ${joinGroupId}`);
+    console.log(`User ${session.user.id} joined group: ${data.joinGroupId}`);
 
-    revalidatePath("/groups")
+    
+    revalidateTag('activities')
   } catch (error: any) {
     console.error("Failed to join group:", error);
     throw new Error(`Failed to join group: ${error.message}`);

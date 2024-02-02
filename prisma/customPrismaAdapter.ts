@@ -12,7 +12,7 @@ export function CustomPrismaAdapter(prisma: PrismaClient) {
     ...defaultAdapter,
     createUser: async (profile: CustomAdapterUser) => {
       // Your custom logic here
-      profile.groupId = "65142379c592bef7f2b1e3c7";
+      profile.groupId = "65bd3dd3e61a1d675d3ed555";
 
       // Then call the default createUser method
       if (defaultAdapter.createUser) {

@@ -55,6 +55,7 @@ export async function createPost({
     });
     console.log(newPost);
     revalidateTag('posts')
+    revalidateTag('activities')
   } catch (error: any) {
     throw new Error(`Failed to create post: ${error.message}`);
   }

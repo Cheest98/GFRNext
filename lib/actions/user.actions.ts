@@ -73,7 +73,7 @@ export async function createUser({
       data: {
         email: data.email,
         password: hashedPassword,
-        groupId: "65142379c592bef7f2b1e3c7",
+        groupId: "65bd3dd3e61a1d675d3ed555",
       },
     });
     return { success: true, message: "User created successfully" };
