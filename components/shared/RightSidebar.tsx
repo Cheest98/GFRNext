@@ -39,6 +39,8 @@ const RightSidebar = () => {
   const { data: session } = useSession();
   const groupId = session?.user.groupId;
   useEffect(() => {
+
+    let intervalId: number | undefined;
     const fetchActivities = async () => {
       if (groupId !== undefined) {
         const data: Activity[] = await fetchRecentActivities({ groupId });
@@ -52,6 +54,20 @@ const RightSidebar = () => {
     if (session) {
       fetchActivities();
     }
+
+    if (session) {
+      fetchActivities();
+
+      // Refresh activities every X milliseconds (e.g., 60000 ms for every minute)
+      intervalId = setInterval(fetchActivities, 60000) as unknown as number
+    }
+
+    // Cleanup function to clear the interval
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
   }, [session]);
 
 

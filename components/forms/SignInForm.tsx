@@ -20,6 +20,7 @@ import { Button } from "../ui/button";
 import { useToast } from "../ui/use-toast";
 import { CardWrapper } from "../shared/CardWrapper";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import router from "next/router";
 
 const SignInForm = () => {
   const { toast } = useToast();
@@ -48,7 +49,9 @@ const SignInForm = () => {
         variant: "destructive",
       });
     }
+    router.push('/')
   };
+  
   return (
     <CardWrapper
       headerLabel="Welcome back"

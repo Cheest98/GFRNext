@@ -12,7 +12,7 @@ async function Page() {
         <GroupHeader session={session} />
       </section>
       <section className="mt-9 bg-dark-2 p-10 rounded-lg">
-        <p className="text-light-2 max-sm:hidden">lista osób w grupie?</p>
+        <p className="text-light-2 max-sm:hidden"> Component with group members</p>
       </section>
     </main>
   );
