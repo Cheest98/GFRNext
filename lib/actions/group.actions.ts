@@ -44,6 +44,9 @@ interface JoinGroupProps {
   };
 }
 
+interface groupMemebersProps {
+  groupIdPrisma: string | undefined;
+}
 
 export async function createGroup({
   session,
@@ -221,7 +224,7 @@ export async function joinGroup({
     });
     console.log(`User ${session.user.id} joined group: ${data.joinGroupId}`);
 
-    
+
     revalidateTag('activities')
   } catch (error: any) {
     console.error("Failed to join group:", error);
@@ -322,3 +325,45 @@ export async function updateGroup({
     return { success: false, message: "Failed to update group, please try again" };
   }
 }
+
+export async function fetchGroupMembers({ groupIdPrisma }: groupMemebersProps) {
+  if (!groupIdPrisma) {
+    throw new Error("Group ID is missing.");
+  }
+  try {
+    const groupMembers = await prisma.user.findMany({
+      where: {
+        groupId: groupIdPrisma,
+      },
+      select: {
+        id: true,
+        name: true,
+        userImage: true,
+        tasks: {
+          select: {
+            id: true,
+          },
+        },
+        posts: {
+          select: {
+            id: true,
+          },
+        },
+        lists: {
+          select: {
+            id: true,
+          },
+        },
+        event: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    return groupMembers;
+
+  } catch (error: any) {
+    throw new Error(`Failed to fetch activities: ${error.message}`);
+  }}

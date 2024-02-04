@@ -57,3 +57,9 @@ export const listsTabs = [
   { value: "Completed", label: "Completed", icon: "/assets/members.svg" }, 
 ];
 
+export const memberItems = [
+  { src: "/assets/reply.svg", alt: "Posts", key: "posts" },
+  { src: "/assets/members.svg", alt: "Tasks", key: "tasks" },
+  { src: "/assets/tag.svg", alt: "Events", key: "events" },
+  { src: "/assets/tag.svg", alt: "Lists", key: "lists" },
+];

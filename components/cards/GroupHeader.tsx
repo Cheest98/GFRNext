@@ -5,8 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import profilePicPlaceholder from "../../public/assets/profile-pic-placeholder.png";
-import CreateGroupModal from "../modals/CreateGroupModal";
 import GroupHeaderSkeleton from "../Skeletons/GroupHeaderSkeleton";
+import CreateGroupModal from "../modals/CreateGroupModal";
 
 interface GroupHeaderProps {
   session: Session | null;
