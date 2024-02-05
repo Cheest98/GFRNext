@@ -1,9 +1,14 @@
 "use client";
-import { fetchRecentActivities } from "@/lib/actions/group.actions";
+import {
+  fetchRecentActivities,
+  fetchUpcomingEvents,
+} from "@/lib/actions/group.actions";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import ActivityCard from "../cards/ActivityCard";
 import RightSidebarSkeleton from "../Skeletons/RightSideBarSkeleton";
+import { formatDateString } from "@/lib/utils";
+import Image from "next/image";
 
 interface Activity {
   id: string;
@@ -14,6 +19,13 @@ interface Activity {
     name: string | null;
     userImage: string | null;
   };
+}
+
+interface Event {
+  id: string;
+  title: string;
+  description: string;
+  start: Date;
 }
 
 const getActivityDescription = (type: string) => {
@@ -35,17 +47,20 @@ const getActivityDescription = (type: string) => {
 
 const RightSidebar = () => {
   const [activities, setActivities] = useState<Activity[]>([]);
+  const [upcomingEvents, setUpcomingEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true); // Loading state
   const { data: session } = useSession();
   const groupId = session?.user.groupId;
-  useEffect(() => {
 
+  useEffect(() => {
     let intervalId: number | undefined;
     const fetchActivities = async () => {
       if (groupId !== undefined) {
-        const data: Activity[] = await fetchRecentActivities({ groupId });
-        setActivities(data);
-        setLoading(false); 
+        const activitiesData = await fetchRecentActivities({ groupId });
+        const eventsData = await fetchUpcomingEvents({ groupId });
+        setActivities(activitiesData);
+        setUpcomingEvents(eventsData);
+        setLoading(false);
       } else {
         console.log("Failed to fetch activites on frontend");
       }
@@ -59,7 +74,7 @@ const RightSidebar = () => {
       fetchActivities();
 
       // Refresh activities every X milliseconds (e.g., 60000 ms for every minute)
-      intervalId = setInterval(fetchActivities, 60000) as unknown as number
+      intervalId = setInterval(fetchActivities, 60000) as unknown as number;
     }
 
     // Cleanup function to clear the interval
@@ -69,7 +84,6 @@ const RightSidebar = () => {
       }
     };
   }, [session]);
-
 
   if (loading) {
     return <RightSidebarSkeleton />; // Render the skeleton loader when loading
@@ -92,20 +106,29 @@ const RightSidebar = () => {
           ))}
         </div>
         <div className="mt-7 flex w-[350px] flex-col gap-9"></div>
-
       </div>
       <div className="flex flex-1 flex-col justify-start  bg-dark-2 rounded-lg p-4 mt-5">
-        <h3 className="text-heading4-medium text-light-1">
-           - TODO
-        </h3>
-        <p className=" text-light-1">- Fix łamania tekstu</p>
-        <p className=" text-light-1">- edycja grupy tylko dla autora</p>
-        <p className=" text-light-1">- opuszczenie grupy</p>
+        <h3 className="text-heading4-medium text-light-1">Upcoming events</h3>
+        {upcomingEvents.map((event) => (
+          <div key={event.id} className="mt-2">
+            <div className="flex items-center gap-2 p-3 ">
+            <Image
+                src="/assets/calendar.svg"
+                alt="Calendar"
+                width={14}
+                height={14}
+              />
+              <p className="font-bold text-light-2">{event.title}</p>
+              <p className="text-small-regular text-light-2 ml-2">
+                {" "}
+                started at {formatDateString(event.start.toISOString())}
+              </p>
+            </div>
+          </div>
+        ))}
         <div className="mt-7 flex w-[350px] flex-col gap-10"></div>
-
       </div>
     </section>
-  
   );
 };
 export default RightSidebar;

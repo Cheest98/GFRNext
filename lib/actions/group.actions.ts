@@ -18,6 +18,10 @@ interface recentActivitiesProps {
   groupId: string | null
 }
 
+interface upcomingEventsProps {
+  groupId: string | null
+}
+
 interface groupActivitiesProps {
   groupIdPrisma: string;
 }
@@ -367,3 +371,26 @@ export async function fetchGroupMembers({ groupIdPrisma }: groupMemebersProps) {
   } catch (error: any) {
     throw new Error(`Failed to fetch activities: ${error.message}`);
   }}
+
+
+  export async function fetchUpcomingEvents({ groupId }: upcomingEventsProps) {
+    if (!groupId) {
+      throw new Error("Group ID is missing.");
+    }
+    const currentDate = new Date();
+  
+    try {
+      const events = prisma.event.findMany({
+        where: {
+          groupId,
+          start: {
+            gte: currentDate, 
+          },
+        },
+        take: 5, 
+      });
+      return events;
+    } catch (error: any) {
+      throw new Error(`Failed to fetch activities: ${error.message}`);
+    }
+  }
