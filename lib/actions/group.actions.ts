@@ -280,24 +280,26 @@ export async function fetchRecentActivities({ groupId }: recentActivitiesProps) 
   }
 }
 
-export async function fetchGroupActivities({ groupIdPrisma }: groupActivitiesProps) {
+export async function fetchGroupActivities({ groupIdPrisma, skip = 0, take = 15 }: groupActivitiesProps & { skip?: number; take?: number }) {
   if (!groupIdPrisma) {
     throw new Error("Group ID is missing.");
   }
 
   try {
-    const activities = prisma.activity.findMany({
-      where: {
-        groupId: groupIdPrisma,
-      },
-      orderBy: {
-        createdAt: 'desc'
-      },
-      include: {
-        user: true
-      }, // Include user information
-    });
-    return activities;
+    const [activities, totalCount] = await prisma.$transaction([
+      prisma.activity.findMany({
+        where: { groupId: groupIdPrisma },
+        skip,
+        take,
+        orderBy: { createdAt: 'desc' },
+        include: { user: true },
+      }),
+      prisma.activity.count({
+        where: { groupId: groupIdPrisma },
+      }),
+    ]);
+  
+    return { activities, totalCount };
   } catch (error: any) {
     throw new Error(`Failed to fetch activities: ${error.message}`);
   }
