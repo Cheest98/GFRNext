@@ -43,8 +43,8 @@ function Calendar({ session, events }: CalendarProps) {
     setSelectedDate(arg.date);
     setEventData({
       id: null,
-      title: "editEvent.title",
-      description: "editEvent.description",
+      title: "Title",
+      description: "Description",
       date: arg.date,
       allDay: false,
       label: "Create",

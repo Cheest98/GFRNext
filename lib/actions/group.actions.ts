@@ -346,21 +346,25 @@ export async function fetchGroupMembers({ groupIdPrisma }: groupMemebersProps) {
         name: true,
         userImage: true,
         tasks: {
+          where: { groupId: groupIdPrisma },
           select: {
             id: true,
           },
         },
         posts: {
+          where: { groupId: groupIdPrisma },
           select: {
             id: true,
           },
         },
         lists: {
+          where: { groupId: groupIdPrisma },
           select: {
             id: true,
           },
         },
         event: {
+          where: { groupId: groupIdPrisma },
           select: {
             id: true,
           },

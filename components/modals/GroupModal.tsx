@@ -19,6 +19,7 @@ import {
 import { Input } from "../ui/input";
 import { getSession } from "next-auth/react";
 import router from "next/router";
+import { Button } from "../ui/button";
 
 interface GroupProps {
   joinGroupId: string;
@@ -84,7 +85,7 @@ function GroupModal({ joinGroupId, session, password, onClose }: GroupProps) {
               )}
             />
             <DialogFooter>
-            <button className="bg-primary" type="submit"> Join </button>
+            <Button className="bg-primary-500" type="submit">Join</Button>
             </DialogFooter>
           </form>
         </Form>

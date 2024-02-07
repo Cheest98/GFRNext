@@ -40,6 +40,10 @@ const getActivityDescription = (type: string) => {
       return "updated a task on";
     case "GROUP_LEFT":
       return "left group on";
+    case "EVENT_CREATED":
+      return "created event at ";
+    case "EVENT_UPDATED":
+      return "updated an event on";
     default:
       return "did something on";
   }
@@ -72,12 +76,9 @@ const RightSidebar = () => {
 
     if (session) {
       fetchActivities();
-
-      // Refresh activities every X milliseconds (e.g., 60000 ms for every minute)
       intervalId = setInterval(fetchActivities, 60000) as unknown as number;
     }
 
-    // Cleanup function to clear the interval
     return () => {
       if (intervalId) {
         clearInterval(intervalId);
@@ -86,7 +87,7 @@ const RightSidebar = () => {
   }, [session]);
 
   if (loading) {
-    return <RightSidebarSkeleton />; // Render the skeleton loader when loading
+    return <RightSidebarSkeleton />
   }
 
   return (
@@ -112,7 +113,7 @@ const RightSidebar = () => {
         {upcomingEvents.map((event) => (
           <div key={event.id} className="mt-2">
             <div className="flex items-center gap-2 p-3 ">
-            <Image
+              <Image
                 src="/assets/calendar.svg"
                 alt="Calendar"
                 width={14}
@@ -121,7 +122,7 @@ const RightSidebar = () => {
               <p className="font-bold text-light-2">{event.title}</p>
               <p className="text-small-regular text-light-2 ml-2">
                 {" "}
-                started at {formatDateString(event.start.toISOString())}
+                will start on {formatDateString(event.start.toISOString())}
               </p>
             </div>
           </div>
