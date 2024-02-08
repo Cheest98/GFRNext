@@ -2,7 +2,7 @@ import Image from "next/image";
 import profilePicPlaceholder from "../../public/assets/profile-pic-placeholder.png";
 
 import { memberItems } from "@/app/constants";
-import MemberInfo from "../shared/memberInfo";
+import MemberInfo from "../shared/MemberInfo";
 
 interface UserCardProps {
   id: string;

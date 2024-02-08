@@ -16,6 +16,7 @@ interface GroupInfo {
   name: string;
   description: string;
   groupImage: string | null;
+  ownerId: string;
 }
 
 const GroupHeader = ({ session }: GroupHeaderProps) => {
@@ -25,6 +26,8 @@ const GroupHeader = ({ session }: GroupHeaderProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const imageSrc = groupInfo?.groupImage || profilePicPlaceholder;
+
+  const isOwner = session?.user?.id === groupInfo?.ownerId;
 
   useEffect(() => {
     async function fetchGroupInfo() {
@@ -63,6 +66,7 @@ const GroupHeader = ({ session }: GroupHeaderProps) => {
     setIsModalOpen(false);
   };
 
+
   return (
     <>
       <article className="flex w-full flex-col rounded-xl  bg-dark-2 p-7">
@@ -84,17 +88,31 @@ const GroupHeader = ({ session }: GroupHeaderProps) => {
                 </h2>
               </div>
             </div>
-            <Link href="/groups/edit">
-              <div className="flex cursor-pointer gap-3 rounded-lg bg-dark-3 px-4 py-2">
-                <Image
-                  src="/assets/edit.svg"
-                  alt="logout"
-                  width={16}
-                  height={16}
-                />
-                <p className="text-light-2 max-sm:hidden">Edit</p>
-              </div>
-            </Link>
+            <div>
+              {isOwner ? (
+                <Link href="/groups/edit">
+                  <div className="flex cursor-pointer gap-3 rounded-lg bg-dark-3 px-4 py-2">
+                    <Image
+                      src="/assets/edit.svg"
+                      alt="logout"
+                      width={16}
+                      height={16}
+                    />
+                    <p className="text-light-2 max-sm:hidden">Edit</p>
+                  </div>
+                </Link>
+              ) : (
+                <div className="flex cursor-pointer gap-3 rounded-lg bg-dark-3 px-4 py-2">
+                  <Image
+                    src="/assets/lock.svg"
+                    alt="Lock"
+                    width={16}
+                    height={16}
+                  />
+                  <p className="text-light-2 max-sm:hidden">Not</p>
+                </div>
+              )}
+            </div>
           </div>
           <p className="mt-6 max-w-lg text-base-regular text-light-2">
             {groupInfo.description}

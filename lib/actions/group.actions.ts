@@ -248,6 +248,7 @@ export async function getGroupInfo({ groupIdPrisma }: getGroupInfoProps) {
         name: true,
         description: true,
         groupImage: true,
+        ownerId: true,
       }
     });
     return groupInfo;

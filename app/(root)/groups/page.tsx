@@ -1,5 +1,4 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import GroupHeaderSkeleton from "@/components/Skeletons/GroupHeaderSkeleton";
 import GroupHeader from "@/components/cards/GroupHeader";
 import UserCard from "@/components/cards/UserCard";
 import { fetchGroupMembers } from "@/lib/actions/group.actions";

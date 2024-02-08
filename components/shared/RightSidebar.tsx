@@ -31,19 +31,21 @@ interface Event {
 const getActivityDescription = (type: string) => {
   switch (type) {
     case "POST_CREATED":
-      return "added a new post on";
+      return " has created the post on ";
     case "TASK_CREATED":
-      return "added a new task on";
+      return "has created the task on ";
     case "TASK_UPDATED":
-      return "updated a task on";
+      return " has updated the task on";
     case "LIST_UPDATED":
-      return "updated a task on";
+      return " has updated the list on";
+    case "LIST_CREATED":
+      return "has created the list on ";
     case "GROUP_LEFT":
-      return "left group on";
+      return " has left the group on";
     case "EVENT_CREATED":
-      return "created event at ";
+      return " has created the event on  ";
     case "EVENT_UPDATED":
-      return "updated an event on";
+      return " has updated the event on";
     default:
       return "did something on";
   }
@@ -87,7 +89,7 @@ const RightSidebar = () => {
   }, [session]);
 
   if (loading) {
-    return <RightSidebarSkeleton />
+    return <RightSidebarSkeleton />;
   }
 
   return (
