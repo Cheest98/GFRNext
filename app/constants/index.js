@@ -10,22 +10,22 @@ export const sidebarLinks = [
     label: "Groups",
   },
   {
-    imgURL: "/assets/community.svg",
+    imgURL: "/assets/task.svg",
     route: "/tasks",
     label: "Tasks",
   },
   {
-    imgURL: "/assets/community.svg",
+    imgURL: "/assets/shopping.svg",
     route: "/shopping",
     label: "Shopping Lists",
   },
   {
-    imgURL: "/assets/community.svg",
+    imgURL: "/assets/calendar.svg",
     route: "/events",
     label: "Events",
   },
   {
-    imgURL: "/assets/community.svg",
+    imgURL: "/assets/activity.svg",
     route: "/activities",
     label: "Activity",
   },
@@ -40,9 +40,9 @@ export const sidebarLinks = [
 
 export const profileTabs = [
   { value: "posts", label: "Posts", icon: "/assets/reply.svg" },
-  { value: "tasks", label: "Tasks", icon: "/assets/members.svg" },
-  { value: "lists", label: "Shopping Lists", icon: "/assets/tag.svg" },
-  { value: "events", label: "Events", icon: "/assets/tag.svg" },
+  { value: "tasks", label: "Tasks", icon: "/assets/task.svg" },
+  { value: "lists", label: "Shopping Lists", icon: "/assets/shopping.svg" },
+  { value: "events", label: "Events", icon: "/assets/calendar.svg" },
 ];
 
 export const tasksTabs = [
@@ -60,6 +60,6 @@ export const listsTabs = [
 export const memberItems = [
   { src: "/assets/reply.svg", alt: "Posts", key: "posts" },
   { src: "/assets/members.svg", alt: "Tasks", key: "tasks" },
-  { src: "/assets/tag.svg", alt: "Events", key: "events" },
+  { src: "/assets/membersCalendar.svg", alt: "Events", key: "events" },
   { src: "/assets/tag.svg", alt: "Lists", key: "lists" },
 ];
